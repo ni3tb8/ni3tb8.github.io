@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dwustronna Strona z Licznikiem</title>
+    <style>
+    
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@100..900&display=swap');
+
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Bricolage Grotesque", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fefefe;
+            background: #222222;
+            transition: background 0.3s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .page {
+            text-align: center;
+        }
+
+        .button {
+            position: fixed;
+            font-family: "Bricolage Grotesque", serif;
+            font-weight: 500;
+            bottom: 40px;
+            right: 40px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: #243857;
+            color: #fefefe;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+            display: inlinel
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+        
+        .button:active {
+            background: #0067d6;
+        }
+
+        #timer {
+            font-size: 36px;
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input, button, buttonZ {
+            padding: 10px 20px;
+            font-family: "Bricolage Grotesque", serif;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            background-color: #282828;
+            color: #fefefe;
+        }
+
+       	button {
+        	font-family: "Bricolage Grotesque", serif;
+            font-weight: 500;
+            background: #224a1d;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+            display: inline;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+        
+        button:active {
+            background: #27a343;
+        }
+        
+        
+        buttonZ {
+        	font-family: "Bricolage Grotesque", serif;
+            font-weight: 500;
+            background: #372359;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+            display: inline;
+        }
+
+        buttonZ:hover {
+            background: #4a248a;
+        }
+        
+        buttonZ:active {
+            background: #5c2cab;
+        }
+        
+        
+        form div {
+   			display: flex;
+    		gap: 10px;
+}
+
+#timer span {
+    display: inline-block;
+    width: 2ch; /* Szerokość wystarczająca na dwucyfrową liczbę */
+    text-align: right; /* Wyrównanie tekstu wewnątrz */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%) brightness(95%);
+    cursor: pointer;
+}
+
+.podglad {
+position: fixed; 
+bottom: 40px; 
+left: 40px; 
+font-size: 16px; 
+color: #fefefe; 
+background-color: #191919; 
+padding: 10px; 
+border-radius: 5px;
+}
+
+.podglad span {
+    display: inline-block;
+    width: 2ch; /* Stała szerokość dla każdej cyfry */
+    text-align: right; /* Wyrównanie tekstu wewnątrz elementu */
+}
+
+    </style>
+</head>
+<body>
+    <div id="page1" class="page">
+        <h1>Licznik</h1>
+        <div id="timer">
+            <span id="days" style="font-weight: 600">0</span>d,
+            <span id="hours" style="font-weight: 600">0</span>h,
+            <span id="minutes" style="font-weight: 600">0</span>m,
+            <span id="seconds" style="font-weight: 600">0</span>s
+        </div>
+    </div>
+
+    <div id="page2" class="page hidden">
+        <h1>Ustaw datę</h1><br><br>
+        <form id="dateForm">
+            <label>
+                Data:&nbsp;&nbsp;
+                <input type="date" id="dateInput">
+            </label>
+            <label>
+                Godzina:&nbsp;&nbsp;
+                <input type="time" id="timeInput">
+            </label><br>
+            <div style="display: flex; gap: 10px;">
+    			<buttonZ type="button" id="setNow">Ustaw obecną datę</buttonZ>
+   				<button type="submit">Zapisz</button>
+</div>
+        </form>
+        
+        <div id="timerPreview" class="podglad">
+        <span id="daysPreview" style="font-weight: 600">0</span>d,
+        <span id="hoursPreview" style="font-weight: 600">0</span>h,
+        <span id="minutesPreview" style="font-weight: 600">0</span>m,
+        <span id="secondsPreview" style="font-weight: 600">0</span>s
+    </div>
+        
+    </div>
+
+    <button class="button" id="togglePage">Przełącz stronę</button>
+
+    <script>
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const toggleButton = document.getElementById('togglePage');
+        const timer = document.getElementById('timer');
+
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        const dateForm = document.getElementById('dateForm');
+        const dateInput = document.getElementById('dateInput');
+        const timeInput = document.getElementById('timeInput');
+        const setNowButton = document.getElementById('setNow');
+        
+        const daysPreviewEl = document.getElementById('daysPreview');
+		const hoursPreviewEl = document.getElementById('hoursPreview');
+		const minutesPreviewEl = document.getElementById('minutesPreview');
+		const secondsPreviewEl = document.getElementById('secondsPreview');
+
+        let targetDate = new Date();
+
+        function switchPage() {
+            page1.classList.toggle('hidden');
+            page2.classList.toggle('hidden');
+        }
+
+        toggleButton.addEventListener('click', switchPage);
+
+        setNowButton.addEventListener('click', () => {
+            const now = new Date();
+            dateInput.value = now.toISOString().split('T')[0];
+            timeInput.value = now.toTimeString().slice(0, 5);
+        });
+
+        dateForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const dateValue = dateInput.value;
+            const timeValue = timeInput.value;
+
+            if (dateValue && timeValue) {
+                targetDate = new Date(`${dateValue}T${timeValue}:00`);
+                if (!isNaN(targetDate)) {
+                    switchPage();
+                } else {
+                    alert('Proszę wprowadzić poprawną datę i godzinę.');
+                }
+            } else {
+                alert('Proszę wprowadzić datę i godzinę.');
+            }
+        });
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - targetDate; // Liczymy czas od `targetDate` do teraz
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                daysEl.textContent = days;
+                hoursEl.textContent = hours;
+                minutesEl.textContent = minutes;
+                secondsEl.textContent = seconds;
+                
+                // Aktualizowanie licznika na stronie 2 (podgląd)
+        		daysPreviewEl.textContent = days;
+       			hoursPreviewEl.textContent = hours;
+        		minutesPreviewEl.textContent = minutes;
+        		secondsPreviewEl.textContent = seconds;
+            } else {
+                // Reset timer to zero if the target date is in the future (unexpected case)
+                daysEl.textContent = 0;
+                hoursEl.textContent = 0;
+                minutesEl.textContent = 0;
+                secondsEl.textContent = 0;
+                
+                daysPreviewEl.textContent = 0;
+        		hoursPreviewEl.textContent = 0;
+        		minutesPreviewEl.textContent = 0;
+        		secondsPreviewEl.textContent = 0;
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
