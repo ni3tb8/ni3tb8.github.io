@@ -243,24 +243,28 @@ border-radius: 5px;
         });
 
         dateForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+    	event.preventDefault();
 
-            const dateValue = dateInput.value;
-            const timeValue = timeInput.value;
+    	const dateValue = dateInput.value;
+    	const timeValue = timeInput.value;
 
-            if (dateValue && timeValue) {
-                targetDate = new Date(`${dateValue}T${timeValue}:00`);
-                if (!isNaN(targetDate)) {
-                    switchPage();
-                } else {
-                    alert('Proszę wprowadzić poprawną datę i godzinę.');
-                }
-            } else {
-                alert('Proszę wprowadzić datę i godzinę.');
-            }
-        });
+    	if (dateValue && timeValue) {
+    	    targetDate = new Date(`${dateValue}T${timeValue}:00`);
+      	  if (!isNaN(targetDate)) {
+       	     switchPage();
+        	    timerRunning = true; // Uruchamia timer po zapisaniu daty
+        	} else {
+              alert('Proszę wprowadzić poprawną datę i godzinę.');
+        }
+    } else {
+        alert('Proszę wprowadzić datę i godzinę.');
+    }
+});
+        
+        let timerRunning = false;
 
         function updateTimer() {
+        if (timerRunning) {
             const now = new Date();
             const diff = now - targetDate; // Liczymy czas od `targetDate` do teraz
 
@@ -293,6 +297,7 @@ border-radius: 5px;
         		secondsPreviewEl.textContent = 0;
             }
         }
+    }
 
         setInterval(updateTimer, 1000);
     </script>
