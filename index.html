@@ -30,8 +30,9 @@
         }
 
         .hidden {
-            display: none;
-        }
+            visibility: hidden;
+            position: absolute;
+}
 
         .page {
             text-align: center;
@@ -170,28 +171,28 @@ border-radius: 5px;
     	bottom: 42px; 
     	font-size: 12px;
     }
-
+}
 	
 .fade {
     animation: fadeOut 0.5s forwards; /* Fade out animation */
-}
-
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-        background-color: transparent;
-    }
-    100% {
-        opacity: 0;
-        background-color: #222222; /* Kolor, na który ma się zfade'ować */
-    }
 }
 
 .fadeIn {
     animation: fadeIn 0.5s forwards; /* Fade in animation */
 }
 
-@keyframes fadeIn {
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+        background-color: transparent;
+    }
+    100% {
+        opacity: 0;
+        background-color: #222222;
+    }
+}
+
+@-webkit-keyframes fadeIn {
     0% {
         opacity: 0;
         background-color: #222222;
@@ -300,18 +301,23 @@ border-radius: 5px;
         });
 
         dateForm.addEventListener('submit', (event) => {
-    	event.preventDefault();
+    event.preventDefault();
 
-    	const dateValue = dateInput.value;
-    	const timeValue = timeInput.value;
+    const dateValue = dateInput.value;
+    const timeValue = timeInput.value;
 
-    	if (dateValue && timeValue) {
-    	    targetDate = new Date(`${dateValue}T${timeValue}:00`);
-      	  if (!isNaN(targetDate)) {
-       	     switchPage();
-        	    timerRunning = true; // Uruchamia timer po zapisaniu daty
-        	} else {
-              alert('Proszę wprowadzić poprawną datę i godzinę.');
+    if (dateValue && timeValue) {
+        targetDate = new Date(`${dateValue}T${timeValue}:00`);
+        if (!isNaN(targetDate)) {
+            // Natychmiastowa zmiana strony
+            switchPage();
+            
+            // Uruchomienie timera po 1 sekundzie
+            setTimeout(() => {
+                timerRunning = true; // Uruchamia timer po sekundzie
+            }, 1500); // Opóźnienie 1,5 sekundy
+        } else {
+            alert('Proszę wprowadzić poprawną datę i godzinę.');
         }
     } else {
         alert('Proszę wprowadzić datę i godzinę.');
