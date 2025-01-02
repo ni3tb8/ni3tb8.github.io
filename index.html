@@ -10,6 +10,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Licznik">
     <link rel="apple-touch-icon" href="icon-180x180.png">
+    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
+
 
     <style>
     
@@ -60,7 +64,6 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background 0.3s ease;
-            display: inlinel
         }
 
         .button:hover {
@@ -209,6 +212,23 @@ border-radius: 5px;
         background-color: transparent;
     }
 }
+
+.custom-info {
+        background-color: #243857;
+        font-family: "Bricolage Grotesque", serif;
+        color: #fefefe;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .custom-success {
+        background-color: #224a1d;
+        font-family: "Bricolage Grotesque", serif;
+        color: #fefefe;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
     </style>
 </head>
 <body>
@@ -316,7 +336,11 @@ border-radius: 5px;
     if (dateValue && timeValue) {
         targetDate = new Date(`${dateValue}T${timeValue}:00`);
         if (!isNaN(targetDate)) {
-            // Natychmiastowa zmiana strony
+            PNotify.success({
+                text: 'Data i godzina zostały zapisane.',
+                delay: 2000,
+                addClass: 'custom-success'
+            });
             switchPage();
             
             // Uruchomienie timera po 1 sekundzie
@@ -324,10 +348,18 @@ border-radius: 5px;
                 timerRunning = true; // Uruchamia timer po sekundzie
             }, 1500); // Opóźnienie 1,5 sekundy
         } else {
-            alert('Proszę wprowadzić poprawną datę i godzinę.');
+            PNotify.notice({
+            text: 'Data lub godzina niepoprawna.',
+            delay: 2000,
+            addClass: 'custom-info'
+        });
         }
     } else {
-        alert('Proszę wprowadzić datę i godzinę.');
+        PNotify.notice({
+            text: 'Wprowadź datę i godzinę.',
+            delay: 2000,
+            addClass: 'custom-info'
+        });
     }
 });
         
