@@ -37,7 +37,7 @@
             background: #222222;
             transition: background 0.3s ease;
             overflow: hidden;
-	    margin: 0;
+	    	margin: 0;
         }
 
         .hidden {
@@ -155,7 +155,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .podglad {
 position: fixed; 
-bottom: 40px; 
+bottom: 90px; 
 left: 40px; 
 font-size: 16px; 
 color: #fefefe; 
@@ -170,6 +170,17 @@ border-radius: 5px;
     text-align: right; /* Wyrównanie tekstu wewnątrz elementu */
 }
 
+.stopka {
+position: fixed; 
+bottom: 40px; 
+left: 40px; 
+font-size: 16px; 
+color: #fefefe; 
+background-color: #191919; 
+padding: 10px; 
+border-radius: 5px;
+}
+
 /* Dostosowanie na urządzenia mobilne */
 @media (max-width: 600px) {
     body {
@@ -178,8 +189,19 @@ border-radius: 5px;
     }
 
 	.podglad {
+    	bottom: 86px; 
+    	font-size: 12px;
+    }
+    
+    .stopka {
     	bottom: 42px; 
     	font-size: 12px;
+    }
+    
+    .custom-alert {
+        width: 90%; /* Pełna szerokość ekranu na urządzeniach mobilnych */
+        font-size: 14px; /* Mniejszy rozmiar czcionki na mobilnych */
+        padding: 10px 20px; /* Mniejsze wewnętrzne odstępy */
     }
 }
 	
@@ -213,25 +235,118 @@ border-radius: 5px;
     }
 }
 
-.custom-info {
-        background-color: #243857;
-        font-family: "Bricolage Grotesque", serif;
-        color: #fefefe;
-        border-radius: 5px;
-        font-size: 16px;
-    }
+/* Ekran ładowania */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #222222; /* Tło ekranowe */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 1;
+    transition: opacity 1.5s ease-out; /* Animacja znikania tła z ease-out */
+}
 
-    .custom-success {
-        background-color: #224a1d;
-        font-family: "Bricolage Grotesque", serif;
-        color: #fefefe;
-        border-radius: 5px;
-        font-size: 16px;
-    }
+/* Po załadowaniu strony ekran ładowania zniknie */
+.loading-screen.hidden {
+    opacity: 0; /* Tło zniknie */
+    visibility: hidden; /* Ukrycie elementu po animacji */
+}
+
+/* Styl podstawowy dla alertów */
+.custom-alert {
+    position: fixed; /* Ustawienie alertu względem okna przeglądarki */
+    top: 40px;
+    right: 40px;
+    background-color: #243857; /* Kolor tła */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    font-family: "Bricolage Grotesque", serif; /* Czcionka */
+    color: #fefefe; /* Kolor tekstu */
+    border-radius: 5px; /* Zaokrąglenie rogów */
+    font-size: 16px; /* Rozmiar czcionki */
+    text-align: center; /* Wyrównanie tekstu w poziomie */
+    padding: 15px 30px; /* Wewnętrzne odstępy wokół tekstu */
+    max-width: 80%; /* Maksymalna szerokość elementu (80% ekranu) */
+    z-index: 9999; /* Ustawienie na wierzchu innych elementów */
+    opacity: 0; /* Początkowo ukryty */
+    transition: 0.3s ease;
+}
+
+.custom-alert.show {
+    opacity: 1; /* Ustawienie pełnej widoczności */
+}
+
+/* Styl alertu dla typu "success" */
+.custom-alert.success {
+    background-color: #224a1d; /* Zielone tło dla sukcesu */
+}
+
+/* Styl alertu dla typu "info" */
+.custom-alert.info {
+    background-color: #243857; /* Niebieskie tło dla info */
+}
+
+/* Styl alertu dla typu "warning" */
+.custom-alert.warning {
+    background-color: #574924; /* Niebieskie tło dla info */
+}
+
+/* Ekran ładowania */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #222222; /* Tło ekranowe */
+    z-index: 10000;
+    opacity: 1; /* Początkowo pełna widoczność */
+    transition: 0.3s ease-out; /* Animacja znikania */
+}
+
+/* Po załadowaniu strony ekran ładowania zniknie */
+.loading-screen.hidden {
+    opacity: 0; /* Tło zniknie */
+    visibility: hidden; /* Ukrycie elementu po animacji */
+}
+
+/* Początkowa ukryta zawartość strony */
+.content {
+    opacity: 0; /* Na początku kontent jest niewidoczny */
+    transition: 0.3s ease-in; /* Animacja stopniowego pojawiania się */
+}
+
+/* Zawartość strony widoczna po zakończeniu ładowania */
+.content.visible {
+    opacity: 1; /* Po zakończeniu ładowania kontent stanie się widoczny */
+}
 
     </style>
 </head>
 <body>
+
+<!-- Ekran ładowania -->
+<div id="loadingScreen" class="loading-screen"></div>
+
+<!-- Alert info -->
+<div id="customAlertInfo" class="custom-alert hidden info">
+    Wprowadź datę i godzinę.
+</div>
+
+<!-- Alert success -->
+<div id="customAlertSuccess" class="custom-alert hidden success">
+    Operacja zakończona sukcesem!
+</div>
+
+<!-- Alert success -->
+<div id="customAlertWarning" class="custom-alert hidden warning">
+    Operacja zakończona niepowodzeniem!
+</div>
+
     <div id="page1" class="page">
         <h1>Licznik</h1>
         <div id="timer">
@@ -243,7 +358,7 @@ border-radius: 5px;
     </div>
 
     <div id="page2" class="page hidden">
-        <h1>Ustaw datę</h1><br><br>
+        <h1>Ustaw datę i czas</h1><br><br>
         <form id="dateForm">
             <label>
                 Data:&nbsp;&nbsp;
@@ -254,7 +369,7 @@ border-radius: 5px;
                 <input type="time" id="timeInput">
             </label><br>
             <div style="display: flex; gap: 10px;">
-    			<buttonZ type="button" id="setNow">Ustaw obecną datę</buttonZ>
+    			<buttonZ type="button" id="setNow">Ustaw teraz</buttonZ>
    				<button type="submit">Zapisz</button>
 </div>
         </form>
@@ -265,6 +380,8 @@ border-radius: 5px;
         <span id="minutesPreview" style="font-weight: 600">0</span>m,
         <span id="secondsPreview" style="font-weight: 600">0</span>s
     </div>
+    
+    <div class="stopka">&copy; 2024 ni3b8 design, v0301</div>
         
     </div>
 
@@ -322,10 +439,18 @@ border-radius: 5px;
         toggleButton.addEventListener('click', switchPage);
 
         setNowButton.addEventListener('click', () => {
-            const now = new Date();
-            dateInput.value = now.toISOString().split('T')[0];
-            timeInput.value = now.toTimeString().slice(0, 5);
-        });
+    const now = new Date();
+
+    // Ustawienie lokalnej daty w formacie YYYY-MM-DD
+    const localDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+    
+    // Ustawienie lokalnego czasu w formacie HH:MM
+    const localTime = now.toTimeString().slice(0, 5); 
+
+    // Ustawienie wartości na lokalną datę i czas
+    dateInput.value = localDate;
+    timeInput.value = localTime;
+});
 
         dateForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -336,11 +461,7 @@ border-radius: 5px;
     if (dateValue && timeValue) {
         targetDate = new Date(`${dateValue}T${timeValue}:00`);
         if (!isNaN(targetDate)) {
-            PNotify.success({
-                text: 'Data i godzina zostały zapisane.',
-                delay: 2000,
-                addClass: 'custom-success'
-            });
+            showAlert('success', 'Data i godzina zostały zapisane.');
             switchPage();
             
             // Uruchomienie timera po 1 sekundzie
@@ -348,18 +469,10 @@ border-radius: 5px;
                 timerRunning = true; // Uruchamia timer po sekundzie
             }, 1500); // Opóźnienie 1,5 sekundy
         } else {
-            PNotify.notice({
-            text: 'Data lub godzina niepoprawna.',
-            delay: 2000,
-            addClass: 'custom-info'
-        });
+            showAlert('warning', 'Wprowadzono niepoprawną datę lub godzinę.');
         }
     } else {
-        PNotify.notice({
-            text: 'Wprowadź datę i godzinę.',
-            delay: 2000,
-            addClass: 'custom-info'
-        });
+        showAlert('info', 'Wprowadź datę i godzinę.');
     }
 });
         
@@ -410,6 +523,33 @@ border-radius: 5px;
       console.error('Rejestracja Service Workera nie powiodła się:', error);
     });
   }
+  
+  // Funkcja do pokazania alertu
+function showAlert(type, message) {
+    const alertElement = document.getElementById(`customAlert${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    alertElement.textContent = message; // Ustawienie tekstu alertu
+    alertElement.classList.remove('hidden'); // Usuwamy klasę ukrywającą
+    alertElement.classList.add('show'); // Pokazujemy alert z animacją
+
+    setTimeout(() => {
+        alertElement.classList.remove('show'); // Ukrywamy alert z animacją
+        setTimeout(() => {
+            alertElement.classList.add('hidden'); // Całkowite ukrycie elementu po animacji
+        }, 300); // Czas trwania animacji znikania
+    }, 3000); // Alert będzie widoczny przez 3 sekundy
+}
+
+// Funkcja do ukrycia ekranu ładowania po 1,5 sekundy i wyświetlenia kontentu
+window.addEventListener('load', function () {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+
+    // Czekamy 1,5 sekundy na animację ładowania
+    setTimeout(function () {
+        loadingScreen.classList.add('hidden'); // Ukrywamy ekran ładowania
+        content.classList.add('visible'); // Sprawiamy, że zawartość stanie się widoczna
+    }, 500); // Po 1,5 sekundy
+});
     </script>
 </body>
 </html>
