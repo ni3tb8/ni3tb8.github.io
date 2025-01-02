@@ -1,0 +1,16 @@
+{
+  "short_name": "Licznik",
+  "name": "Licznik",
+  "description": "Prosty licznik czasu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#222222",
+  "theme_color": "#222222",
+  "icons": [
+    {
+      "src": "stopwatch.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
