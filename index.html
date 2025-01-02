@@ -25,6 +25,7 @@
             color: #fefefe;
             background: #222222;
             transition: background 0.3s ease;
+            overflow: hidden;
         }
 
         .hidden {
@@ -156,6 +157,13 @@ border-radius: 5px;
     width: 2ch; /* Stała szerokość dla każdej cyfry */
     text-align: right; /* Wyrównanie tekstu wewnątrz elementu */
 }
+
+/* Dostosowanie na urządzenia mobilne */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px; /* Zmniejszenie rozmiaru czcionki na małych ekranach */
+        padding: 10px; /* Dodanie marginesu, aby uniknąć przyklejania się elementów */
+    }
 
     </style>
 </head>
