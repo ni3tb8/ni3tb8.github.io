@@ -171,6 +171,36 @@ border-radius: 5px;
     	font-size: 12px;
     }
 
+	
+.fade {
+    animation: fadeOut 0.5s forwards; /* Fade out animation */
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        background-color: transparent;
+    }
+    100% {
+        opacity: 0;
+        background-color: #222222; /* Kolor, na który ma się zfade'ować */
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s forwards; /* Fade in animation */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        background-color: #222222;
+    }
+    100% {
+        opacity: 1;
+        background-color: transparent;
+    }
+}
     </style>
 </head>
 <body>
@@ -236,9 +266,30 @@ border-radius: 5px;
         let targetDate = new Date();
 
         function switchPage() {
-            page1.classList.toggle('hidden');
-            page2.classList.toggle('hidden');
-        }
+    // Dodaj klasę fade-out do strony, którą chcesz ukryć
+    page1.classList.add('fade');
+    page2.classList.add('fade');
+
+    // Czekaj na zakończenie animacji przed przełączeniem stron
+    setTimeout(() => {
+        page1.classList.toggle('hidden');
+        page2.classList.toggle('hidden');
+        
+        // Po zakończeniu animacji usuń klasę fade, by przywrócić stronę do normalności
+        page1.classList.remove('fade');
+        page2.classList.remove('fade');
+        
+        // Dodaj fade-in dla nowej strony
+        page1.classList.add('fadeIn');
+        page2.classList.add('fadeIn');
+        
+        // Usuwamy fade-in po zakończeniu animacji
+        setTimeout(() => {
+            page1.classList.remove('fadeIn');
+            page2.classList.remove('fadeIn');
+        }, 500); // Zgodne z czasem trwania animacji
+    }, 500); // Czas trwania fadeOut animacji
+}
 
         toggleButton.addEventListener('click', switchPage);
 
