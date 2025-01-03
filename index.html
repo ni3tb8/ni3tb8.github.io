@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Licznik</title>
+    <link rel="icon" href="stopwatch.svg" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Licznik">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="icon-180x180.png">
+    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Ekran ładowania -->
+<div id="loadingScreen" class="loading-screen"></div>
+
+<!-- Alert info -->
+<div id="customAlertInfo" class="custom-alert hidden info">
+    Wprowadź datę i godzinę.
+</div>
+
+<!-- Alert success -->
+<div id="customAlertSuccess" class="custom-alert hidden success">
+    Operacja zakończona sukcesem!
+</div>
+
+<!-- Alert success -->
+<div id="customAlertWarning" class="custom-alert hidden warning">
+    Operacja zakończona niepowodzeniem!
+</div>
+
+    <div id="page1" class="page">
+        <h1>Licznik</h1>
+        <div id="timer">
+            <span id="days" style="font-weight: 600">0</span>d,
+            <span id="hours" style="font-weight: 600">0</span>h,
+            <span id="minutes" style="font-weight: 600">0</span>m,
+            <span id="seconds" style="font-weight: 600">0</span>s
+        </div>
+        <div class="stopka">ni3tb8 design</div>
+    </div>
+
+    <div id="page2" class="page hidden">
+        <h1>Ustaw datę i czas</h1><br><br>
+        <form id="dateForm">
+            <label>
+                Data:&nbsp;&nbsp;
+                <input type="date" id="dateInput">
+            </label>
+            <label>
+                Godzina:&nbsp;&nbsp;
+                <input type="time" id="timeInput">
+            </label><br>
+            <div style="display: flex; gap: 10px;">
+    			<buttonZ type="button" id="setNow">Ustaw teraz</buttonZ>
+   				<button type="submit">Zapisz</button>
+</div>
+        </form>
+        
+        <div id="timerPreview" class="podglad">
+        <span id="daysPreview" style="font-weight: 600">0</span>d,
+        <span id="hoursPreview" style="font-weight: 600">0</span>h,
+        <span id="minutesPreview" style="font-weight: 600">0</span>m,
+        <span id="secondsPreview" style="font-weight: 600">0</span>s
+    </div>
+        
+    </div>
+
+    <button class="button" id="togglePage">Przełącz stronę</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
