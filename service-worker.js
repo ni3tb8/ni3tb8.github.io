@@ -3,7 +3,6 @@ const URLS_TO_CACHE = [
   '/',
   'stopwatch.svg',
   'index.html',
-  // Dodaj inne pliki, które chcesz przechowywać
 ];
 
 // Instalacja Service Workera
