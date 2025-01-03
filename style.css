@@ -198,7 +198,7 @@ border-radius: 5px;
     animation: fadeIn 0.5s forwards; /* Fade in animation */
 }
 
-@-webkit-keyframes fadeOut {
+@keyframes fadeOut {
     0% {
         opacity: 1;
         background-color: transparent;
@@ -209,7 +209,7 @@ border-radius: 5px;
     }
 }
 
-@-webkit-keyframes fadeIn {
+@keyframes fadeIn {
     0% {
         opacity: 0;
         background-color: #222222;
