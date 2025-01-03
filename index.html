@@ -151,6 +151,7 @@ input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(100%) brightness(95%);
     cursor: pointer;
+    line-height: 1.5;
 }
 
 .podglad {
@@ -284,6 +285,11 @@ border-radius: 5px;
     opacity: 1; /* Ustawienie pełnej widoczności */
 }
 
+.custom-alert.fadeOut {
+    opacity: 0;
+    transition: opacity 0.3s ease; /* animacja zanikania */
+}
+
 /* Styl alertu dla typu "success" */
 .custom-alert.success {
     background-color: #224a1d; /* Zielone tło dla sukcesu */
@@ -297,6 +303,10 @@ border-radius: 5px;
 /* Styl alertu dla typu "warning" */
 .custom-alert.warning {
     background-color: #574924; /* Niebieskie tło dla info */
+}
+
+.custom-alert.option {
+    background-color: #191919; /* Niebieskie tło dla info */
 }
 
 /* Ekran ładowania */
@@ -392,70 +402,61 @@ border-radius: 5px;
 
     <script>
         const page1 = document.getElementById('page1');
-        const page2 = document.getElementById('page2');
-        const toggleButton = document.getElementById('togglePage');
-        const timer = document.getElementById('timer');
+const page2 = document.getElementById('page2');
+const toggleButton = document.getElementById('togglePage');
+const timer = document.getElementById('timer');
 
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minutesEl = document.getElementById('minutes');
+const secondsEl = document.getElementById('seconds');
 
-        const dateForm = document.getElementById('dateForm');
-        const dateInput = document.getElementById('dateInput');
-        const timeInput = document.getElementById('timeInput');
-        const setNowButton = document.getElementById('setNow');
-        
-        const daysPreviewEl = document.getElementById('daysPreview');
-		const hoursPreviewEl = document.getElementById('hoursPreview');
-		const minutesPreviewEl = document.getElementById('minutesPreview');
-		const secondsPreviewEl = document.getElementById('secondsPreview');
+const dateForm = document.getElementById('dateForm');
+const dateInput = document.getElementById('dateInput');
+const timeInput = document.getElementById('timeInput');
+const setNowButton = document.getElementById('setNow');
 
-        let targetDate = new Date();
+const daysPreviewEl = document.getElementById('daysPreview');
+const hoursPreviewEl = document.getElementById('hoursPreview');
+const minutesPreviewEl = document.getElementById('minutesPreview');
+const secondsPreviewEl = document.getElementById('secondsPreview');
 
-        function switchPage() {
-    // Dodaj klasę fade-out do strony, którą chcesz ukryć
+let targetDate = new Date();
+let timerRunning = false;
+
+function switchPage() {
     page1.classList.add('fade');
     page2.classList.add('fade');
 
-    // Czekaj na zakończenie animacji przed przełączeniem stron
     setTimeout(() => {
         page1.classList.toggle('hidden');
         page2.classList.toggle('hidden');
-        
-        // Po zakończeniu animacji usuń klasę fade, by przywrócić stronę do normalności
+
         page1.classList.remove('fade');
         page2.classList.remove('fade');
-        
-        // Dodaj fade-in dla nowej strony
+
         page1.classList.add('fadeIn');
         page2.classList.add('fadeIn');
-        
-        // Usuwamy fade-in po zakończeniu animacji
+
         setTimeout(() => {
             page1.classList.remove('fadeIn');
             page2.classList.remove('fadeIn');
-        }, 500); // Zgodne z czasem trwania animacji
-    }, 500); // Czas trwania fadeOut animacji
+        }, 500);
+    }, 500);
 }
 
-        toggleButton.addEventListener('click', switchPage);
+toggleButton.addEventListener('click', switchPage);
 
-        setNowButton.addEventListener('click', () => {
+setNowButton.addEventListener('click', () => {
     const now = new Date();
-
-    // Ustawienie lokalnej daty w formacie YYYY-MM-DD
     const localDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
-    
-    // Ustawienie lokalnego czasu w formacie HH:MM
-    const localTime = now.toTimeString().slice(0, 5); 
+    const localTime = now.toTimeString().slice(0, 5);
 
-    // Ustawienie wartości na lokalną datę i czas
     dateInput.value = localDate;
     timeInput.value = localTime;
 });
 
-        dateForm.addEventListener('submit', (event) => {
+dateForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     const dateValue = dateInput.value;
@@ -464,13 +465,15 @@ border-radius: 5px;
     if (dateValue && timeValue) {
         targetDate = new Date(`${dateValue}T${timeValue}:00`);
         if (!isNaN(targetDate)) {
+            localStorage.setItem('savedDate', dateValue);
+            localStorage.setItem('savedTime', timeValue);
+
             showAlert('success', 'Data i godzina zostały zapisane.');
             switchPage();
-            
-            // Uruchomienie timera po 1 sekundzie
+
             setTimeout(() => {
-                timerRunning = true; // Uruchamia timer po sekundzie
-            }, 1500); // Opóźnienie 1,5 sekundy
+                timerRunning = true;
+            }, 1500);
         } else {
             showAlert('warning', 'Wprowadzono niepoprawną datę lub godzinę.');
         }
@@ -478,81 +481,235 @@ border-radius: 5px;
         showAlert('info', 'Wprowadź datę i godzinę.');
     }
 });
-        
-        let timerRunning = false;
 
-        function updateTimer() {
-        if (timerRunning) {
-            const now = new Date();
-            const diff = now - targetDate; // Liczymy czas od `targetDate` do teraz
+function updateTimer() {
+    if (timerRunning) {
+        const now = new Date();
+        const diff = now - targetDate;
 
-            if (diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        if (diff > 0) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                daysEl.textContent = days;
-                hoursEl.textContent = hours;
-                minutesEl.textContent = minutes;
-                secondsEl.textContent = seconds;
-                
-                // Aktualizowanie licznika na stronie 2 (podgląd)
-        		daysPreviewEl.textContent = days;
-       			hoursPreviewEl.textContent = hours;
-        		minutesPreviewEl.textContent = minutes;
-        		secondsPreviewEl.textContent = seconds;
-            } else {
-                // Reset timer to zero if the target date is in the future (unexpected case)
-                daysEl.textContent = 0;
-                hoursEl.textContent = 0;
-                minutesEl.textContent = 0;
-                secondsEl.textContent = 0;
-                
-                daysPreviewEl.textContent = 0;
-        		hoursPreviewEl.textContent = 0;
-        		minutesPreviewEl.textContent = 0;
-        		secondsPreviewEl.textContent = 0;
-            }
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
+
+            daysPreviewEl.textContent = days;
+            hoursPreviewEl.textContent = hours;
+            minutesPreviewEl.textContent = minutes;
+            secondsPreviewEl.textContent = seconds;
+        } else {
+            daysEl.textContent = 0;
+            hoursEl.textContent = 0;
+            minutesEl.textContent = 0;
+            secondsEl.textContent = 0;
+
+            daysPreviewEl.textContent = 0;
+            hoursPreviewEl.textContent = 0;
+            minutesPreviewEl.textContent = 0;
+            secondsPreviewEl.textContent = 0;
         }
     }
-
-        setInterval(updateTimer, 1000);
-
-	    if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-      console.log('Service Worker zarejestrowany:', registration);
-    }).catch((error) => {
-      console.error('Rejestracja Service Workera nie powiodła się:', error);
-    });
-  }
-  
-  // Funkcja do pokazania alertu
-function showAlert(type, message) {
-    const alertElement = document.getElementById(`customAlert${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    alertElement.textContent = message; // Ustawienie tekstu alertu
-    alertElement.classList.remove('hidden'); // Usuwamy klasę ukrywającą
-    alertElement.classList.add('show'); // Pokazujemy alert z animacją
-
-    setTimeout(() => {
-        alertElement.classList.remove('show'); // Ukrywamy alert z animacją
-        setTimeout(() => {
-            alertElement.classList.add('hidden'); // Całkowite ukrycie elementu po animacji
-        }, 300); // Czas trwania animacji znikania
-    }, 3000); // Alert będzie widoczny przez 3 sekundy
 }
 
-// Funkcja do ukrycia ekranu ładowania po 1,5 sekundy i wyświetlenia kontentu
+setInterval(updateTimer, 1000);
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        console.log('Service Worker zarejestrowany:', registration);
+    }).catch((error) => {
+        console.error('Rejestracja Service Workera nie powiodła się:', error);
+    });
+}
+
 window.addEventListener('load', function () {
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+
+    if (savedDate && savedTime) {
+        const formattedDate = formatDate(savedDate); // Sformatowanie daty
+        const formattedTime = savedTime; // Godzina
+
+        // Tworzenie komunikatu z zapisaną datą i godziną
+        const message = `Wczytano licznik od ${formattedDate}, ${formattedTime}. Czy kontynuować?`;
+
+        showConfirmationAlert(message, () => {
+            // Jeśli użytkownik kliknie "Tak"
+            dateInput.value = savedDate;
+            timeInput.value = savedTime;
+            targetDate = new Date(`${savedDate}T${savedTime}:00`);
+            timerRunning = true;
+        }, () => {
+            // Jeśli użytkownik kliknie "Nie"
+            console.log('Licznik nie został wznowiony.');
+        });
+    }
+
     const loadingScreen = document.getElementById('loadingScreen');
     const content = document.getElementById('content');
 
-    // Czekamy 1,5 sekundy na animację ładowania
     setTimeout(function () {
-        loadingScreen.classList.add('hidden'); // Ukrywamy ekran ładowania
-        content.classList.add('visible'); // Sprawiamy, że zawartość stanie się widoczna
-    }, 500); // Po 1,5 sekundy
+        loadingScreen.classList.add('hidden');
+        content.classList.add('visible');
+    }, 500);
 });
+
+function formatDate(date) {
+    // Funkcja do formatowania daty z 'yyyy-mm-dd' na 'dd.mm.yyyy'
+    const dateParts = date.split('-');
+    return `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+}
+
+function showAlert(type, message) {
+    const alertElement = document.getElementById(`customAlert${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    alertElement.textContent = message;
+    alertElement.classList.remove('hidden');
+    alertElement.classList.add('show');
+
+    setTimeout(() => {
+        alertElement.classList.remove('show');
+        setTimeout(() => {
+            alertElement.classList.add('hidden');
+        }, 300);
+    }, 3000);
+}
+
+function showConfirmationAlert(message, onConfirm, onCancel) {
+    const alertContainer = document.createElement('div');
+    alertContainer.className = 'custom-alert option'; // Klasa alertu dostosowana do stylu
+
+    const alertMessage = document.createElement('p');
+    alertMessage.textContent = message;
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.justifyContent = 'center';
+    buttonContainer.style.gap = '10px';
+    buttonContainer.style.marginTop = '15px';
+
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'Tak';
+    confirmButton.style.backgroundColor = '#224a1d';
+    confirmButton.style.border = 'none';
+    confirmButton.style.color = '#fefefe';
+    confirmButton.style.padding = '10px 20px';
+    confirmButton.style.borderRadius = '30px';
+    confirmButton.style.cursor = 'pointer';
+    confirmButton.style.fontSize = '16px';
+    confirmButton.style.transition = '0.3s ease';
+
+    confirmButton.addEventListener('mouseover', () => {
+        confirmButton.style.backgroundColor = '#218838';
+    });
+    confirmButton.addEventListener('mouseout', () => {
+        confirmButton.style.backgroundColor = '#224a1d';
+    });
+    confirmButton.addEventListener('click', () => {
+        alertContainer.classList.add('fadeOut'); // Dodanie klasy fadeOut
+        setTimeout(() => {
+            document.body.removeChild(alertContainer); // Usunięcie alertu po animacji
+            onConfirm(); // Wywołanie funkcji onConfirm po kliknięciu "Tak"
+            toggleButton.disabled = false; // Przywrócenie dostępności przycisku togglePage
+            toggleButton.style.pointerEvents = 'auto'; // Przywrócenie możliwości klikania przycisku
+            toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
+            toggleButton.style.color = '';
+        }, 500); // Po 500 ms (czas trwania animacji) usuwamy alert
+    });
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Nie';
+    cancelButton.style.backgroundColor = '#372359';
+    cancelButton.style.border = 'none';
+    cancelButton.style.color = '#fefefe';
+    cancelButton.style.padding = '10px 20px';
+    cancelButton.style.borderRadius = '30px';
+    cancelButton.style.cursor = 'pointer';
+    cancelButton.style.fontSize = '16px';
+    cancelButton.style.transition = '0.3s ease';
+
+    cancelButton.addEventListener('mouseover', () => {
+        cancelButton.style.backgroundColor = '#4a248a';
+    });
+    cancelButton.addEventListener('mouseout', () => {
+        cancelButton.style.backgroundColor = '#372359';
+    });
+    cancelButton.addEventListener('click', () => {
+        alertContainer.classList.add('fadeOut'); // Dodanie klasy fadeOut
+        setTimeout(() => {
+            // Usunięcie danych z localStorage
+            localStorage.removeItem('savedDate');
+            localStorage.removeItem('savedTime');
+
+            // Ustawienie flagi, że użytkownik nie chce kontynuować licznika
+            localStorage.setItem('skipTimer', 'true');
+
+            document.body.removeChild(alertContainer); // Usunięcie alertu po animacji
+            onCancel(); // Wywołanie funkcji onCancel po kliknięciu "Nie"
+            toggleButton.disabled = false; // Przywrócenie dostępności przycisku togglePage
+            toggleButton.style.pointerEvents = 'auto'; // Przywrócenie możliwości klikania przycisku
+            toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
+            toggleButton.style.color = '';
+        }, 500); // Po 500 ms (czas trwania animacji) usuwamy alert
+    });
+
+    buttonContainer.appendChild(confirmButton);
+    buttonContainer.appendChild(cancelButton);
+
+    alertContainer.appendChild(alertMessage);
+    alertContainer.appendChild(buttonContainer);
+
+    document.body.appendChild(alertContainer);
+
+    // Wyłączanie przycisku togglePage
+    toggleButton.disabled = true;
+    toggleButton.style.pointerEvents = 'none'; // Wyłączenie kliknięcia przycisku
+    toggleButton.style.backgroundColor = '#576478'; // Zmiana koloru przycisku na szary (lub inny nieaktywny)
+    toggleButton.style.color = '#abb7c9';
+
+    // Ustawienie początkowej widoczności i animacji
+    setTimeout(() => {
+        alertContainer.classList.add('show');
+    }, 100);
+}
+
+
+
+
+window.addEventListener('load', function () {
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+    const skipTimer = localStorage.getItem('skipTimer');
+
+    // Jeśli użytkownik wcześniej wybrał "Nie", nie pokazuj monitu
+    if (skipTimer !== 'true' && savedDate && savedTime) {
+        showConfirmationAlert('Czy kontynuować obecny licznik?', () => {
+            // Jeśli użytkownik kliknie "Tak"
+            dateInput.value = savedDate;
+            timeInput.value = savedTime;
+            targetDate = new Date(`${savedDate}T${savedTime}:00`);
+            timerRunning = true;
+        }, () => {
+            // Jeśli użytkownik kliknie "Nie"
+            console.log('Licznik nie został wznowiony.');
+        });
+    }
+
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+
+    setTimeout(function () {
+        loadingScreen.classList.add('hidden');
+        content.classList.add('visible');
+    }, 500);
+});
+
+
+
+
     </script>
 </body>
 </html>
