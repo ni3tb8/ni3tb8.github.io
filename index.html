@@ -529,36 +529,94 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('load', function () {
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-
-    if (savedDate && savedTime) {
-        const formattedDate = formatDate(savedDate); // Sformatowanie daty
-        const formattedTime = savedTime; // Godzina
-
-        // Tworzenie komunikatu z zapisaną datą i godziną
-        const message = `Wczytano licznik od ${formattedDate}, ${formattedTime}. Czy kontynuować?`;
-
-        showConfirmationAlert(message, () => {
-            // Jeśli użytkownik kliknie "Tak"
-            dateInput.value = savedDate;
-            timeInput.value = savedTime;
-            targetDate = new Date(`${savedDate}T${savedTime}:00`);
-            timerRunning = true;
-        }, () => {
-            // Jeśli użytkownik kliknie "Nie"
-            console.log('Licznik nie został wznowiony.');
-        });
-    }
-
+    const stopka = document.querySelector('.stopka');
     const loadingScreen = document.getElementById('loadingScreen');
     const content = document.getElementById('content');
 
+    // Ustawienie licznika na 0 przed wczytaniem danych
+    resetTimer();
+
+    // Opóźnienie, aby załadować wszystkie zasoby
     setTimeout(function () {
+        // Wczytanie zapisanych danych
+        const savedDate = localStorage.getItem('savedDate');
+        const savedTime = localStorage.getItem('savedTime');
+
+        if (savedDate && savedTime) {
+            const formattedDate = formatDate(savedDate); // Sformatowanie daty
+            const formattedTime = savedTime; // Godzina
+
+            // Tworzenie komunikatu z zapisaną datą i godziną
+            const message = `Wczytano licznik od ${formattedDate}, ${formattedTime}. Czy kontynuować?`;
+
+            // Wyświetlenie monitu z pytaniem
+            showConfirmationAlert(message, () => {
+                // Jeśli użytkownik kliknie "Tak"
+                dateInput.value = savedDate;
+                timeInput.value = savedTime;
+                targetDate = new Date(`${savedDate}T${savedTime}:00`);
+                timerRunning = true;
+
+                // Zaktualizowanie licznika na zapisany czas
+                updateTimerWithSavedData(targetDate);
+            }, () => {
+                // Jeśli użytkownik kliknie "Nie"
+                console.log('Licznik nie został wznowiony.');
+                const now = new Date();
+                updateTimerWithSavedData(now); // Ustawienie licznika na aktualną datę
+            });
+        } else {
+            // Brak zapisanych danych, ustawienie na teraz
+            const now = new Date();
+            updateTimerWithSavedData(now); // Ustawienie licznika na aktualną datę
+        }
+
+        // Po zakończeniu ładowania strony
         loadingScreen.classList.add('hidden');
         content.classList.add('visible');
-    }, 500);
+        
+        // Pokazanie stopki
+        if (stopka) {
+            stopka.classList.remove('hidden');
+        }
+    }, 500); // Czas oczekiwania przed ukryciem ekranu ładowania
 });
+
+function resetTimer() {
+    // Funkcja do ustawienia licznika na 0
+    daysEl.textContent = 0;
+    hoursEl.textContent = 0;
+    minutesEl.textContent = 0;
+    secondsEl.textContent = 0;
+
+    daysPreviewEl.textContent = 0;
+    hoursPreviewEl.textContent = 0;
+    minutesPreviewEl.textContent = 0;
+    secondsPreviewEl.textContent = 0;
+}
+
+function updateTimerWithSavedData(targetDate) {
+    // Funkcja do zaktualizowania licznika z podanym targetDate
+    const diff = targetDate - new Date();
+    const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24))); // Zapewniamy, że dni nie będą ujemne
+    const hours = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    const minutes = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+    const seconds = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
+
+    // Ustawienie wartości w odpowiednich elementach
+    daysEl.textContent = days;
+    hoursEl.textContent = hours;
+    minutesEl.textContent = minutes;
+    secondsEl.textContent = seconds;
+
+    // Ustawienie danych do podglądu
+    daysPreviewEl.textContent = days;
+    hoursPreviewEl.textContent = hours;
+    minutesPreviewEl.textContent = minutes;
+    secondsPreviewEl.textContent = seconds;
+}
+
+
 
 function formatDate(date) {
     // Funkcja do formatowania daty z 'yyyy-mm-dd' na 'dd.mm.yyyy'
