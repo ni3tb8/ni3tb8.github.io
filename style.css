@@ -199,10 +199,14 @@ border-radius: 5px;
     }
     
     .custom-alert {
-        width: 90%; /* Pełna szerokość ekranu na urządzeniach mobilnych */
+        width: calc(100% - 80px); /* Pełna szerokość ekranu na urządzeniach mobilnych */
         font-size: 14px; /* Mniejszy rozmiar czcionki na mobilnych */
         padding: 10px 20px; /* Mniejsze wewnętrzne odstępy */
     }
+}
+
+@media (min-width: 600px) {
+   
 }
 	
 .fade {
@@ -270,7 +274,7 @@ border-radius: 5px;
     font-size: 16px; /* Rozmiar czcionki */
     text-align: center; /* Wyrównanie tekstu w poziomie */
     padding: 15px 30px; /* Wewnętrzne odstępy wokół tekstu */
-    max-width: 80%; /* Maksymalna szerokość elementu (80% ekranu) */
+    max-width: 100%; /* Maksymalna szerokość elementu (80% ekranu) */
     z-index: 9999; /* Ustawienie na wierzchu innych elementów */
     opacity: 0; /* Początkowo ukryty */
     transition: 0.3s ease;
