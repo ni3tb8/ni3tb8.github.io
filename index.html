@@ -13,30 +13,17 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <link rel="apple-touch-icon" href="icon-180x180.png">
-    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Ekran ładowania -->
+
 <div id="loadingScreen" class="loading-screen"></div>
 
-<!-- Alert info -->
-<div id="customAlertInfo" class="custom-alert hidden info">
-    Wprowadź datę i godzinę.
-</div>
-
-<!-- Alert success -->
-<div id="customAlertSuccess" class="custom-alert hidden success">
-    Operacja zakończona sukcesem!
-</div>
-
-<!-- Alert success -->
-<div id="customAlertWarning" class="custom-alert hidden warning">
-    Operacja zakończona niepowodzeniem!
-</div>
+<div id="customAlertInfo" class="custom-alert hidden info"></div>
+<div id="customAlertSuccess" class="custom-alert hidden success"></div>
+<div id="customAlertWarning" class="custom-alert hidden warning"></div>
+<div id="customAlertOption" class="custom-alert hidden option"></div>
 
     <div id="page1" class="page">
         <h1>Licznik</h1>
@@ -46,7 +33,7 @@
             <span id="minutes" style="font-weight: 600">0</span>m,
             <span id="seconds" style="font-weight: 600">0</span>s
         </div>
-        <div class="stopka">ni3tb8 design</div>
+        <div class="stopka"><a href="https://github.com/ni3tb8/ni3tb8.github.io/">ni3tb8 design</a></div>
     </div>
 
     <div id="page2" class="page hidden">
