@@ -129,12 +129,10 @@ function updateTimer() {
 setInterval(updateTimer, 1000);
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').then(registration => {
-            console.log('Service Worker registered with scope:', registration.scope);
-        }).catch(error => {
-            console.error('Service Worker registration failed:', error);
-        });
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        console.log('Service Worker zarejestrowany:', registration);
+    }).catch((error) => {
+        console.error('Rejestracja Service Workera nie powiodła się:', error);
     });
 }
 
@@ -305,8 +303,12 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             toggleButton.style.pointerEvents = 'auto'; // Przywrócenie możliwości klikania przycisku
             toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
             toggleButton.style.color = '';
-        }, 500); // Po 500 ms (czas trwania animacji) usuwamy alert
+        }, 500);
+        setTimeout(() => {
+            showAlert('success', 'Pomyślnie wczytano dane.');
+        }, 500);
     });
+    
 
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Nie';
@@ -342,6 +344,9 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
             toggleButton.style.color = '';
         }, 500); // Po 500 ms (czas trwania animacji) usuwamy alert
+        setTimeout(() => {
+            showAlert('info', 'Wprowadź nowe dane.');
+        }, 500);
     });
 
     buttonContainer.appendChild(confirmButton);
