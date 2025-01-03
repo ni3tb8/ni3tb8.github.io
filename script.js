@@ -251,18 +251,34 @@ function formatDate(date) {
 }
 
 function showAlert(type, message) {
-    const alertElement = document.getElementById(`customAlert${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    alertElement.textContent = message;
-    alertElement.classList.remove('hidden');
-    alertElement.classList.add('show');
-
-    setTimeout(() => {
-        alertElement.classList.remove('show');
+    // Znajdź wszystkie aktywne alerty i ukryj je
+    const activeAlerts = document.querySelectorAll('.custom-alert.show');
+    activeAlerts.forEach(alert => {
+        alert.classList.remove('show');
         setTimeout(() => {
-            alertElement.classList.add('hidden');
+            alert.classList.add('hidden');
         }, 300);
-    }, 3000);
+    });
+
+    // Dodaj cooldown przed wyświetleniem nowego alertu
+    setTimeout(() => {
+        // Wyświetl nowy alert
+        const alertElement = document.getElementById(`customAlert${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        alertElement.textContent = message;
+        alertElement.classList.remove('hidden');
+        alertElement.classList.add('show');
+        alertElement.style.whiteSpace = 'pre-wrap';
+
+        // Automatycznie ukryj alert po 3 sekundach
+        setTimeout(() => {
+            alertElement.classList.remove('show');
+            setTimeout(() => {
+                alertElement.classList.add('hidden');
+            }, 300);
+        }, 3000);
+    }, 300); // Cooldown 0.5 sekundy
 }
+
 
 function showConfirmationAlert(message, onConfirm, onCancel) {
     const alertContainer = document.createElement('div');
