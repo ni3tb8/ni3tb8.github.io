@@ -529,6 +529,12 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('load', function () {
+    if (localStorage.getItem('skipTimer') !== 'true') {
+        location.reload(true);
+    }
+});
+
+window.addEventListener('load', function () {
     const savedDate = localStorage.getItem('savedDate');
     const savedTime = localStorage.getItem('savedTime');
 
