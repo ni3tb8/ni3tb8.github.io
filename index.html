@@ -569,19 +569,9 @@ function initializePage() {
     }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
-// Sprawdzanie stanu localStorage przy każdej wizycie
-window.addEventListener('load', function () {
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-
-    if (savedDate && savedTime) {
-        // Jeśli zapisano datę i godzinę
-        // Uruchomienie logiki związaną z kontynuowaniem licznika
-        initializePage();
-    } else {
-        // Jeśli brak zapisanych danych, ustawienia na aktualną datę
-        initializePage();
-    }
+// Uruchomienie inicjalizacji po załadowaniu strony
+window.addEventListener('load', function() {
+    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
 });
 
 
