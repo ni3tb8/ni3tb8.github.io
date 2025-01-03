@@ -14,8 +14,6 @@
     <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
-    <script src="app.js?v=1.0.1"></script>
-    <link rel="stylesheet" href="style.css?v=1.0.1">
 
 
     <style>
@@ -404,16 +402,23 @@ border-radius: 5px;
     <button class="button" id="togglePage">Przełącz stronę</button>
 
     <script>
-window.addEventListener('load', function() {
-    // Sprawdzamy, czy strona była już załadowana
-    if (!sessionStorage.getItem('pageRefreshed')) {
-        // Jeśli nie, ustawiamy flagę w sessionStorage, aby strona się nie przeładowała natychmiast
-        sessionStorage.setItem('pageRefreshed', 'true');
-        // Odświeżamy stronę z wyłączeniem cache
-        location.reload(true);
+window.addEventListener('load', function () {
+    // Sprawdzamy, czy strona jest ładowana po wciśnięciu F5 lub ponownym otwarciu karty
+    if (!sessionStorage.getItem('reload')) {
+        sessionStorage.setItem('reload', 'true');
+        // Wymuszenie pełnego odświeżenia strony
+        window.location.reload(true); // 'true' wymusza odświeżenie z pominięciem cache
     } else {
-        // Jeśli strona była już załadowana, usuwamy flagę
-        sessionStorage.removeItem('pageRefreshed');
+        sessionStorage.removeItem('reload');
+    }
+});
+
+// Obsługa naciśnięcia F5
+window.addEventListener('keydown', function (event) {
+    // Sprawdzamy, czy użytkownik nacisnął F5
+    if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
+        event.preventDefault(); // Zapobiegamy domyślnemu odświeżeniu
+        window.location.reload(true); // Wymuszenie odświeżenia
     }
 });
 
