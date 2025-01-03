@@ -127,11 +127,19 @@
     text-align: right; /* Wyrównanie tekstu wewnątrz */
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="time"]::-webkit-calendar-picker-indicator {
-    filter: invert(100%) brightness(95%);
-    cursor: pointer;
-    line-height: 1.5;
+/* Wyśrodkowanie etykiet względem pól */
+label {
+    display: flex;
+    align-items: center; /* Wyśrodkowanie w pionie */
+    gap: 5px; /* Odstęp między etykietą a polem */
+}
+
+input[type="date"],
+input[type="time"] {
+    height: 2.5em; /* Ustal wysokość, aby były spójne */
+    padding: 0.5em; /* Dodaj trochę przestrzeni wewnętrznej */
+    line-height: 1.5; /* Ustal właściwą wysokość tekstu */
+    box-sizing: border-box; /* Upewnij się, że padding nie powiększa pola */
 }
 
 .podglad {
