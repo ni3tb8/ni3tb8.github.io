@@ -404,6 +404,20 @@ border-radius: 5px;
     <button class="button" id="togglePage">Przełącz stronę</button>
 
     <script>
+window.addEventListener('load', function() {
+    // Sprawdzamy, czy strona była już załadowana
+    if (!sessionStorage.getItem('pageRefreshed')) {
+        // Jeśli nie, ustawiamy flagę w sessionStorage, aby strona się nie przeładowała natychmiast
+        sessionStorage.setItem('pageRefreshed', 'true');
+        // Odświeżamy stronę z wyłączeniem cache
+        location.reload(true);
+    } else {
+        // Jeśli strona była już załadowana, usuwamy flagę
+        sessionStorage.removeItem('pageRefreshed');
+    }
+});
+
+
         const page1 = document.getElementById('page1');
 const page2 = document.getElementById('page2');
 const toggleButton = document.getElementById('togglePage');
@@ -777,18 +791,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }, 100); // Ustawić niewielkie opóźnienie
 
 
-window.addEventListener('load', function() {
-    // Sprawdzamy, czy strona była już załadowana
-    if (!sessionStorage.getItem('pageRefreshed')) {
-        // Jeśli nie, ustawiamy flagę w sessionStorage, aby strona się nie przeładowała natychmiast
-        sessionStorage.setItem('pageRefreshed', 'true');
-        // Odświeżamy stronę z wyłączeniem cache
-        location.reload(true);
-    } else {
-        // Jeśli strona była już załadowana, usuwamy flagę
-        sessionStorage.removeItem('pageRefreshed');
-    }
-});
+
 
     </script>
 </body>
