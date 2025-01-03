@@ -529,11 +529,16 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('load', function () {
+    // Upewnij się, że elementy są dostępne
     const stopka = document.querySelector('.stopka');
+    if (!stopka) {
+        console.log('Stopka nie jest dostępna.');
+        return;
+    }
     const loadingScreen = document.getElementById('loadingScreen');
     const content = document.getElementById('content');
 
-    // Ustawienie licznika na 0 przed wczytaniem danych
+    // Resetowanie licznika na zero przed wczytaniem danych
     resetTimer();
 
     // Opóźnienie, aby załadować wszystkie zasoby
@@ -574,13 +579,16 @@ window.addEventListener('load', function () {
         // Po zakończeniu ładowania strony
         loadingScreen.classList.add('hidden');
         content.classList.add('visible');
-        
-        // Pokazanie stopki
-        if (stopka) {
-            stopka.classList.remove('hidden');
-        }
-    }, 500); // Czas oczekiwania przed ukryciem ekranu ładowania
+
+        // Zwiększone opóźnienie na wczytanie stopki
+        setTimeout(() => {
+            if (stopka) {
+                stopka.classList.remove('hidden');
+            }
+        }, 200); // Dodatkowe opóźnienie przed pokazaniem stopki
+    }, 500); // Opóźnienie przed rozpoczęciem całego procesu
 });
+
 
 function resetTimer() {
     // Funkcja do ustawienia licznika na 0
