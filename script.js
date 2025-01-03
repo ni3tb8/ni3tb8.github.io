@@ -303,6 +303,7 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             toggleButton.style.pointerEvents = 'auto'; // Przywrócenie możliwości klikania przycisku
             toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
             toggleButton.style.color = '';
+            document.body.style.color = '#fefefe';
         }, 500);
         setTimeout(() => {
             showAlert('success', 'Pomyślnie wczytano dane.');
@@ -312,7 +313,7 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
 
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Nie';
-    cancelButton.style.backgroundColor = '#372359';
+    cancelButton.style.backgroundColor = '#574124';
     cancelButton.style.border = 'none';
     cancelButton.style.color = '#fefefe';
     cancelButton.style.padding = '10px 20px';
@@ -322,10 +323,10 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
     cancelButton.style.transition = '0.3s ease';
 
     cancelButton.addEventListener('mouseover', () => {
-        cancelButton.style.backgroundColor = '#4a248a';
+        cancelButton.style.backgroundColor = '#a87025';
     });
     cancelButton.addEventListener('mouseout', () => {
-        cancelButton.style.backgroundColor = '#372359';
+        cancelButton.style.backgroundColor = '#574124';
     });
     cancelButton.addEventListener('click', () => {
         alertContainer.classList.add('fadeOut'); // Dodanie klasy fadeOut
@@ -343,6 +344,7 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             toggleButton.style.pointerEvents = 'auto'; // Przywrócenie możliwości klikania przycisku
             toggleButton.style.backgroundColor = ''; // Przywrócenie oryginalnego koloru
             toggleButton.style.color = '';
+            document.body.style.color = '#fefefe';
         }, 500); // Po 500 ms (czas trwania animacji) usuwamy alert
         setTimeout(() => {
             showAlert('info', 'Wprowadź nowe dane.');
@@ -362,6 +364,7 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
     toggleButton.style.pointerEvents = 'none'; // Wyłączenie kliknięcia przycisku
     toggleButton.style.backgroundColor = '#576478'; // Zmiana koloru przycisku na szary (lub inny nieaktywny)
     toggleButton.style.color = '#abb7c9';
+    document.body.style.color = '#525252';
 
     // Ustawienie początkowej widoczności i animacji
     setTimeout(() => {
