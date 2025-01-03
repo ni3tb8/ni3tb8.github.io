@@ -17,7 +17,7 @@
             background: #222222;
             transition: background 0.3s ease;
             overflow: hidden;
-	    	margin: 0;
+	    margin-top: -20px;
         }
 
         .hidden {
