@@ -13,11 +13,11 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: #fefefe;
+            color: #525252;
             background: #222222;
-            transition: background 0.3s ease;
+            transition: 0.3s ease;
             overflow: hidden;
-	    margin-top: -20px;
+	    	margin-top: -20px;
         }
 
         .hidden {
