@@ -403,19 +403,13 @@ border-radius: 5px;
 
     <script>
 window.addEventListener('load', function () {
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    
     if (!sessionStorage.getItem('reload')) {
         sessionStorage.setItem('reload', 'true');
         
-        // Dla Chrome możemy wymusić pełne odświeżenie
-        if (isChrome) {
-            setTimeout(function() {
-                window.location.reload(true); // Wymuszenie odświeżenia
-            }, 100); // Opóźnienie
-        } else {
-            location.href = location.href; // Inne przeglądarki
-        }
+        setTimeout(function() {
+            // Wymuszenie pełnego odświeżenia
+            window.location.reload(true);
+        }, 100);  // Opóźnienie 100ms, aby zapewnić pełne przeładowanie
     } else {
         sessionStorage.removeItem('reload');
     }
