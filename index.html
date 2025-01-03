@@ -403,22 +403,21 @@ border-radius: 5px;
 
     <script>
 window.addEventListener('load', function () {
-    // Sprawdzamy, czy strona jest ładowana po wciśnięciu F5 lub ponownym otwarciu karty
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    
     if (!sessionStorage.getItem('reload')) {
         sessionStorage.setItem('reload', 'true');
-        // Wymuszenie pełnego odświeżenia strony
-        window.location.reload(true); // 'true' wymusza odświeżenie z pominięciem cache
+        
+        // Dla Chrome możemy wymusić pełne odświeżenie
+        if (isChrome) {
+            setTimeout(function() {
+                window.location.reload(true); // Wymuszenie odświeżenia
+            }, 100); // Opóźnienie
+        } else {
+            location.href = location.href; // Inne przeglądarki
+        }
     } else {
         sessionStorage.removeItem('reload');
-    }
-});
-
-// Obsługa naciśnięcia F5
-window.addEventListener('keydown', function (event) {
-    // Sprawdzamy, czy użytkownik nacisnął F5
-    if (event.key === 'F5' || (event.ctrlKey && event.key === 'r')) {
-        event.preventDefault(); // Zapobiegamy domyślnemu odświeżeniu
-        window.location.reload(true); // Wymuszenie odświeżenia
     }
 });
 
