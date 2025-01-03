@@ -15,6 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
     <script src="app.js?v=1.0.1"></script>
+    <link rel="stylesheet" href="style.css?v=1.0.1">
 
 
     <style>
@@ -528,65 +529,59 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-window.addEventListener('load', function () {
-    // Upewnij się, że elementy są dostępne
-    const stopka = document.querySelector('.stopka');
-    if (!stopka) {
-        console.log('Stopka nie jest dostępna.');
-        return;
-    }
+// Funkcja do inicjalizacji
+function initializePage() {
     const loadingScreen = document.getElementById('loadingScreen');
     const content = document.getElementById('content');
+    const stopka = document.querySelector('.stopka');
 
-    // Resetowanie licznika na zero przed wczytaniem danych
-    resetTimer();
-
-    // Opóźnienie, aby załadować wszystkie zasoby
-    setTimeout(function () {
-        // Wczytanie zapisanych danych
+    // Opóźnienie ładowania, aby dodać efekt ładowania
+    setTimeout(function() {
+        // Sprawdzenie zapisanych danych
         const savedDate = localStorage.getItem('savedDate');
         const savedTime = localStorage.getItem('savedTime');
 
         if (savedDate && savedTime) {
-            const formattedDate = formatDate(savedDate); // Sformatowanie daty
-            const formattedTime = savedTime; // Godzina
-
-            // Tworzenie komunikatu z zapisaną datą i godziną
-            const message = `Wczytano licznik od ${formattedDate}, ${formattedTime}. Czy kontynuować?`;
-
-            // Wyświetlenie monitu z pytaniem
+            const message = `Wczytano licznik od ${formatDate(savedDate)}, ${savedTime}. Czy kontynuować?`;
             showConfirmationAlert(message, () => {
-                // Jeśli użytkownik kliknie "Tak"
                 dateInput.value = savedDate;
                 timeInput.value = savedTime;
                 targetDate = new Date(`${savedDate}T${savedTime}:00`);
                 timerRunning = true;
-
-                // Zaktualizowanie licznika na zapisany czas
                 updateTimerWithSavedData(targetDate);
             }, () => {
-                // Jeśli użytkownik kliknie "Nie"
-                console.log('Licznik nie został wznowiony.');
                 const now = new Date();
-                updateTimerWithSavedData(now); // Ustawienie licznika na aktualną datę
+                updateTimerWithSavedData(now);
             });
         } else {
-            // Brak zapisanych danych, ustawienie na teraz
             const now = new Date();
-            updateTimerWithSavedData(now); // Ustawienie licznika na aktualną datę
+            updateTimerWithSavedData(now);
         }
 
-        // Po zakończeniu ładowania strony
+        // Ukrywanie ekranu ładowania i pokazanie zawartości
         loadingScreen.classList.add('hidden');
         content.classList.add('visible');
 
-        // Zwiększone opóźnienie na wczytanie stopki
-        setTimeout(() => {
-            if (stopka) {
-                stopka.classList.remove('hidden');
-            }
-        }, 200); // Dodatkowe opóźnienie przed pokazaniem stopki
-    }, 500); // Opóźnienie przed rozpoczęciem całego procesu
+        // Pokazanie stopki po załadowaniu
+        if (stopka) {
+            stopka.classList.remove('hidden');
+        }
+    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
+}
+
+// Sprawdzanie stanu localStorage przy każdej wizycie
+window.addEventListener('load', function () {
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+
+    if (savedDate && savedTime) {
+        // Jeśli zapisano datę i godzinę
+        // Uruchomienie logiki związaną z kontynuowaniem licznika
+        initializePage();
+    } else {
+        // Jeśli brak zapisanych danych, ustawienia na aktualną datę
+        initializePage();
+    }
 });
 
 
