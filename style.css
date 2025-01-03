@@ -266,7 +266,7 @@ border-radius: 5px;
     position: fixed; /* Ustawienie alertu względem okna przeglądarki */
     top: 40px;
     right: 40px;
-    background-color: #243857; /* Kolor tła */
+    background-color: #191919; /* Kolor tła */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     font-family: "Bricolage Grotesque", serif; /* Czcionka */
     color: #fefefe; /* Kolor tekstu */
@@ -336,4 +336,9 @@ border-radius: 5px;
 /* Zawartość strony widoczna po zakończeniu ładowania */
 .content.visible {
     opacity: 1; /* Po zakończeniu ładowania kontent stanie się widoczny */
+}
+
+a {
+    color: #fefefe;
+    text-decoration: solid;
 }
