@@ -13,6 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/Material.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@pnotify/core/dist/PNotify.js"></script>
+    <script src="app.js?v=1.0.1"></script>
 
 
     <style>
@@ -679,24 +680,14 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
 
 
 
-window.addEventListener('load', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const savedDate = localStorage.getItem('savedDate');
     const savedTime = localStorage.getItem('savedTime');
     const skipTimer = localStorage.getItem('skipTimer');
 
-    // Jeśli użytkownik wcześniej wybrał "Nie", nie pokazuj monitu
-    if (skipTimer !== 'true' && savedDate && savedTime) {
-        showConfirmationAlert('Czy kontynuować obecny licznik?', () => {
-            // Jeśli użytkownik kliknie "Tak"
-            dateInput.value = savedDate;
-            timeInput.value = savedTime;
-            targetDate = new Date(`${savedDate}T${savedTime}:00`);
-            timerRunning = true;
-        }, () => {
-            // Jeśli użytkownik kliknie "Nie"
-            console.log('Licznik nie został wznowiony.');
-        });
-    }
+    console.log('Saved Date:', savedDate);
+    console.log('Saved Time:', savedTime);
+    console.log('Skip Timer:', skipTimer);
 
     const loadingScreen = document.getElementById('loadingScreen');
     const content = document.getElementById('content');
