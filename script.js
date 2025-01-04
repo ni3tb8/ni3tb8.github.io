@@ -33,6 +33,10 @@ const secondsPreviewEl = document.getElementById('secondsPreview');
 dateInput.addEventListener('input', checkIfDataIsUnchanged);
 timeInput.addEventListener('input', checkIfDataIsUnchanged);
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.backgroundColor = '#222222';
+});
+
 // Funkcja do sprawdzania, czy dane w formularzu są różne od zapisanych w localStorage
 function checkIfDataIsUnchanged() {
     const savedDate = localStorage.getItem('savedDate');
