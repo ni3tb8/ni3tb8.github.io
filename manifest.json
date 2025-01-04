@@ -1,7 +1,7 @@
 {
   "short_name": "Licznik",
   "name": "Licznik",
-  "description": "Prosty licznik czasu",
+  "description": "Prosty licznik",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#222222",
