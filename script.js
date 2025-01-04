@@ -10,78 +10,6 @@ window.addEventListener('load', function () {
     }
 });
 
-window.addEventListener('load', function () {
-    // Kod odpowiedzialny za ładowanie tła
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-    
-    // Opóźnienie 0,5s, żeby widoczny był ekran ładowania
-    setTimeout(function() {
-        loadingScreen.classList.add('hidden'); // Ukrywanie ekranu ładowania
-        content.classList.remove('hidden'); // Pokazywanie zawartości
-    }, 500); // Opóźnienie 0,5 sekundy
-    
-    // Zawsze inicjalizuj stronę na podstawie danych z localStorage
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-
-    if (savedDate && savedTime) {
-        // Logika związaną z kontynuowaniem licznika
-        const targetDate = new Date(`${savedDate}T${savedTime}:00`);
-        updateTimerWithSavedData(targetDate);
-    } else {
-        // Logika przy wczytywaniu nowego licznika
-        const now = new Date();
-        updateTimerWithSavedData(now);
-    }
-});
-
-window.addEventListener('load', function () {
-    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
-    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
-});
-
-// Funkcja do inicjalizacji
-function initializePage() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-    const stopka = document.querySelector('.stopka');
-
-    // Opóźnienie ładowania, aby dodać efekt ładowania
-    setTimeout(function() {
-        // Sprawdzenie zapisanych danych
-        const savedDate = localStorage.getItem('savedDate');
-        const savedTime = localStorage.getItem('savedTime');
-
-        if (savedDate && savedTime) {
-            const message = `Wczytano licznik od ${formatDate(savedDate)}, ${savedTime}. Czy kontynuować?`;
-            showConfirmationAlert(message, () => {
-                dateInput.value = savedDate;
-                timeInput.value = savedTime;
-                targetDate = new Date(`${savedDate}T${savedTime}:00`);
-                timerRunning = true;
-                updateTimerWithSavedData(targetDate);
-            }, () => {
-                const now = new Date();
-                updateTimerWithSavedData(now);
-            });
-        } else {
-            const now = new Date();
-            updateTimerWithSavedData(now);
-        }
-
-        // Ukrywanie ekranu ładowania i pokazanie zawartości
-        loadingScreen.classList.add('hidden');
-        content.classList.add('visible');
-
-        // Pokazanie stopki po załadowaniu
-        if (stopka) {
-            stopka.classList.remove('hidden');
-        }
-    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
-}
-
-
 const page1 = document.getElementById('page1');
 const page2 = document.getElementById('page2');
 const toggleButton = document.getElementById('togglePage');
@@ -104,10 +32,6 @@ const secondsPreviewEl = document.getElementById('secondsPreview');
 
 dateInput.addEventListener('input', checkIfDataIsUnchanged);
 timeInput.addEventListener('input', checkIfDataIsUnchanged);
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.body.style.backgroundColor = '#222222';
-});
 
 // Funkcja do sprawdzania, czy dane w formularzu są różne od zapisanych w localStorage
 function checkIfDataIsUnchanged() {
@@ -242,6 +166,80 @@ if ('serviceWorker' in navigator) {
         console.error('Rejestracja Service Workera nie powiodła się:', error);
     });
 }
+
+// Funkcja do inicjalizacji
+function initializePage() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+    const stopka = document.querySelector('.stopka');
+
+    // Opóźnienie ładowania, aby dodać efekt ładowania
+    setTimeout(function() {
+        // Sprawdzenie zapisanych danych
+        const savedDate = localStorage.getItem('savedDate');
+        const savedTime = localStorage.getItem('savedTime');
+
+        if (savedDate && savedTime) {
+            const message = `Wczytano licznik mierzący czas od ${formatDate(savedDate)}, ${savedTime}. Czy kontynuować jego pomiar?`;
+            showConfirmationAlert(message, () => {
+                dateInput.value = savedDate;
+                timeInput.value = savedTime;
+                targetDate = new Date(`${savedDate}T${savedTime}:00`);
+                timerRunning = true;
+                updateTimerWithSavedData(targetDate);
+            }, () => {
+                const now = new Date();
+                updateTimerWithSavedData(now);
+            });
+        } else {
+            const now = new Date();
+            updateTimerWithSavedData(now);
+        }
+
+        // Ukrywanie ekranu ładowania i pokazanie zawartości
+        loadingScreen.classList.add('hidden');
+        content.classList.add('visible');
+
+        // Pokazanie stopki po załadowaniu
+        if (stopka) {
+            stopka.classList.remove('hidden');
+        }
+    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
+}
+
+window.addEventListener('load', function () {
+    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
+    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
+});
+
+
+window.addEventListener('load', function () {
+    // Kod odpowiedzialny za ładowanie tła
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+    
+    // Opóźnienie 0,5s, żeby widoczny był ekran ładowania
+    setTimeout(function() {
+        loadingScreen.classList.add('hidden'); // Ukrywanie ekranu ładowania
+        content.classList.remove('hidden'); // Pokazywanie zawartości
+    }, 500); // Opóźnienie 0,5 sekundy
+    
+    // Zawsze inicjalizuj stronę na podstawie danych z localStorage
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+
+    if (savedDate && savedTime) {
+        // Logika związaną z kontynuowaniem licznika
+        const targetDate = new Date(`${savedDate}T${savedTime}:00`);
+        updateTimerWithSavedData(targetDate);
+    } else {
+        // Logika przy wczytywaniu nowego licznika
+        const now = new Date();
+        updateTimerWithSavedData(now);
+    }
+});
+
+
 
 function resetTimer() {
     // Funkcja do ustawienia licznika na 0
@@ -412,6 +410,7 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
         setTimeout(() => {
             showAlert('info', 'Wprowadź nowe dane.');
         }, 500);
+        switchPage();
     });
 
     buttonContainer.appendChild(confirmButton);
