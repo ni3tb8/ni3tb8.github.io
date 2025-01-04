@@ -10,8 +10,7 @@ window.addEventListener('load', function () {
     }
 });
 
-
-        const page1 = document.getElementById('page1');
+const page1 = document.getElementById('page1');
 const page2 = document.getElementById('page2');
 const toggleButton = document.getElementById('togglePage');
 const timer = document.getElementById('timer');
@@ -30,6 +29,33 @@ const daysPreviewEl = document.getElementById('daysPreview');
 const hoursPreviewEl = document.getElementById('hoursPreview');
 const minutesPreviewEl = document.getElementById('minutesPreview');
 const secondsPreviewEl = document.getElementById('secondsPreview');
+
+dateInput.addEventListener('input', checkIfDataIsUnchanged);
+timeInput.addEventListener('input', checkIfDataIsUnchanged);
+
+// Funkcja do sprawdzania, czy dane w formularzu są różne od zapisanych w localStorage
+function checkIfDataIsUnchanged() {
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+    const dateValue = dateInput.value;
+    const timeValue = timeInput.value;
+
+    // Porównaj zapisane dane z aktualnymi wartościami w formularzu
+    const isUnchanged = savedDate === dateValue && savedTime === timeValue;
+
+    // Wyszarez przycisk "Zapisz" jeśli dane się nie zmieniły
+    const saveButton = document.getElementById('saveButton');
+    if (isUnchanged) {
+        saveButton.style.backgroundColor = '#718a6d';  // Szary kolor dla nieaktywnego przycisku
+        saveButton.style.color = '#b0c9ab';  // Szary kolor 
+        saveButton.style.pointerEvents = 'none';
+    } else {
+        saveButton.disabled = false; // Aktywuj przycisk, jeśli dane się różnią
+        saveButton.style.backgroundColor = '';  // Przywróć oryginalny kolor
+        saveButton.style.color = '';
+        saveButton.style.pointerEvents = 'auto';  // Przywróć normalny kursor
+    }
+}
 
 let targetDate = new Date();
 let timerRunning = false;
@@ -64,6 +90,9 @@ setNowButton.addEventListener('click', () => {
 
     dateInput.value = localDate;
     timeInput.value = localTime;
+
+    // Ponownie sprawdź, czy dane są różne po zapisaniu
+    checkIfDataIsUnchanged();
 });
 
 dateForm.addEventListener('submit', (event) => {
@@ -79,6 +108,8 @@ dateForm.addEventListener('submit', (event) => {
             localStorage.setItem('savedTime', timeValue);
 
             showAlert('success', 'Data i godzina zostały zapisane.');
+            // Ponownie sprawdź, czy dane są różne po zapisaniu
+            checkIfDataIsUnchanged();
             switchPage();
 
             setTimeout(() => {
@@ -176,9 +207,11 @@ function initializePage() {
     }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
+    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
 });
+
 
 window.addEventListener('load', function () {
     // Kod odpowiedzialny za ładowanie tła
@@ -321,6 +354,14 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             toggleButton.style.color = '';
             document.body.style.color = '#fefefe';
         }, 500);
+
+            // Zablokowanie przycisku "Zapisz"
+            const saveButton = document.getElementById('saveButton');
+            saveButton.disabled = true;
+            saveButton.style.backgroundColor = '#718a6d';  // Szary kolor dla nieaktywnego przycisku
+            saveButton.style.color = '#b0c9ab';
+            saveButton.style.pointerEvents = 'none';
+
         setTimeout(() => {
             showAlert('success', 'Pomyślnie wczytano dane.');
         }, 500);
@@ -350,6 +391,10 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
             // Usunięcie danych z localStorage
             localStorage.removeItem('savedDate');
             localStorage.removeItem('savedTime');
+
+            // Ustaw puste wartości w formularzu
+            dateInput.value = '';
+            timeInput.value = '';
 
             // Ustawienie flagi, że użytkownik nie chce kontynuować licznika
             localStorage.setItem('skipTimer', 'true');
@@ -387,9 +432,6 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
         alertContainer.classList.add('show');
     }, 100);
 }
-
-
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const savedDate = localStorage.getItem('savedDate');
