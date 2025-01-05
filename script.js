@@ -1,3 +1,44 @@
+// Funkcja do inicjalizacji
+function initializePage() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+    const stopka = document.querySelector('.stopka');
+
+    // Opóźnienie ładowania, aby dodać efekt ładowania
+    setTimeout(function() {
+        // Sprawdzenie zapisanych danych
+        const savedDate = localStorage.getItem('savedDate');
+        const savedTime = localStorage.getItem('savedTime');
+
+        if (savedDate && savedTime) {
+            const message = `Wczytano licznik mierzący czas od ${formatDate(savedDate)}, ${savedTime}. Czy kontynuować jego pomiar?`;
+            showConfirmationAlert(message, () => {
+                dateInput.value = savedDate;
+                timeInput.value = savedTime;
+                targetDate = new Date(`${savedDate}T${savedTime}:00`);
+                timerRunning = true;
+                updateTimerWithSavedData(targetDate);
+            }, () => {
+                const now = new Date();
+                updateTimerWithSavedData(now);
+            });
+        } else {
+            const now = new Date();
+            updateTimerWithSavedData(now);
+        }
+
+        // Ukrywanie ekranu ładowania i pokazanie zawartości
+        loadingScreen.classList.add('hidden');
+        content.classList.add('visible');
+        
+    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
+}
+
+window.addEventListener('load', function () {
+    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
+    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
+});
+
 window.addEventListener('load', function () {
     // Jeśli strona jest ładowana po wciśnięciu F5, zrób pełne przeładowanie strony
     if (!sessionStorage.getItem('reload')) {
@@ -166,48 +207,6 @@ if ('serviceWorker' in navigator) {
         console.error('Rejestracja Service Workera nie powiodła się:', error);
     });
 }
-
-// Funkcja do inicjalizacji
-function initializePage() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-    const stopka = document.querySelector('.stopka');
-
-    // Opóźnienie ładowania, aby dodać efekt ładowania
-    setTimeout(function() {
-        // Sprawdzenie zapisanych danych
-        const savedDate = localStorage.getItem('savedDate');
-        const savedTime = localStorage.getItem('savedTime');
-
-        if (savedDate && savedTime) {
-            const message = `Wczytano licznik mierzący czas od ${formatDate(savedDate)}, ${savedTime}. Czy kontynuować jego pomiar?`;
-            showConfirmationAlert(message, () => {
-                dateInput.value = savedDate;
-                timeInput.value = savedTime;
-                targetDate = new Date(`${savedDate}T${savedTime}:00`);
-                timerRunning = true;
-                updateTimerWithSavedData(targetDate);
-            }, () => {
-                const now = new Date();
-                updateTimerWithSavedData(now);
-            });
-        } else {
-            const now = new Date();
-            updateTimerWithSavedData(now);
-        }
-
-        // Ukrywanie ekranu ładowania i pokazanie zawartości
-        loadingScreen.classList.add('hidden');
-        content.classList.add('visible');
-        
-    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
-}
-
-window.addEventListener('load', function () {
-    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
-    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
-});
-
 
 /*
 window.addEventListener('load', function () {
