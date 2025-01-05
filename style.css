@@ -17,7 +17,7 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             font-family: "Bricolage Grotesque", serif;
             display: flex;
             justify-content: center;
