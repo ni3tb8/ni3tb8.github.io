@@ -199,11 +199,7 @@ function initializePage() {
         // Ukrywanie ekranu ładowania i pokazanie zawartości
         loadingScreen.classList.add('hidden');
         content.classList.add('visible');
-
-        // Pokazanie stopki po załadowaniu
-        if (stopka) {
-            stopka.classList.remove('hidden');
-        }
+        
     }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
@@ -213,6 +209,7 @@ window.addEventListener('load', function () {
 });
 
 
+/*
 window.addEventListener('load', function () {
     // Kod odpowiedzialny za ładowanie tła
     const loadingScreen = document.getElementById('loadingScreen');
@@ -238,7 +235,7 @@ window.addEventListener('load', function () {
         updateTimerWithSavedData(now);
     }
 });
-
+*/
 
 
 function resetTimer() {
