@@ -3,6 +3,10 @@ const URLS_TO_CACHE = [
   '/',
   'stopwatch.svg',
   'index.html',
+  'styles.css',
+  'stopwatch.svg',
+  'bricolage.woff2',
+  'script.js'
 ];
 
 // Instalacja Service Workera
@@ -36,18 +40,34 @@ self.addEventListener('activate', (event) => {
 // Pobieranie zasobów
 self.addEventListener('fetch', (event) => {
   console.log('[Service Worker] Fetching: ', event.request.url);
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request).then((response) => {
-        // Dynamiczne zapisywanie nowych zasobów
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
+      // Jeśli znaleziono w cache, zwróć wynik
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // Jeśli nie ma w cache, spróbuj pobrać z sieci
+      return fetch(event.request)
+        .then((response) => {
+          // Zapisz nowy zasób w cache
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        })
+        .catch((error) => {
+          console.error('[Service Worker] Fetch failed for:', event.request.url, error);
+
+          // Fallback na stronę główną w przypadku błędów dokumentu
+          if (event.request.destination === 'document') {
+            return caches.match('/index.html');
+          }
+
+          // Domyślny fallback (możesz dostosować)
+          return new Response('Błąd połączenia', { status: 503 });
         });
-      });
-    }).catch(() => {
-      console.error('[Service Worker] Failed to fetch resource:', event.request.url);
-      return caches.match('/'); // Opcjonalnie zwróć stronę główną jako fallback
     })
   );
 });
