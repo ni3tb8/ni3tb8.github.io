@@ -2,6 +2,8 @@
   "short_name": "Licznik",
   "name": "Licznik",
   "description": "Prosty licznik",
+  "author": "ni3tb8 design",
+  "version": "0.9b",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#222222",
