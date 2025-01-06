@@ -42,7 +42,7 @@ function initializePage() {
         setTimeout(function () {
             loadingScreen.classList.add('hidden');
             document.getElementById('content').style.display = 'block';
-        }, 300);  
+        }, 600);  
 
     }, 200); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
