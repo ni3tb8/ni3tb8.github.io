@@ -22,6 +22,11 @@
   		height: 100%;
   		z-index: 9999;
 	}
+
+#content {
+    display: none;
+}
+
 	
         * {
             margin: 0;
