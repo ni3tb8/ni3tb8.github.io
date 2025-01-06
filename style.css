@@ -344,18 +344,7 @@ border-radius: 5px;
 /* Po załadowaniu strony ekran ładowania zniknie */
 .loading-screen.hidden {
     opacity: 0; /* Tło zniknie */
-    visibility: hidden; /* Ukrycie elementu po animacji */
-}
-
-/* Początkowa ukryta zawartość strony */
-.content {
-    opacity: 0; /* Na początku kontent jest niewidoczny */
-    transition: 0.3s ease-in; /* Animacja stopniowego pojawiania się */
-}
-
-/* Zawartość strony widoczna po zakończeniu ładowania */
-.content.visible {
-    opacity: 1; /* Po zakończeniu ładowania kontent stanie się widoczny */
+    visibility: hidden;
 }
 
 a {
