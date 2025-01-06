@@ -55,17 +55,17 @@ function initializePage() {
 //     }, 500);
 // }, 100); // Ustawić niewielkie opóźnienie
 
-window.addEventListener('load', function () {
-    // Jeśli strona jest ładowana po wciśnięciu F5, zrób pełne przeładowanie strony
-    if (!sessionStorage.getItem('reload')) {
-        sessionStorage.setItem('reload', 'true');
+// window.addEventListener('load', function () {
+//     // Jeśli strona jest ładowana po wciśnięciu F5, zrób pełne przeładowanie strony
+//     if (!sessionStorage.getItem('reload')) {
+//         sessionStorage.setItem('reload', 'true');
         
-        // Wymuszenie pełnego odświeżenia strony
-        location.reload(true); // Wymusza odświeżenie, ignorując cache
-    } else {
-        sessionStorage.removeItem('reload');
-    }
-});
+//         // Wymuszenie pełnego odświeżenia strony
+//         location.reload(true); // Wymusza odświeżenie, ignorując cache
+//     } else {
+//         sessionStorage.removeItem('reload');
+//     }
+// });
 
 const page1 = document.getElementById('page1');
 const page2 = document.getElementById('page2');
