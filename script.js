@@ -3,10 +3,13 @@ window.addEventListener('load', function () {
     checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
 });
 
+window.addEventListener("offline", function() {
+    showAlert('warning', 'Brak połączenia.');
+  });
+
 // Funkcja do inicjalizacji
 function initializePage() {
-    const loadingScreen = document.getElementById('loadingScreen');
-
+    const loadingScreen = document.getElementById('loadingScreen'); 
     // Opóźnienie ładowania, aby dodać efekt ładowania
     setTimeout(function() {
         // Sprawdzenie zapisanych danych
@@ -28,10 +31,13 @@ function initializePage() {
         } else {
             const now = new Date();
             updateTimerWithSavedData(now);
-        }  
+        }
+
         setTimeout(function () {
             loadingScreen.classList.add('hidden');
-        }, 100);      
+            document.getElementById('content').style.display = 'block';
+        }, 100);  
+
     }, 400); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
