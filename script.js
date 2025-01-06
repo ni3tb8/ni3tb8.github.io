@@ -25,12 +25,7 @@ function initializePage() {
         } else {
             const now = new Date();
             updateTimerWithSavedData(now);
-        }
-
-        // Ukrywanie ekranu ładowania i pokazanie zawartości
-        loadingScreen.classList.add('hidden');
-        content.classList.add('visible');
-        
+        }        
     }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
@@ -38,6 +33,24 @@ window.addEventListener('load', function () {
     initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
     checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const savedDate = localStorage.getItem('savedDate');
+    const savedTime = localStorage.getItem('savedTime');
+    const skipTimer = localStorage.getItem('skipTimer');
+
+    console.log('Saved Date:', savedDate);
+    console.log('Saved Time:', savedTime);
+    console.log('Skip Timer:', skipTimer);
+
+    const loadingScreen = document.getElementById('loadingScreen');
+    const content = document.getElementById('content');
+
+    setTimeout(function () {
+        loadingScreen.classList.add('hidden');
+        content.classList.add('visible');
+    }, 500);
+}, 100); // Ustawić niewielkie opóźnienie
 
 window.addEventListener('load', function () {
     // Jeśli strona jest ładowana po wciśnięciu F5, zrób pełne przeładowanie strony
@@ -207,35 +220,6 @@ if ('serviceWorker' in navigator) {
         console.error('Rejestracja Service Workera nie powiodła się:', error);
     });
 }
-
-/*
-window.addEventListener('load', function () {
-    // Kod odpowiedzialny za ładowanie tła
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-    
-    // Opóźnienie 0,5s, żeby widoczny był ekran ładowania
-    setTimeout(function() {
-        loadingScreen.classList.add('hidden'); // Ukrywanie ekranu ładowania
-        content.classList.remove('hidden'); // Pokazywanie zawartości
-    }, 500); // Opóźnienie 0,5 sekundy
-    
-    // Zawsze inicjalizuj stronę na podstawie danych z localStorage
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-
-    if (savedDate && savedTime) {
-        // Logika związaną z kontynuowaniem licznika
-        const targetDate = new Date(`${savedDate}T${savedTime}:00`);
-        updateTimerWithSavedData(targetDate);
-    } else {
-        // Logika przy wczytywaniu nowego licznika
-        const now = new Date();
-        updateTimerWithSavedData(now);
-    }
-});
-*/
-
 
 function resetTimer() {
     // Funkcja do ustawienia licznika na 0
@@ -429,21 +413,3 @@ function showConfirmationAlert(message, onConfirm, onCancel) {
         alertContainer.classList.add('show');
     }, 100);
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-    const skipTimer = localStorage.getItem('skipTimer');
-
-    console.log('Saved Date:', savedDate);
-    console.log('Saved Time:', savedTime);
-    console.log('Skip Timer:', skipTimer);
-
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-
-    setTimeout(function () {
-        loadingScreen.classList.add('hidden');
-        content.classList.add('visible');
-    }, 500);
-}, 100); // Ustawić niewielkie opóźnienie
