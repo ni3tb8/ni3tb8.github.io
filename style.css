@@ -198,7 +198,7 @@ border-radius: 5px;
 /* Dostosowanie na urządzenia mobilne */
 @media (max-width: 600px) {
     html, body {
-        margin-bottom: 80px; /* Podniesienie zawartości strony o 100px */
+        margin-bottom: 120px; /* Podniesienie zawartości strony o 100px */
         padding: 10px; /* Dodanie marginesu, aby uniknąć przyklejania się elementów */
     }
     
@@ -225,7 +225,7 @@ border-radius: 5px;
 
 @media (min-width: 600px) {
     html, body {
-        margin-bottom: 50px;
+        margin-bottom: 70px;
     }
 }
 	
