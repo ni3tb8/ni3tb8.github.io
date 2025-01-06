@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@100..900&display=swap');
 
+@media (prefers-color-scheme: dark) {
+    html, body {
+        background-color: #222222;
+    }
+}
+
 
 	#preloader {
   		background-color: #222222;
@@ -22,12 +28,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 95vh;
+            height: 95%; 
             color: #fefefe;
             background: #222222;
             transition: 0.3s ease;
             overflow: hidden;
-	    	margin-top: -20px;
+	    	margin: 0; 
+            padding: 0;
         }
 
         .hidden {
@@ -189,8 +197,8 @@ border-radius: 5px;
 
 /* Dostosowanie na urządzenia mobilne */
 @media (max-width: 600px) {
-    body {
-        margin-top: -70px; /* Podniesienie zawartości strony o 100px */
+    html, body {
+        margin-bottom: 80px; /* Podniesienie zawartości strony o 100px */
         padding: 10px; /* Dodanie marginesu, aby uniknąć przyklejania się elementów */
     }
     
@@ -216,8 +224,8 @@ border-radius: 5px;
 }
 
 @media (min-width: 600px) {
-    body {
-        margin-top: -50px;
+    html, body {
+        margin-bottom: 50px;
     }
 }
 	
