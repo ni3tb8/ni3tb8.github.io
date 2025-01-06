@@ -1,3 +1,8 @@
+window.addEventListener('load', function () {
+    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
+    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
+});
+
 // Funkcja do inicjalizacji
 function initializePage() {
     const loadingScreen = document.getElementById('loadingScreen');
@@ -25,32 +30,30 @@ function initializePage() {
         } else {
             const now = new Date();
             updateTimerWithSavedData(now);
-        }        
-    }, 500); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
+        }  
+        setTimeout(function () {
+            loadingScreen.classList.add('hidden');
+        }, 100);      
+    }, 400); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
-window.addEventListener('load', function () {
-    initializePage(); // Zapewniamy, że ta funkcja jest uruchamiana zawsze, niezależnie od cache
-    checkIfDataIsUnchanged();  // Sprawdź, czy dane się nie zmieniły
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//     const savedDate = localStorage.getItem('savedDate');
+//     const savedTime = localStorage.getItem('savedTime');
+//     const skipTimer = localStorage.getItem('skipTimer');
 
-document.addEventListener('DOMContentLoaded', function () {
-    const savedDate = localStorage.getItem('savedDate');
-    const savedTime = localStorage.getItem('savedTime');
-    const skipTimer = localStorage.getItem('skipTimer');
+//     console.log('Saved Date:', savedDate);
+//     console.log('Saved Time:', savedTime);
+//     console.log('Skip Timer:', skipTimer);
 
-    console.log('Saved Date:', savedDate);
-    console.log('Saved Time:', savedTime);
-    console.log('Skip Timer:', skipTimer);
+//     const loadingScreen = document.getElementById('loadingScreen');
+//     const content = document.getElementById('content');
 
-    const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-
-    setTimeout(function () {
-        loadingScreen.classList.add('hidden');
-        content.classList.add('visible');
-    }, 500);
-}, 100); // Ustawić niewielkie opóźnienie
+//     setTimeout(function () {
+//         loadingScreen.classList.add('hidden');
+//         content.classList.add('visible');
+//     }, 500);
+// }, 100); // Ustawić niewielkie opóźnienie
 
 window.addEventListener('load', function () {
     // Jeśli strona jest ładowana po wciśnięciu F5, zrób pełne przeładowanie strony
