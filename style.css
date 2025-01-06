@@ -38,6 +38,10 @@
             padding: 0;
         }
 
+        html {
+            visibility: hidden;
+        }
+
         .hidden {
             visibility: hidden;
             position: absolute;
