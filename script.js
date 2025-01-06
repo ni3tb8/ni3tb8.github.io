@@ -10,7 +10,7 @@ window.addEventListener("offline", function() {
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(function () {
     document.documentElement.style.visibility = 'visible'; // Pokazuje stronę dopiero po załadowaniu
-}, 1000);  
+}, 300);  
 });
 
 // Funkcja do inicjalizacji
