@@ -6,8 +6,6 @@ window.addEventListener('load', function () {
 // Funkcja do inicjalizacji
 function initializePage() {
     const loadingScreen = document.getElementById('loadingScreen');
-    const content = document.getElementById('content');
-    const stopka = document.querySelector('.stopka');
 
     // Opóźnienie ładowania, aby dodać efekt ładowania
     setTimeout(function() {
