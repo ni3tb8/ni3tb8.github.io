@@ -42,9 +42,9 @@ function initializePage() {
         setTimeout(function () {
             loadingScreen.classList.add('hidden');
             document.getElementById('content').style.display = 'block';
-        }, 800);  
+        }, 300);  
 
-    }, 400); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
+    }, 200); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
 }
 
 // document.addEventListener('DOMContentLoaded', function () {
