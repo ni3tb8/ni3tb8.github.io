@@ -8,7 +8,9 @@ window.addEventListener("offline", function() {
   });
 
 window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(function () {
     document.documentElement.style.visibility = 'visible'; // Pokazuje stronę dopiero po załadowaniu
+}, 300);  
 });
 
 // Funkcja do inicjalizacji
