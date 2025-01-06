@@ -7,11 +7,11 @@ window.addEventListener("offline", function() {
     showAlert('warning', 'Brak połączenia.');
   });
 
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(function () {
-    document.documentElement.style.visibility = 'visible'; // Pokazuje stronę dopiero po załadowaniu
-}, 300);  
-});
+//window.addEventListener('DOMContentLoaded', () => {
+//    setTimeout(function () {
+//    document.documentElement.style.visibility = 'visible'; // Pokazuje stronę dopiero po załadowaniu
+//}, 300);  
+//});
 
 // Funkcja do inicjalizacji
 function initializePage() {
@@ -42,6 +42,7 @@ function initializePage() {
         setTimeout(function () {
             loadingScreen.classList.add('hidden');
             document.getElementById('content').style.display = 'block';
+            document.documentElement.style.visibility = 'visible';
         }, 300);  
 
     }, 200); // Opóźnienie 0.5s, aby wyświetlić ekran ładowania
