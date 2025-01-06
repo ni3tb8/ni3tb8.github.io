@@ -6,6 +6,12 @@
     }
 }
 
+@font-face {
+    font-family: 'Bricolage Grotesque';
+    src: url('bricolage.woff2') format('woff2');
+    font-display: block; /* Wstrzymuje renderowanie tekstu do czasu załadowania fontu */
+}
+
 
 	#preloader {
   		background-color: #222222;
