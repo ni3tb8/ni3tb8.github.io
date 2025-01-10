@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Bus Line</title>
+  <title>Trasownik v0.98</title>
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
@@ -166,8 +166,30 @@
       white-space: nowrap; /* Prevent text from wrapping */
     }
 
+    input.stopOst {
+      font-family: "Inter", serif;
+      width: 150px;
+      text-align: left;
+      border: none;
+      font-size: 14px;
+      background: transparent;
+      outline: none;
+      position: relative;
+      transform: rotate(-50deg);
+      margin-bottom: 60px;
+      margin-left: 90px;
+      white-space: pre-wrap;
+      line-height: 1.2;
+      color: #06355c;
+      font-weight: 550;
+      max-width: 150px; /* Limiting max width */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      white-space: nowrap; /* Prevent text from wrapping */
+      z-index: 1;
+    }
+
     .stop input::placeholder {
-      color: #999;
+      color: #bfbfbf;
     }
 
     /* Stylizacja dla color picker */
@@ -196,6 +218,55 @@
     .color-picker select:focus {
       outline: none;
     }
+
+    .rotated-marquee {
+            font-family: "Inter", serif;;
+            transform: rotate(-50deg);
+            transform-origin: top left;
+            display: inline-block;
+            white-space: nowrap;
+            color: #06355c;
+            margin-left: 177px;
+            width: 200px;
+            font-weight: 550;
+            line-height: 1.2;
+            font-size: 14px;
+        }
+
+    .przykrycie {
+        margin-left: 1304px;
+        margin-bottom: 40px;
+        border-left: 4px solid #222222;;
+        background-color: #f4f4f4;
+        width: 100px;
+        height: 150px;
+        z-index: 9999;
+        position: absolute;
+    }
+
+    button {
+            font-family: "Inter", serif;
+            font-weight: 400;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: #06355c;
+            color: #fefefe;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0e4a7a;
+            transition: background 0.3s ease;
+        }
+
+        button:active {
+            background: #195e97;
+            transition: background 0.3s ease;
+        }
   </style>
 </head>
 <body>
@@ -205,19 +276,21 @@
     </div>
     <div class="top-section">
       <div class="arrow"></div>
-      <input type="text" placeholder="Kierunek">
+      <input type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
     </div>
     <div class="line" id="line">
       <div class="stop" style="margin-left: 25px; bottom: -8px;">
-        <input type="text" placeholder="Przystanek początkowy">
+        <input class="skrol" type="text" placeholder="Przystanek początkowy">
         <div class="circle"></div>
       </div>
-      <div class="stop" style="left: 90%; bottom: -8px;">
-        <input type="text" placeholder="Przystanek końcowy">
+      <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
+        <input class="skrol" type="text" placeholder="Przystanek końcowy">
         <div class="circle-last"></div>
       </div>
     </div>
   </div>
+  <div class="przykrycie"></div>
+  
 
   <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
   <div class="color-picker">
@@ -227,6 +300,10 @@
       <option value="#9e9531">Zmiana trasy</option>
     </select>
   </div>
+<br>
+  <div class="label-container">
+    <button id="skroloff">Przełącz przewijanie</button>
+    </div>
 
   <script>
     const colorPicker = document.getElementById('background-color');
@@ -262,7 +339,7 @@
       const newStop = document.createElement('div');
       newStop.className = 'stop';
       newStop.innerHTML = `  
-        <input type="text" placeholder="Nowy Przystanek">
+        <input class="skrol" type="text" placeholder="Nowy Przystanek">
         <div class="circle"></div>
       `;
 
@@ -287,11 +364,17 @@
       });
 
       input.addEventListener('blur', () => {
-        if (!input.value.trim()) {
-          newStop.remove();
-          updateStops();
-        }
-      });
+  const isFirstStop = input === line.querySelector('.stop input');
+  const isLastStop = input === line.querySelector('#ostatni input'); // Check if this is the last stop with id 'ostatni'
+
+  if (!input.value.trim() && !isFirstStop && !isLastStop) {
+    const parentStop = input.parentElement;
+    parentStop.remove();
+    updateStops();
+  } else if (isLastStop && !input.value.trim()) {
+    input.placeholder = 'Nowy Przystanek'; // Keep the placeholder or default value for the last stop
+  }
+});
 
       updateStops();
       input.focus();
@@ -313,19 +396,105 @@
       });
 
       input.addEventListener('blur', () => {
-        if (!input.value.trim()) {
-          const parentStop = input.parentElement;
-          if (line.querySelectorAll('.stop').length > 2) {
-            parentStop.remove();
-            updateStops();
-          } else {
-            input.value = 'Nowy Przystanek';
-          }
-        }
-      });
+  const isFirstStop = input === line.querySelector('.stop input');
+  const isLastStop = input === line.querySelector('#ostatni input'); // Check if this is the last stop with id 'ostatni'
+
+  if (!input.value.trim() && !isFirstStop && !isLastStop) {
+    const parentStop = input.parentElement;
+    parentStop.remove();
+    updateStops();
+  } else if (isLastStop && !input.value.trim()) {
+    input.placeholder = 'Przystanek końcowy'; // Keep the placeholder or default value for the last stop
+  }
+});
     });
 
     updateStops();
+
+    let areMarqueesEnabled = true; // Global state to track marquee toggle
+
+        // Function to toggle marquee for a specific input
+        function toggleMarquee(element) {
+            const isMarqueeAdded = element.dataset.marqueeAdded === "true";
+            let marqueeTag;
+
+            if (!isMarqueeAdded) {
+                marqueeTag = document.createElement("marquee");
+                marqueeTag.textContent = element.value;
+                marqueeTag.className = "rotated-marquee";
+
+                // Append marquee and hide input
+                element.parentNode.insertBefore(marqueeTag, element);
+                element.style.display = "none";
+                element.dataset.marqueeAdded = "true";
+                element.dataset.marqueeRef = marqueeTag;
+            } else {
+                // Remove marquee and show input
+                marqueeTag = element.previousSibling; // Find the marquee element
+                if (marqueeTag && marqueeTag.tagName === "MARQUEE") {
+                    marqueeTag.parentNode.removeChild(marqueeTag);
+                }
+                element.style.display = "block";
+                element.dataset.marqueeAdded = "false";
+            }
+        }
+
+        // Function to handle blur event
+        function handleBlur(event) {
+            const inputField = event.target;
+            if (inputField.value.length > 25 && areMarqueesEnabled) {
+                toggleMarquee(inputField);
+            }
+        }
+
+        // Function to handle focus event
+        function handleFocus(event) {
+            const inputField = event.target;
+            if (inputField.dataset.marqueeAdded === "true") {
+                toggleMarquee(inputField);
+            }
+        }
+
+        // Attach events to an input
+        function attachEventsToInput(inputField) {
+            inputField.dataset.marqueeAdded = "false"; // Initialize marquee state
+            inputField.addEventListener("blur", handleBlur);
+            inputField.addEventListener("focus", handleFocus);
+        }
+
+        // Toggle marquees globally
+        function toggleAllMarquees() {
+            const inputs = document.querySelectorAll('.skrol');
+            inputs.forEach(inputField => {
+                const isMarqueeAdded = inputField.dataset.marqueeAdded === "true";
+                if (areMarqueesEnabled && inputField.value.length > 20 && !isMarqueeAdded) {
+                    toggleMarquee(inputField);
+                } else if (!areMarqueesEnabled && isMarqueeAdded) {
+                    toggleMarquee(inputField);
+                }
+            });
+
+            areMarqueesEnabled = !areMarqueesEnabled; // Toggle global state
+        }
+
+        // Add a new input dynamically
+        function addNewInput() {
+            const newInput = document.createElement("input");
+            newInput.type = "text";
+            newInput.className = "skrol";
+            newInput.placeholder = "Type at least 25 characters";
+            document.body.insertBefore(newInput, document.getElementById("skroloff"));
+            attachEventsToInput(newInput); // Attach events to new input
+        }
+
+        // Attach events to existing inputs
+        document.querySelectorAll('.skrol').forEach(attachEventsToInput);
+
+        // Attach event to the 'Toggle Marquees' button
+        document.getElementById('skroloff').addEventListener('click', toggleAllMarquees);
+
+        // Attach event to the 'Add Input' button
+        document.getElementById('addInput').addEventListener('click', addNewInput);
   </script>
 </body>
 </html>
