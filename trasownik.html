@@ -290,7 +290,7 @@
     </div>
     <div class="top-section">
       <div class="arrow"></div>
-      <input type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
+      <input id="kierunek" type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
     </div>
     <div class="line" id="line">
       <div class="stop" style="margin-left: 25px; bottom: -8px;">
@@ -298,7 +298,7 @@
         <div class="circle"></div>
       </div>
       <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
-        <input class="skrolOst" type="text" placeholder="Przystanek końcowy">
+        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Przystanek końcowy">
         <div class="circle-last"></div>
       </div>
     </div>
@@ -320,6 +320,10 @@
     </div>
 
   <script>
+document.getElementById('kierunek').addEventListener('input', function() {
+    document.getElementById('ostatniprzystanek').value = this.value;
+});
+
     const colorPicker = document.getElementById('background-color');
     const lineNumber = document.querySelector('.line-number');
 
