@@ -233,6 +233,20 @@
             font-size: 14px;
         }
 
+        .rotated-marqueeOst {
+            font-family: "Inter", serif;;
+            transform: rotate(-50deg);
+            transform-origin: top left;
+            display: inline-block;
+            white-space: nowrap;
+            color: #06355c;
+            margin-left: 177px;
+            width: 200px;
+            font-weight: 550;
+            line-height: 1.2;
+            font-size: 14px;
+        }
+
     .przykrycie {
         margin-left: 1304px;
         margin-bottom: 40px;
@@ -284,7 +298,7 @@
         <div class="circle"></div>
       </div>
       <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
-        <input class="skrol" type="text" placeholder="Przystanek końcowy">
+        <input class="skrolOst" type="text" placeholder="Przystanek końcowy">
         <div class="circle-last"></div>
       </div>
     </div>
@@ -418,10 +432,17 @@
             const isMarqueeAdded = element.dataset.marqueeAdded === "true";
             let marqueeTag;
 
+            // Check the class of the element (skrol or skrolOst)
+            const isSkrol = element.classList.contains("skrol");
+            const isSkrolOst = element.classList.contains("skrolOst");
+
+            // Decide the class for marquee
+            const marqueeClass = isSkrolOst ? "rotated-marqueeOst" : "rotated-marquee";
+
             if (!isMarqueeAdded) {
                 marqueeTag = document.createElement("marquee");
                 marqueeTag.textContent = element.value;
-                marqueeTag.className = "rotated-marquee";
+                marqueeTag.className = marqueeClass;
 
                 // Append marquee and hide input
                 element.parentNode.insertBefore(marqueeTag, element);
@@ -442,7 +463,11 @@
         // Function to handle blur event
         function handleBlur(event) {
             const inputField = event.target;
-            if (inputField.value.length > 25 && areMarqueesEnabled) {
+            const isSkrol = inputField.classList.contains("skrol");
+            const isSkrolOst = inputField.classList.contains("skrolOst");
+
+            // Trigger marquee based on the class and length of the value
+            if ((isSkrol && inputField.value.length > 25 || isSkrolOst && inputField.value.length > 20) && areMarqueesEnabled) {
                 toggleMarquee(inputField);
             }
         }
@@ -464,10 +489,16 @@
 
         // Toggle marquees globally
         function toggleAllMarquees() {
-            const inputs = document.querySelectorAll('.skrol');
+            const inputs = document.querySelectorAll('.skrol, .skrolOst'); // Select both skrol and skrolOst
             inputs.forEach(inputField => {
                 const isMarqueeAdded = inputField.dataset.marqueeAdded === "true";
-                if (areMarqueesEnabled && inputField.value.length > 20 && !isMarqueeAdded) {
+                const isSkrol = inputField.classList.contains("skrol");
+                const isSkrolOst = inputField.classList.contains("skrolOst");
+
+                // Trigger marquee based on the class and length of the value
+                if (areMarqueesEnabled && 
+                    ((isSkrol && inputField.value.length > 25) || (isSkrolOst && inputField.value.length > 20)) && 
+                    !isMarqueeAdded) {
                     toggleMarquee(inputField);
                 } else if (!areMarqueesEnabled && isMarqueeAdded) {
                     toggleMarquee(inputField);
@@ -481,14 +512,14 @@
         function addNewInput() {
             const newInput = document.createElement("input");
             newInput.type = "text";
-            newInput.className = "skrol";
+            newInput.className = "skrol"; // Default to skrol class
             newInput.placeholder = "Type at least 25 characters";
             document.body.insertBefore(newInput, document.getElementById("skroloff"));
             attachEventsToInput(newInput); // Attach events to new input
         }
 
         // Attach events to existing inputs
-        document.querySelectorAll('.skrol').forEach(attachEventsToInput);
+        document.querySelectorAll('.skrol, .skrolOst').forEach(attachEventsToInput);
 
         // Attach event to the 'Toggle Marquees' button
         document.getElementById('skroloff').addEventListener('click', toggleAllMarquees);
