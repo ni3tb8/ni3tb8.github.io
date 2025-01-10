@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Bus Line</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    body {
+      margin: 0;
+      font-family: "Inter", serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin-top: -50px;
+      flex-direction: column; /* Zmieniamy układ na kolumnowy */
+    }
+
+    /* Nowa sekcja na górze */
+    .top-section {
+      display: flex;
+      align-items: center;
+      background-color: #06355c; /* Niebieski kolor */
+      color: #f4f8ff;
+      height: 50px;
+      width: 860px;
+      margin-left: 300px;
+      position: absolute;
+      top: 0;
+      justify-content: flex-start;
+      padding: 0 20px;
+    }
+
+    .top-section .arrow {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid #f4f8ff; /* Strzałka w prawo */
+      margin-right: 10px;
+      transform: rotate(90deg);
+    }
+
+    .top-section input {
+      font-family: "Inter", serif;
+      background: transparent;
+      border: none;
+      color: #f4f8ff;
+      font-size: 20px;
+      outline: none;
+      width: 450px;
+      height: 40px;
+      padding-left: 10px;
+      font-weight: 700;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      background-color: #f4f8ff;
+      border: 4px solid #222222;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 1200px;
+      height: 250px;
+      position: relative;
+      margin-top: 100px; /* Aby kontener był widoczny poniżej sekcji na górze */
+    }
+
+    .line-number {
+      background-color: #06355c;
+      color: #f4f8ff;
+      font-size: 72px;
+      font-weight: bold;
+      padding: 20px;
+      text-align: center;
+      width: 300px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .line-number input {
+      font-family: "Inter", serif;
+      background: transparent;
+      border: none;
+      color: #f4f8ff;
+      font-size: 140px;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+      outline: none;
+    }
+
+    .line {
+      position: absolute;
+      bottom: 20px;
+      left: 300px;
+      right: 90px;
+      height: 8px;
+      background-color: #06355c;
+    }
+
+    .stop {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      transform: translateX(-50%);
+      bottom: -8px;
+      margin-left: 25px;
+    }
+
+    .stop .circle {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 5px solid #06355c;
+      background-color: #f4f8ff;
+    }
+
+    .circle-last {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 5px solid #06355c;
+      background-color: #06355c;
+    }
+
+    .stop .circle:active {
+      background-color: rgb(177, 35, 35);
+    }
+
+    .stop.night-stop .circle {
+      background-color: #06355c;
+      border-color: #f4f8ff;
+    }
+
+    .stop.night-stop .circle:active {
+      background-color: rgb(177, 35, 35);
+    }
+
+    .stop input {
+      font-family: "Inter", serif;
+      width: 200px;
+      text-align: left;
+      border: none;
+      font-size: 14px;
+      background: transparent;
+      outline: none;
+      position: relative;
+      transform: rotate(-50deg);
+      margin-bottom: 80px;
+      margin-left: 120px;
+      white-space: pre-wrap;
+      line-height: 1.2;
+      color: #06355c;
+      font-weight: 550;
+      max-width: 300px; /* Limiting max width */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      white-space: nowrap; /* Prevent text from wrapping */
+    }
+
+    .stop input::placeholder {
+      color: #999;
+    }
+
+    /* Stylizacja dla color picker */
+    .color-picker {
+      text-align: center;
+      margin-top: 30px; /* Odstęp od kontenera */
+      display: block; /* Gwarantujemy blokowy układ */
+    }
+
+    .color-picker label {
+      font-size: 16px;
+      font-weight: 400;
+      color: #06355c;
+    }
+
+    .color-picker select {
+      font-size: 16px;
+      padding: 5px;
+      border: 1px solid #06355c;
+      border-radius: 4px;
+      background-color: #f4f8ff;
+      color: #06355c;
+      font-weight: 400;
+    }
+
+    .color-picker select:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="line-number">
+      <input type="text">
+    </div>
+    <div class="top-section">
+      <div class="arrow"></div>
+      <input type="text" placeholder="Kierunek">
+    </div>
+    <div class="line" id="line">
+      <div class="stop" style="margin-left: 25px; bottom: -8px;">
+        <input type="text" placeholder="Przystanek początkowy">
+        <div class="circle"></div>
+      </div>
+      <div class="stop" style="left: 90%; bottom: -8px;">
+        <input type="text" placeholder="Przystanek końcowy">
+        <div class="circle-last"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
+  <div class="color-picker">
+    <label for="background-color">Wybierz kolor tła linii:</label>
+    <select id="background-color">
+      <option value="#06355c">Zwykły</option>
+      <option value="#9e9531">Zmiana trasy</option>
+    </select>
+  </div>
+
+  <script>
+    const colorPicker = document.getElementById('background-color');
+    const lineNumber = document.querySelector('.line-number');
+
+    colorPicker.addEventListener('change', (e) => {
+      const selectedColor = e.target.value;
+      lineNumber.style.backgroundColor = selectedColor;
+    });
+
+    const line = document.getElementById('line');
+
+    function updateStops() {
+      const stops = Array.from(line.querySelectorAll('.stop'));
+      const totalStops = stops.length;
+
+      stops.forEach((stop, index) => {
+        const position = (index / (totalStops - 1)) * 96;
+        stop.style.left = `${position}%`;
+
+        const input = stop.querySelector('input');
+        const circle = stop.querySelector('.circle');
+
+        if (input.value.includes('NŻ')) {
+          stop.classList.add('night-stop');
+        } else {
+          stop.classList.remove('night-stop');
+        }
+      });
+    }
+
+    function addStop(target) {
+      const newStop = document.createElement('div');
+      newStop.className = 'stop';
+      newStop.innerHTML = `  
+        <input type="text" placeholder="Nowy Przystanek">
+        <div class="circle"></div>
+      `;
+
+      const stops = Array.from(line.querySelectorAll('.stop'));
+      const targetIndex = stops.indexOf(target);
+
+      line.insertBefore(newStop, stops[targetIndex + 1]);
+
+      const input = newStop.querySelector('input');
+      input.addEventListener('input', () => updateStops());
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          addStop(newStop);
+        }
+        if (e.key === 'Enter' && e.shiftKey) {
+          const caretPosition = input.selectionStart;
+          input.value =
+            input.value.substring(0, caretPosition) +
+            '\n' +
+            input.value.substring(caretPosition);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) {
+          newStop.remove();
+          updateStops();
+        }
+      });
+
+      updateStops();
+      input.focus();
+    }
+
+    document.querySelectorAll('.stop input').forEach((input) => {
+      input.addEventListener('input', () => updateStops());
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          addStop(input.parentElement);
+        }
+        if (e.key === 'Enter' && e.shiftKey) {
+          const caretPosition = input.selectionStart;
+          input.value =
+            input.value.substring(0, caretPosition) +
+            '\n' +
+            input.value.substring(caretPosition);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) {
+          const parentStop = input.parentElement;
+          if (line.querySelectorAll('.stop').length > 2) {
+            parentStop.remove();
+            updateStops();
+          } else {
+            input.value = 'Nowy Przystanek';
+          }
+        }
+      });
+    });
+
+    updateStops();
+  </script>
+</body>
+</html>
