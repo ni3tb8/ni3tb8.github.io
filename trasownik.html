@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trasownik v0.98</title>
-  <style>
+  <style id="dynamic-style">
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
     body {
@@ -237,7 +237,7 @@
       font-family: "Inter", serif;
       font-size: 16px;
       padding: 5px;
-      border: 2px solid #144b77;
+      border: 2px solid #174d7a;
       border-radius: 4px;
       background-color: #353535;
       color: #f4f8ff;
@@ -248,11 +248,18 @@
       font-family: "Inter", serif;
       font-size: 16px;
       padding: 5px;
-      border: 2px solid #144b77;
+      border: 2px solid #174d7a;
       border-radius: 4px;
       background-color: #353535;
       color: #f4f8ff;
       font-weight: 400;
+    }
+
+    .label-tickbox {
+      font-family: "Inter", serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #f4f8ff;
     }
 
     .color-picker select:focus {
@@ -283,7 +290,7 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #0f3758;
+            color: #144b77;
             margin-left: 178px;
             width: 200px;
             font-weight: 600;
@@ -307,7 +314,7 @@
             font-weight: 400;
             padding: 10px 20px;
             border-radius: 30px;
-            background: #144b77;
+            background: #174d7a;
             color: #f4f8ff;
             border: none;
             font-size: 16px;
@@ -334,10 +341,10 @@
 </head>
 <body>
   <div class="container">
-    <div class="line-number">
+    <div id="liniaTlo" class="line-number">
       <input type="text">
     </div>
-    <div class="top-section">
+    <div id="liniaTlo" class="top-section">
       <div class="arrow"></div>
       <input id="kierunek" type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
     </div>
@@ -347,7 +354,7 @@
         <div class="circle"></div>
       </div>
       <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
-        <input disabled style="color: #144b77;" id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek">
+        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek" disabled>
         <div class="circle-last"></div>
       </div>
     </div>
@@ -357,51 +364,113 @@
 
   <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
   <div class="color-picker">
-    <label for="background-color">Wybierz kolor tła linii:</label>
-    <select id="background-color">
-      <option value="#144b77">Zwykły</option>
-      <option value="#9e9531">Zmiana trasy</option>
-    </select>
-    <label>
-      <input type="checkbox" id="link-background-direction"> Powiąż tło kierunku
-    </label>
-  </div><br>
+    <label for="color-selector">Wybierz wersję kolorystyczną:</label>
+  <select id="color-selector">
+    <option value="#144b77">Niebieski</option>
+    <option value="#303030">Czarny</option>
+    <option value="#9e9531">Żółty</option>
+  </select>
+  <input type="checkbox" id="sync-colors" checked>
+  <label for="sync-colors">Powiąż kolory</label>
+  <br><br>
+
+  <label for="secondary-color-selector">Wybierz kolor dla pola linii:</label>
+  <select id="secondary-color-selector">
+    <option value="#144b77">Niebieski</option>
+    <option value="#303030">Czarny</option>
+    <option value="#9e9531">Żółty</option>
+  </select>
+  <br><br>
+  <input type="checkbox" id="toggle-ostatniprzystanek">
+      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek</label>
+</div>
+  <br>
   <div class="label-container">
     <button id="skroloff">Przełącz przewijanie</button>
     </div>
 
   <script>
+const mainColorSelector = document.getElementById('color-selector');
+    const secondaryColorSelector = document.getElementById('secondary-color-selector');
+    const syncCheckbox = document.getElementById('sync-colors');
+
+    // Funkcja zmieniająca kolor w stylach CSS
+    function changeColorInCSS(newColor, oldColor) {
+      const styleElement = document.getElementById('dynamic-style');
+      const currentStyles = styleElement.innerHTML;
+      const newStyles = currentStyles.replace(new RegExp(oldColor, 'g'), newColor);
+      styleElement.innerHTML = newStyles;
+    }
+
+    // Funkcja do zmiany tła dla klas .top-section i .line-number
+    function changeSecondaryColor(color) {
+      document.querySelectorAll('.top-section, .line-number').forEach(element => {
+        element.style.backgroundColor = color;
+      });
+    }
+
+    // Zmienna przechowująca bieżący kolor dla głównego wybieraka
+    let currentColor = "#144b77";
+
+    // Obsługa głównego wybieraka koloru
+    mainColorSelector.addEventListener('change', function () {
+      const selectedColor = this.value;
+      changeColorInCSS(selectedColor, currentColor);
+      currentColor = selectedColor;
+
+      // Jeśli synchronizacja jest włączona, zmień też drugi wybierak i odpowiednie elementy
+      if (syncCheckbox.checked) {
+        secondaryColorSelector.value = selectedColor;
+        changeSecondaryColor(selectedColor);
+      }
+    });
+
+    // Obsługa drugiego wybieraka koloru
+    secondaryColorSelector.addEventListener('change', function () {
+      const selectedColor = this.value;
+      changeSecondaryColor(selectedColor);
+    });
+
+    // Obsługa synchronizacji z tickboxem
+    syncCheckbox.addEventListener('change', function () {
+      if (this.checked) {
+        // Jeśli checkbox jest zaznaczony, ustaw drugi wybierak na wartość pierwszego i zmień kolory
+        secondaryColorSelector.value = mainColorSelector.value;
+        changeSecondaryColor(mainColorSelector.value);
+        secondaryColorSelector.disabled = true; // Wyszarzenie drugiego wybieraka
+      } else {
+        secondaryColorSelector.disabled = false; // Odblokowanie drugiego wybieraka
+      }
+    });
+
+    // Ustawienie stanu początkowego dla drugiego wybieraka
+    if (syncCheckbox.checked) {
+      secondaryColorSelector.disabled = true;
+    }
+
+// Synchronizacja kierunku z ostatnim przystankiem
 document.getElementById('kierunek').addEventListener('input', function() {
-    document.getElementById('ostatniprzystanek').value = this.value;
-});
+      const ostatniPrzystanekInput = document.getElementById('ostatniprzystanek');
+      // Aktualizuj wartość tylko, jeśli pole jest zablokowane
+      if (ostatniPrzystanekInput.disabled) {
+        ostatniPrzystanekInput.value = this.value;
+      }
+    });
 
-const colorPicker = document.getElementById('background-color');
-const lineNumber = document.querySelector('.line-number');
-const kierunekTlo = document.querySelector('.top-section');
-const linkBackgroundDirection = document.getElementById('link-background-direction');
-
-// Funkcja do zmiany tła
-colorPicker.addEventListener('change', (e) => {
-  const selectedColor = e.target.value;
-  lineNumber.style.backgroundColor = selectedColor;
-
-  // Jeśli checkbox jest zaznaczony, zmień tło kierunku
-  if (linkBackgroundDirection.checked) {
-    kierunekTlo.style.backgroundColor = selectedColor;
-  }
-});
-
-// Funkcja do obsługi zmiany stanu checkboxa
-linkBackgroundDirection.addEventListener('change', () => {
-  if (linkBackgroundDirection.checked) {
-    // Jeśli checkbox jest zaznaczony, przypisz kolor tła z wybieraka do kierunku
-    kierunekTlo.style.backgroundColor = lineNumber.style.backgroundColor;
-  } else {
-    // Jeśli checkbox nie jest zaznaczony, przywróć domyślne tło kierunku
-    kierunekTlo.style.backgroundColor = ''; // Przykładowe usunięcie tła
-  }
-});
-
+    // Przełączanie atrybutu 'disabled' w polu ostatniego przystanku
+    document.getElementById('toggle-ostatniprzystanek').addEventListener('change', function() {
+      const ostatniPrzystanekInput = document.getElementById('ostatniprzystanek');
+      if (this.checked) {
+        // Jeśli tickbox zaznaczony, odblokuj pole
+        ostatniPrzystanekInput.disabled = false;
+        ostatniPrzystanekInput.placeholder = "Wpisz ręcznie";
+      } else {
+        // Jeśli tickbox odznaczony, zablokuj pole i zsynchronizuj z kierunkiem
+        ostatniPrzystanekInput.disabled = true;
+        ostatniPrzystanekInput.value = document.getElementById('kierunek').value;
+        ostatniPrzystanekInput.placeholder = "Automatycznie ustawione";
+      }
+    });
 
     const line = document.getElementById('line');
     const maxStops = 26;
