@@ -156,7 +156,7 @@
 
     .stop input {
       font-family: "Inter", serif;
-      width: 200px;
+      width: 190px;
       text-align: left;
       border: none;
       font-size: 14px;
@@ -164,8 +164,8 @@
       outline: none;
       position: relative;
       transform: rotate(-50deg);
-      margin-bottom: 80px;
-      margin-left: 120px;
+      margin-bottom: 75px;
+      margin-left: 115px;
       white-space: pre-wrap;
       line-height: 1.2;
       color: #144b77;
@@ -277,8 +277,8 @@
             display: inline-block;
             white-space: nowrap;
             color: #144b77;
-            margin-left: 177px;
-            width: 200px;
+            margin-left: 170px;
+            width: 190px;
             font-weight: 550;
             line-height: 1.2;
             font-size: 14px;
@@ -291,8 +291,8 @@
             display: inline-block;
             white-space: nowrap;
             color: #144b77;
-            margin-left: 178px;
-            width: 200px;
+            margin-left: 171px;
+            width: 190px;
             font-weight: 600;
             line-height: 1.2;
             font-size: 14px;
@@ -300,11 +300,11 @@
 
     .przykrycie {
         margin-left: 1304px;
-        margin-bottom: 40px;
+        margin-bottom: 80px;
         border-left: 4px solid #222222;;
         background-color: #353535;
         width: 100px;
-        height: 150px;
+        height: 200px;
         z-index: 9999;
         position: absolute;
     }
@@ -390,6 +390,36 @@
     </div>
 
   <script>
+// Mapa zamian tekstów
+const replacements = {
+      " nz": " NŻ",
+      "\\[": "(", // Zamiana "[" na "("
+      "\\]": ")", // Zamiana "]" na ")"
+      " pr": " P+R"
+    };
+
+    // Funkcja do automatycznej zamiany tekstu
+    function replaceText(inputElement) {
+      let value = inputElement.value;
+
+      // Iteruj po zamianach i zastąp tekst
+      for (const [pattern, replacement] of Object.entries(replacements)) {
+        const regex = new RegExp(pattern, "g"); // Tworzymy wyrażenie regularne
+        value = value.replace(regex, replacement);
+      }
+
+      // Aktualizuj wartość inputa
+      inputElement.value = value;
+    }
+
+    // Delegowanie zdarzeń na całym dokumencie (lub określonym kontenerze)
+    document.addEventListener('input', function (event) {
+      // Sprawdzamy, czy zdarzenie pochodzi z pola typu "text"
+      if (event.target.tagName === 'INPUT' && event.target.type === 'text') {
+        replaceText(event.target);
+      }
+    });
+
 const mainColorSelector = document.getElementById('color-selector');
     const secondaryColorSelector = document.getElementById('secondary-color-selector');
     const syncCheckbox = document.getElementById('sync-colors');
