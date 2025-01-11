@@ -10,7 +10,7 @@
     body {
       margin: 0;
       font-family: "Inter", serif;
-      background-color: #f4f4f4;
+      background-color: #353535;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -23,7 +23,7 @@
     .top-section {
       display: flex;
       align-items: center;
-      background-color: #06355c; /* Niebieski kolor */
+      background-color: #144b77; /* Niebieski kolor */
       color: #f4f8ff;
       height: 50px;
       width: 860px;
@@ -43,6 +43,15 @@
       margin-right: 10px;
       transform: rotate(90deg);
     }
+
+    .top-section-list {
+      font-family: "Inter", serif;
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: -5px;
+      padding-right: 4px;
+      color: #f4f8ff;
+}
 
     .top-section input {
       font-family: "Inter", serif;
@@ -70,7 +79,7 @@
     }
 
     .line-number {
-      background-color: #06355c;
+      background-color: #144b77;
       color: #f4f8ff;
       font-size: 72px;
       font-weight: bold;
@@ -102,7 +111,7 @@
       left: 300px;
       right: 90px;
       height: 8px;
-      background-color: #06355c;
+      background-color: #144b77;
     }
 
     .stop {
@@ -120,7 +129,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      border: 5px solid #06355c;
+      border: 5px solid #144b77;
       background-color: #f4f8ff;
     }
 
@@ -128,8 +137,8 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      border: 5px solid #06355c;
-      background-color: #06355c;
+      border: 5px solid #144b77;
+      background-color: #144b77;
     }
 
     .stop .circle:active {
@@ -137,7 +146,7 @@
     }
 
     .stop.night-stop .circle {
-      background-color: #06355c;
+      background-color: #144b77;
       border-color: #f4f8ff;
     }
 
@@ -159,7 +168,7 @@
       margin-left: 120px;
       white-space: pre-wrap;
       line-height: 1.2;
-      color: #06355c;
+      color: #144b77;
       font-weight: 550;
       max-width: 300px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
@@ -180,7 +189,7 @@
       margin-left: 90px;
       white-space: pre-wrap;
       line-height: 1.2;
-      color: #06355c;
+      color: #144b77;
       font-weight: 550;
       max-width: 150px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
@@ -194,28 +203,60 @@
 
     /* Stylizacja dla color picker */
     .color-picker {
+      font-family: "Inter", serif;
+      text-align: center;
+      margin-top: 30px; /* Odstęp od kontenera */
+      display: block; /* Gwarantujemy blokowy układ */
+    }
+
+    .color-line-picker {
+      font-family: "Inter", serif;
       text-align: center;
       margin-top: 30px; /* Odstęp od kontenera */
       display: block; /* Gwarantujemy blokowy układ */
     }
 
     .color-picker label {
+      font-family: "Inter", serif;
       font-size: 16px;
       font-weight: 400;
-      color: #06355c;
+      color: #f4f8ff;
+    }
+
+    .color-line-picker label {
+      font-family: "Inter", serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #f4f8ff;
     }
 
     .color-picker select {
+      font-family: "Inter", serif;
       font-size: 16px;
       padding: 5px;
-      border: 1px solid #06355c;
+      border: 2px solid #144b77;
       border-radius: 4px;
-      background-color: #f4f8ff;
-      color: #06355c;
+      background-color: #353535;
+      color: #f4f8ff;
+      font-weight: 400;
+    }
+
+    .color-line-picker select {
+      font-family: "Inter", serif;
+      font-size: 16px;
+      padding: 5px;
+      border: 2px solid #144b77;
+      border-radius: 4px;
+      background-color: #353535;
+      color: #f4f8ff;
       font-weight: 400;
     }
 
     .color-picker select:focus {
+      outline: none;
+    }
+
+    .color-line-picker select:focus {
       outline: none;
     }
 
@@ -225,7 +266,7 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #06355c;
+            color: #144b77;
             margin-left: 177px;
             width: 200px;
             font-weight: 550;
@@ -239,7 +280,7 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #06355c;
+            color: #144b77;
             margin-left: 177px;
             width: 200px;
             font-weight: 550;
@@ -251,7 +292,7 @@
         margin-left: 1304px;
         margin-bottom: 40px;
         border-left: 4px solid #222222;;
-        background-color: #f4f4f4;
+        background-color: #353535;
         width: 100px;
         height: 150px;
         z-index: 9999;
@@ -263,23 +304,23 @@
             font-weight: 400;
             padding: 10px 20px;
             border-radius: 30px;
-            background: #06355c;
-            color: #fefefe;
+            background: #144b77;
+            color: #f4f8ff;
             border: none;
             font-size: 16px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s ease;
+            transition: 0.3s ease;
         }
 
         button:hover {
-            background: #0e4a7a;
-            transition: background 0.3s ease;
+            background: #18578b;
+            transition: 0.3s ease;
         }
 
         button:active {
             background: #195e97;
-            transition: background 0.3s ease;
+            transition: 0.3s ease;
         }
   </style>
 </head>
@@ -310,11 +351,13 @@
   <div class="color-picker">
     <label for="background-color">Wybierz kolor tła linii:</label>
     <select id="background-color">
-      <option value="#06355c">Zwykły</option>
+      <option value="#144b77">Zwykły</option>
       <option value="#9e9531">Zmiana trasy</option>
     </select>
-  </div>
-<br>
+    <label>
+      <input type="checkbox" id="link-background-direction"> Powiąż tło kierunku
+    </label>
+  </div><br>
   <div class="label-container">
     <button id="skroloff">Przełącz przewijanie</button>
     </div>
@@ -324,15 +367,36 @@ document.getElementById('kierunek').addEventListener('input', function() {
     document.getElementById('ostatniprzystanek').value = this.value;
 });
 
-    const colorPicker = document.getElementById('background-color');
-    const lineNumber = document.querySelector('.line-number');
+const colorPicker = document.getElementById('background-color');
+const lineNumber = document.querySelector('.line-number');
+const kierunekTlo = document.querySelector('.top-section');
+const linkBackgroundDirection = document.getElementById('link-background-direction');
 
-    colorPicker.addEventListener('change', (e) => {
-      const selectedColor = e.target.value;
-      lineNumber.style.backgroundColor = selectedColor;
-    });
+// Funkcja do zmiany tła
+colorPicker.addEventListener('change', (e) => {
+  const selectedColor = e.target.value;
+  lineNumber.style.backgroundColor = selectedColor;
+
+  // Jeśli checkbox jest zaznaczony, zmień tło kierunku
+  if (linkBackgroundDirection.checked) {
+    kierunekTlo.style.backgroundColor = selectedColor;
+  }
+});
+
+// Funkcja do obsługi zmiany stanu checkboxa
+linkBackgroundDirection.addEventListener('change', () => {
+  if (linkBackgroundDirection.checked) {
+    // Jeśli checkbox jest zaznaczony, przypisz kolor tła z wybieraka do kierunku
+    kierunekTlo.style.backgroundColor = lineNumber.style.backgroundColor;
+  } else {
+    // Jeśli checkbox nie jest zaznaczony, przywróć domyślne tło kierunku
+    kierunekTlo.style.backgroundColor = ''; // Przykładowe usunięcie tła
+  }
+});
+
 
     const line = document.getElementById('line');
+    const maxStops = 25;
 
     function updateStops() {
       const stops = Array.from(line.querySelectorAll('.stop'));
@@ -354,49 +418,71 @@ document.getElementById('kierunek').addEventListener('input', function() {
     }
 
     function addStop(target) {
+    const stops = Array.from(line.querySelectorAll('.stop'));
+
+    if (stops.length > maxStops) {
+      // If there are more than 25 stops, replace new dot with an arrow (without circle)
       const newStop = document.createElement('div');
       newStop.className = 'stop';
-      newStop.innerHTML = `  
-        <input class="skrol" type="text" placeholder="Nowy Przystanek">
-        <div class="circle"></div>
+      newStop.innerHTML = `
+        <div class="top-section-list">   >>   </div>  <!-- No circle, only arrow -->
       `;
-
-      const stops = Array.from(line.querySelectorAll('.stop'));
       const targetIndex = stops.indexOf(target);
-
       line.insertBefore(newStop, stops[targetIndex + 1]);
 
-      const input = newStop.querySelector('input');
-      input.addEventListener('input', () => updateStops());
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          addStop(newStop);
-        }
-        if (e.key === 'Enter' && e.shiftKey) {
-          const caretPosition = input.selectionStart;
-          input.value =
-            input.value.substring(0, caretPosition) +
-            '\n' +
-            input.value.substring(caretPosition);
-        }
-      });
-
-      input.addEventListener('blur', () => {
-  const isFirstStop = input === line.querySelector('.stop input');
-  const isLastStop = input === line.querySelector('#ostatni input'); // Check if this is the last stop with id 'ostatni'
-
-  if (!input.value.trim() && !isFirstStop && !isLastStop) {
-    const parentStop = input.parentElement;
-    parentStop.remove();
-    updateStops();
-  } else if (isLastStop && !input.value.trim()) {
-    input.placeholder = 'Nowy Przystanek'; // Keep the placeholder or default value for the last stop
-  }
-});
-
       updateStops();
-      input.focus();
+      return;  // Prevent adding a new input box for additional stops
     }
+
+  // Tworzenie nowego przystanku
+  const newStop = document.createElement('div');
+  newStop.className = 'stop';
+  newStop.innerHTML = `  
+    <input class="skrol" type="text" placeholder="Nowy Przystanek">
+    <div class="circle"></div>
+  `;
+
+  // Znajdź indeks elementu docelowego
+  const targetIndex = stops.indexOf(target);
+
+  // Wstaw nowy przystanek za elementem docelowym
+  if (targetIndex >= 0) {
+    line.insertBefore(newStop, stops[targetIndex + 1]);
+  } else {
+    line.appendChild(newStop); // Jeśli brak targetu, dodaj na końcu
+  }
+
+  // Obsługa zdarzeń dla nowego przystanku
+  const input = newStop.querySelector('input');
+  input.addEventListener('input', () => updateStops());
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      addStop(newStop);
+    }
+    if (e.key === 'Enter' && e.shiftKey) {
+      const caretPosition = input.selectionStart;
+      input.value =
+        input.value.substring(0, caretPosition) +
+        '\n' +
+        input.value.substring(caretPosition);
+    }
+  });
+
+  input.addEventListener('blur', () => {
+    const isFirstStop = input === line.querySelector('.stop input');
+    const isLastStop = input === line.querySelector('#ostatni input');
+
+    if (!input.value.trim() && !isFirstStop && !isLastStop) {
+      const parentStop = input.parentElement;
+      parentStop.remove();
+      updateStops();
+    }
+  });
+
+  updateStops();
+  input.focus();
+}
+
 
     document.querySelectorAll('.stop input').forEach((input) => {
       input.addEventListener('input', () => updateStops());
