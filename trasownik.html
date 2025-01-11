@@ -60,7 +60,7 @@
       color: #f4f8ff;
       font-size: 20px;
       outline: none;
-      width: 450px;
+      width: 500px;
       height: 40px;
       padding-left: 10px;
       font-weight: 700;
@@ -194,11 +194,14 @@
       max-width: 150px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
-      z-index: 1;
     }
 
     .stop input::placeholder {
       color: #bfbfbf;
+    }
+
+    .top-section input::placeholder {
+      color: #b9b9b9;
     }
 
     /* Stylizacja dla color picker */
@@ -280,10 +283,10 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #144b77;
-            margin-left: 177px;
+            color: #0f3758;
+            margin-left: 178px;
             width: 200px;
-            font-weight: 550;
+            font-weight: 600;
             line-height: 1.2;
             font-size: 14px;
         }
@@ -322,6 +325,11 @@
             background: #195e97;
             transition: 0.3s ease;
         }
+
+        #ostatniprzystanek {
+    color: #144b77; /* Tylko dla konkretnego inputa */
+}
+
   </style>
 </head>
 <body>
@@ -339,7 +347,7 @@
         <div class="circle"></div>
       </div>
       <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
-        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Przystanek końcowy">
+        <input disabled style="color: #144b77;" id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek">
         <div class="circle-last"></div>
       </div>
     </div>
@@ -396,7 +404,7 @@ linkBackgroundDirection.addEventListener('change', () => {
 
 
     const line = document.getElementById('line');
-    const maxStops = 25;
+    const maxStops = 26;
 
     function updateStops() {
       const stops = Array.from(line.querySelectorAll('.stop'));
@@ -425,7 +433,7 @@ linkBackgroundDirection.addEventListener('change', () => {
       const newStop = document.createElement('div');
       newStop.className = 'stop';
       newStop.innerHTML = `
-        <div class="top-section-list">   >>   </div>  <!-- No circle, only arrow -->
+        <div class="top-section-list"> > </div>  <!-- No circle, only arrow -->
       `;
       const targetIndex = stops.indexOf(target);
       line.insertBefore(newStop, stops[targetIndex + 1]);
