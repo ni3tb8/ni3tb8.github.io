@@ -204,6 +204,10 @@
       color: #b9b9b9;
     }
 
+    .skrolOst::placeholder {
+      color: #b9b9b9;
+    }
+
     /* Stylizacja dla color picker */
     .color-picker {
       font-family: "Inter", serif;
@@ -395,7 +399,7 @@ const replacements = {
       " nz": " NŻ",
       "\\[": "(", // Zamiana "[" na "("
       "\\]": ")", // Zamiana "]" na ")"
-      " pr": " P+R"
+      " pp": " P+R"
     };
 
     // Funkcja do automatycznej zamiany tekstu
@@ -493,12 +497,12 @@ document.getElementById('kierunek').addEventListener('input', function() {
       if (this.checked) {
         // Jeśli tickbox zaznaczony, odblokuj pole
         ostatniPrzystanekInput.disabled = false;
-        ostatniPrzystanekInput.placeholder = "Wpisz ręcznie";
+        ostatniPrzystanekInput.placeholder = "Przystanek końcowy";
       } else {
         // Jeśli tickbox odznaczony, zablokuj pole i zsynchronizuj z kierunkiem
         ostatniPrzystanekInput.disabled = true;
         ostatniPrzystanekInput.value = document.getElementById('kierunek').value;
-        ostatniPrzystanekInput.placeholder = "Automatycznie ustawione";
+        ostatniPrzystanekInput.placeholder = "Kierunek";
       }
     });
 
