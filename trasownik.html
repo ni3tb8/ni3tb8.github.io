@@ -506,6 +506,7 @@ document.getElementById('kierunek').addEventListener('input', function() {
         // Jeśli tickbox odznaczony, zablokuj pole i zsynchronizuj z kierunkiem
         ostatniPrzystanekInput.disabled = true;
         ostatniPrzystanekInput.value = document.getElementById('kierunek').value;
+        ostatniPrzystanekInput.placeholder = "Kierunek";
       }
     });
 
