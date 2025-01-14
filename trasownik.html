@@ -65,7 +65,7 @@
       height: 40px;
       padding-left: 10px;
       font-weight: 700;
-      /* text-transform: capitalize; */
+      text-transform: capitalize;
     }
 
     .container {
@@ -187,7 +187,7 @@
       max-width: 300px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
-      /* text-transform: capitalize; */
+      text-transform: capitalize;
     }
 
     .stop input {
@@ -208,8 +208,8 @@
       font-weight: 550;
       max-width: 300px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
-      white-space: nowrap; /* Prevent text from wrapping */
-      /* text-transform: capitalize; */
+      white-space: nowrap; /* Prevent tt from wrapping */
+      text-transform: capitalize;
     }
 
     .stopOst input {
@@ -231,7 +231,7 @@
       max-width: 230px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
-      /* text-transform: capitalize; */
+      text-transform: capitalize;
     }
 
     .stop input::placeholder {
@@ -334,7 +334,7 @@
             font-weight: 550;
             line-height: 1.2;
             font-size: 14px;
-            /* text-transform: capitalize; */
+            text-transform: capitalize;
         }
 
         .rotated-marqueeOst {
@@ -349,7 +349,7 @@
             font-weight: 600;
             line-height: 1.2;
             font-size: 14px;
-            /* text-transform: capitalize; */
+            text-transform: capitalize;
         }
 
     .przykrycie {
@@ -391,10 +391,10 @@
     color: #303030; /* Tylko dla konkretnego inputa */
 }
 
-/* Klasy, które dodają kapitalizację */
+/* Default: bez transformacji */
 .capitalize {
-  text-transform: capitalize;
-}
+      text-transform: capitalize;
+    }
 
   </style>
 </head>
@@ -447,7 +447,7 @@
   <input type="checkbox" id="toggle-ostatniprzystanek">
       <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek</label><br><br>
       <label>
-        <input type="checkbox" id="capitalizeToggle">
+        <input type="checkbox" id="capitalizeToggle" checked>
         Automatyczna kapitalizacja tekstu
       </label>
   <br><br><br>
@@ -482,16 +482,21 @@ function toggleCapitalization() {
     document.querySelectorAll(className).forEach(element => {
       if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
         if (shouldCapitalize) {
-          // Zastosowanie kapitalizacji
+          // Zastosowanie kapitalizacji w polach input
           element.value = capitalizeText(element.value);
+          element.style.textTransform = 'capitalize'; // Ustawiamy kapitalizację
+        } else {
+          // Usuwamy kapitalizację przy wyłączeniu
+          element.style.textTransform = 'none'; // Usuwamy 'capitalize'
         }
-        // Nie robimy nic przy wyłączeniu, pozostawiamy obecny stan
       } else {
         if (shouldCapitalize) {
           // Kapitalizacja dla elementów tekstowych
           element.textContent = capitalizeText(element.textContent);
+        } else {
+          // Usuwamy kapitalizację dla tekstu w innych elementach
+          element.style.textTransform = 'none';
         }
-        // Nie robimy nic przy wyłączeniu, pozostawiamy obecny stan
       }
     });
   });
@@ -502,14 +507,6 @@ capitalizeToggle.addEventListener('change', toggleCapitalization);
 
 // Domyślne zastosowanie kapitalizacji na początku
 toggleCapitalization();
-
-
-
-
-
-
-
-
 
 // Mapa zamian tekstów
 const replacements = {
