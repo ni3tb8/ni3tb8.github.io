@@ -423,15 +423,15 @@
 
   <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
   <div class="color-picker">
-    <label for="color-selector">Wybierz kolor bazowy:</label>
+    <!-- <label for="color-selector">Wybierz kolor bazowy:</label>
   <select style="margin-left: 10px;" id="color-selector">
     <option value="#303030">Czarny</option>
     <option value="#144b77">Niebieski</option>
-    <!-- <option value="#9e9531">Żółty</option> -->
+    <option value="#9e9531">Żółty</option>
   </select>
-  <input type="checkbox" id="sync-colors" checked>
+  <input type="checkbox" id="sync-colors">
   <label for="sync-colors">Powiąż kolory</label>
-  <br><br>
+  <br><br>--->
 
   <label for="secondary-color-selector">Wybierz kolor pola linii:</label>
   <select style="margin-left: 8px;" id="secondary-color-selector">
@@ -517,6 +517,7 @@ const replacements = {
       " PP": " P+R",
       "skm": "SKM",
       "pkm": "PKM",
+      "ska": "SKA",
       "pl ": "Plac ",
       "awf": "AWF"
     };
@@ -547,12 +548,12 @@ const mainColorSelector = document.getElementById('color-selector');
     const syncCheckbox = document.getElementById('sync-colors');
 
     // Funkcja zmieniająca kolor w stylach CSS
-    function changeColorInCSS(newColor, oldColor) {
-      const styleElement = document.getElementById('dynamic-style');
-      const currentStyles = styleElement.innerHTML;
-      const newStyles = currentStyles.replace(new RegExp(oldColor, 'g'), newColor);
-      styleElement.innerHTML = newStyles;
-    }
+    //function changeColorInCSS(newColor, oldColor) {
+    //  const styleElement = document.getElementById('dynamic-style');
+    //  const currentStyles = styleElement.innerHTML;
+    //  const newStyles = currentStyles.replace(new RegExp(oldColor, 'g'), newColor);
+    //  styleElement.innerHTML = newStyles;
+    //}
 
     // Funkcja do zmiany tła dla klas .top-section i .line-number
     function changeSecondaryColor(color) {
@@ -565,17 +566,17 @@ const mainColorSelector = document.getElementById('color-selector');
     let currentColor = "#303030";
 
     // Obsługa głównego wybieraka koloru
-    mainColorSelector.addEventListener('change', function () {
-      const selectedColor = this.value;
-      changeColorInCSS(selectedColor, currentColor);
-      currentColor = selectedColor;
-
+    //mainColorSelector.addEventListener('change', function () {
+    //  const selectedColor = this.value;
+    //  changeColorInCSS(selectedColor, currentColor);
+    //  currentColor = selectedColor;
+    //
       // Jeśli synchronizacja jest włączona, zmień też drugi wybierak i odpowiednie elementy
-      if (syncCheckbox.checked) {
-        secondaryColorSelector.value = selectedColor;
-        changeSecondaryColor(selectedColor);
-      }
-    });
+    //  if (syncCheckbox.checked) {
+    //    secondaryColorSelector.value = selectedColor;
+    //    changeSecondaryColor(selectedColor);
+    //  }
+    //});
 
     // Obsługa drugiego wybieraka koloru
     secondaryColorSelector.addEventListener('change', function () {
