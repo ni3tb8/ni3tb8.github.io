@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, capitalize-scale=1.0">
   <title>Trasownik v0.98</title>
   <style id="dynamic-style">
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -15,7 +15,8 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin-top: -50px;
+      width: 100vw;
+      overflow: hidden;
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
     }
 
@@ -23,7 +24,7 @@
     .top-section {
       display: flex;
       align-items: center;
-      background-color: #144b77; /* Niebieski kolor */
+      background-color: #303030; /* Niebieski kolor */
       color: #f4f8ff;
       height: 50px;
       width: 860px;
@@ -64,6 +65,7 @@
       height: 40px;
       padding-left: 10px;
       font-weight: 700;
+      /* text-transform: capitalize; */
     }
 
     .container {
@@ -79,7 +81,7 @@
     }
 
     .line-number {
-      background-color: #144b77;
+      background-color: #303030;
       color: #f4f8ff;
       font-size: 72px;
       font-weight: bold;
@@ -103,6 +105,7 @@
       text-align: center;
       width: 100%;
       outline: none;
+      text-transform: uppercase;
     }
 
     .line {
@@ -111,10 +114,21 @@
       left: 300px;
       right: 90px;
       height: 8px;
-      background-color: #144b77;
+      background-color: #303030;
     }
 
     .stop {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      transform: translateX(-50%);
+      bottom: -8px;
+      margin-left: 25px;
+    }
+
+    .stopOst {
       position: absolute;
       display: flex;
       flex-direction: column;
@@ -129,7 +143,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      border: 5px solid #144b77;
+      border: 5px solid #303030;
       background-color: #f4f8ff;
     }
 
@@ -137,8 +151,8 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      border: 5px solid #144b77;
-      background-color: #144b77;
+      border: 5px solid #303030;
+      background-color: #303030;
     }
 
     .stop .circle:active {
@@ -146,7 +160,7 @@
     }
 
     .stop.night-stop .circle {
-      background-color: #144b77;
+      background-color: #303030;
       border-color: #f4f8ff;
     }
 
@@ -168,16 +182,39 @@
       margin-left: 115px;
       white-space: pre-wrap;
       line-height: 1.2;
-      color: #144b77;
+      color: #303030;
       font-weight: 550;
       max-width: 300px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
+      /* text-transform: capitalize; */
     }
 
-    input.stopOst {
+    .stop input {
       font-family: "Inter", serif;
-      width: 150px;
+      width: 190px;
+      text-align: left;
+      border: none;
+      font-size: 14px;
+      background: transparent;
+      outline: none;
+      position: relative;
+      transform: rotate(-50deg);
+      margin-bottom: 75px;
+      margin-left: 115px;
+      white-space: pre-wrap;
+      line-height: 1.2;
+      color: #303030;
+      font-weight: 550;
+      max-width: 300px; /* Limiting max width */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      white-space: nowrap; /* Prevent text from wrapping */
+      /* text-transform: capitalize; */
+    }
+
+    .stopOst input {
+      font-family: "Inter", serif;
+      width: 130px;
       text-align: left;
       border: none;
       font-size: 14px;
@@ -189,33 +226,38 @@
       margin-left: 90px;
       white-space: pre-wrap;
       line-height: 1.2;
-      color: #144b77;
+      color: #303030;
       font-weight: 550;
-      max-width: 150px; /* Limiting max width */
+      max-width: 230px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
+      /* text-transform: capitalize; */
     }
 
     .stop input::placeholder {
       color: #bfbfbf;
+      text-transform: none;
     }
 
     .top-section input::placeholder {
       color: #b9b9b9;
+      text-transform: none;
     }
 
     .skrolOst::placeholder {
       color: #b9b9b9;
+      text-transform: none;
     }
 
     input:disabled::placeholder {
       color: #b9b9b9;
+      text-transform: none;
     }
 
     /* Stylizacja dla color picker */
     .color-picker {
       font-family: "Inter", serif;
-      text-align: center;
+      text-align: left;
       margin-top: 30px; /* Odstęp od kontenera */
       display: block; /* Gwarantujemy blokowy układ */
     }
@@ -245,9 +287,9 @@
       font-family: "Inter", serif;
       font-size: 16px;
       padding: 5px;
-      border: 2px solid #174d7a;
+      border: none;
       border-radius: 4px;
-      background-color: #353535;
+      background-color: #292929;
       color: #f4f8ff;
       font-weight: 400;
       width: 160px;
@@ -259,7 +301,7 @@
       padding: 5px;
       border: 2px solid #174d7a;
       border-radius: 4px;
-      background-color: #353535;
+      background-color: #343434;
       color: #f4f8ff;
       font-weight: 400;
       width: 160px;
@@ -286,12 +328,13 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #144b77;
+            color: #303030;
             margin-left: 170px;
             width: 190px;
             font-weight: 550;
             line-height: 1.2;
             font-size: 14px;
+            /* text-transform: capitalize; */
         }
 
         .rotated-marqueeOst {
@@ -300,17 +343,18 @@
             transform-origin: top left;
             display: inline-block;
             white-space: nowrap;
-            color: #144b77;
+            color: #303030;
             margin-left: 171px;
             width: 190px;
             font-weight: 600;
             line-height: 1.2;
             font-size: 14px;
+            /* text-transform: capitalize; */
         }
 
     .przykrycie {
         margin-left: 1304px;
-        margin-bottom: 80px;
+        margin-bottom: 140px;
         border-left: 4px solid #222222;;
         background-color: #353535;
         width: 100px;
@@ -322,12 +366,12 @@
     button {
             font-family: "Inter", serif;
             font-weight: 400;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 30px;
             background: #174d7a;
             color: #f4f8ff;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: 0.3s ease;
@@ -344,7 +388,7 @@
         }
 
         #ostatniprzystanek {
-    color: #144b77; /* Tylko dla konkretnego inputa */
+    color: #303030; /* Tylko dla konkretnego inputa */
 }
 
   </style>
@@ -374,43 +418,99 @@
 
   <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
   <div class="color-picker">
-    <label for="color-selector">Wybierz wersję kolorystyczną:</label>
-  <select id="color-selector">
-    <option value="#144b77">Niebieski</option>
+    <label for="color-selector">Wybierz kolor bazowy:</label>
+  <select style="margin-left: 10px;" id="color-selector">
     <option value="#303030">Czarny</option>
+    <option value="#144b77">Niebieski</option>
     <!-- <option value="#9e9531">Żółty</option> -->
   </select>
   <input type="checkbox" id="sync-colors" checked>
   <label for="sync-colors">Powiąż kolory</label>
   <br><br>
 
-  <label for="secondary-color-selector">Wybierz kolor dla pola linii:</label>
-  <select id="secondary-color-selector">
-    <option value="#144b77">Niebieski</option>
+  <label for="secondary-color-selector">Wybierz kolor pola linii:</label>
+  <select style="margin-left: 8px;" id="secondary-color-selector">
+    <option value="#303030">Czarny</option>
     <option value="#382a87">Fioletowy</option>
+    <option value="#144b77">Niebieski</option>
     <option value="#872a2a">Czerwony</option>
     <option value="#87592a">Pomarańczowy</option>
     <option value="#877f2a">Żółty</option>
     <option value="#4b872a">Zielony</option>
-    <option value="#303030">Czarny</option>
   </select>
-  <br><br>
+  <br><br><br>
   <input type="checkbox" id="toggle-ostatniprzystanek">
-      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek</label>
-</div>
-  <br>
-  <div class="label-container">
-    <button id="skroloff">Przełącz przewijanie</button>
+      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek</label><br><br>
+      <label>
+        <input type="checkbox" id="capitalizeToggle">
+        Automatyczna kapitalizacja tekstu
+      </label>
+  <br><br><br>
+    <button id="skroloff">Odśwież przewijanie</button>
     </div>
 
   <script>
+const capitalizeToggle = document.getElementById('capitalizeToggle');
+
+// Funkcja do kapitalizacji tekstu
+function capitalizeText(text) {
+  return text
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+// Funkcja do synchronizacji stanu kapitalizacji z checkboxem
+function toggleCapitalization() {
+  const shouldCapitalize = capitalizeToggle.checked;
+
+  // Klasy elementów, które mają być aktualizowane
+  const classesToToggle = [
+    '.rotated-marqueeOst',
+    '.rotated-marquee',
+    'input.stopOst',
+    '.stop input',
+    '.top-section input'
+  ];
+
+  classesToToggle.forEach(className => {
+    document.querySelectorAll(className).forEach(element => {
+      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+        if (shouldCapitalize) {
+          // Zastosowanie kapitalizacji
+          element.value = capitalizeText(element.value);
+        }
+        // Nie robimy nic przy wyłączeniu, pozostawiamy obecny stan
+      } else {
+        if (shouldCapitalize) {
+          // Kapitalizacja dla elementów tekstowych
+          element.textContent = capitalizeText(element.textContent);
+        }
+        // Nie robimy nic przy wyłączeniu, pozostawiamy obecny stan
+      }
+    });
+  });
+}
+
+// Nasłuchiwanie zmiany stanu checkboxa
+capitalizeToggle.addEventListener('change', toggleCapitalization);
+
+// Domyślne zastosowanie kapitalizacji na początku
+toggleCapitalization();
+
+
+
 // Mapa zamian tekstów
 const replacements = {
       " nz": " NŻ",
       "\\[": "(", // Zamiana "[" na "("
       "\\]": ")", // Zamiana "]" na ")"
       " pp": " P+R",
-      " PP": " P+R"
+      " PP": " P+R",
+      "skm": "SKM",
+      "pkm": "PKM",
+      "pl ": "Plac ",
+      "awf": "AWF"
     };
 
     // Funkcja do automatycznej zamiany tekstu
@@ -419,17 +519,16 @@ const replacements = {
 
       // Iteruj po zamianach i zastąp tekst
       for (const [pattern, replacement] of Object.entries(replacements)) {
-        const regex = new RegExp(pattern, "g"); // Tworzymy wyrażenie regularne
+        const regex = new RegExp(pattern, "g");
         value = value.replace(regex, replacement);
       }
 
-      // Aktualizuj wartość inputa
+      // Ustawienie zmienionego tekstu
       inputElement.value = value;
     }
 
-    // Delegowanie zdarzeń na całym dokumencie (lub określonym kontenerze)
+    // Nasłuchiwanie zdarzeń na polach tekstowych
     document.addEventListener('input', function (event) {
-      // Sprawdzamy, czy zdarzenie pochodzi z pola typu "text"
       if (event.target.tagName === 'INPUT' && event.target.type === 'text') {
         replaceText(event.target);
       }
@@ -455,7 +554,7 @@ const mainColorSelector = document.getElementById('color-selector');
     }
 
     // Zmienna przechowująca bieżący kolor dla głównego wybieraka
-    let currentColor = "#144b77";
+    let currentColor = "#303030";
 
     // Obsługa głównego wybieraka koloru
     mainColorSelector.addEventListener('change', function () {
@@ -517,50 +616,62 @@ document.getElementById('kierunek').addEventListener('input', function() {
       }
     });
 
+    
+
     const line = document.getElementById('line');
-    const maxStops = 26;
+const maxStops = 26;
 
-    function updateStops() {
-      const stops = Array.from(line.querySelectorAll('.stop'));
-      const totalStops = stops.length;
+function updateStops() {
+  const stops = Array.from(line.querySelectorAll('.stop, .stopOst'));
+  const totalStops = stops.length;
 
-      stops.forEach((stop, index) => {
-        const position = (index / (totalStops - 1)) * 96;
-        stop.style.left = `${position}%`;
+  // Usunięcie strzałki i przestrzeni po niej, gdy liczba przystanków spadnie poniżej limitu
+  const arrowStop = line.querySelector('.stop.arrow');
+  if (totalStops <= maxStops && arrowStop) {
+    arrowStop.remove();
+    updateStops(); // Natychmiastowa aktualizacja pozycji
+    return; // Uniknięcie dalszego przetwarzania w tej iteracji
+  }
 
-        const input = stop.querySelector('input');
-        const circle = stop.querySelector('.circle');
+  // Aktualizowanie pozycji przystanków
+  stops.forEach((stop, index) => {
+    const position = (index / (totalStops - 1)) * 96;
+    stop.style.left = `${position}%`;
 
-        if (input.value.includes('NŻ')) {
-          stop.classList.add('night-stop');
-        } else {
-          stop.classList.remove('night-stop');
-        }
-      });
+    const input = stop.querySelector('input');
+    const circle = stop.querySelector('.circle');
+
+    if (input && input.value.includes('NŻ')) {
+      stop.classList.add('night-stop');
+    } else {
+      stop.classList.remove('night-stop');
     }
+  });
+}
 
-    function addStop(target) {
-    const stops = Array.from(line.querySelectorAll('.stop'));
+function addStop(target) {
+  const stops = Array.from(line.querySelectorAll('.stop, .stopOst'));
+  const lastStop = stops[stops.length - 1]; // Ostatni przystanek, który nie powinien być ruszany
 
-    if (stops.length > maxStops) {
-      // If there are more than 25 stops, replace new dot with an arrow (without circle)
-      const newStop = document.createElement('div');
-      newStop.className = 'stop';
-      newStop.innerHTML = `
-        <div class="top-section-list"> > </div>  <!-- No circle, only arrow -->
+  // Sprawdzenie limitu i dodanie strzałki, jeśli limit został przekroczony
+  if (stops.length >= maxStops) {
+    if (!line.querySelector('.stop.arrow')) {
+      const arrowStop = document.createElement('div');
+      arrowStop.className = 'stop arrow';
+      arrowStop.innerHTML = `
+        <div class="top-section-list"> > </div>  <!-- Tylko strzałka -->
       `;
-      const targetIndex = stops.indexOf(target);
-      line.insertBefore(newStop, stops[targetIndex + 1]);
-
+      line.insertBefore(arrowStop, lastStop); // Dodaj strzałkę przed ostatnim przystankiem
       updateStops();
-      return;  // Prevent adding a new input box for additional stops
     }
+    return; // Blokowanie dodawania nowych przystanków
+  }
 
   // Tworzenie nowego przystanku
   const newStop = document.createElement('div');
   newStop.className = 'stop';
   newStop.innerHTML = `  
-    <input class="skrol" type="text" placeholder="Nowy Przystanek">
+    <input class="skrol" type="text" placeholder="Przystanek">
     <div class="circle"></div>
   `;
 
@@ -694,7 +805,7 @@ document.getElementById('kierunek').addEventListener('input', function() {
 
         // Attach events to an input
         function attachEventsToInput(inputField) {
-            inputField.dataset.marqueeAdded = "false"; // Initialize marquee state
+            inputField.dataset.marqueeAdded = "false"; // capitalizeize marquee state
             inputField.addEventListener("blur", handleBlur);
             inputField.addEventListener("focus", handleFocus);
         }
@@ -738,6 +849,8 @@ document.getElementById('kierunek').addEventListener('input', function() {
 
         // Attach event to the 'Add Input' button
         document.getElementById('addInput').addEventListener('click', addNewInput);
+
+
   </script>
 </body>
 </html>
