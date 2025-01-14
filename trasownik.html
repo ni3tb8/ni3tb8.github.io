@@ -543,9 +543,9 @@ const replacements = {
       }
     });
 
-const mainColorSelector = document.getElementById('color-selector');
+//  const mainColorSelector = document.getElementById('color-selector');
     const secondaryColorSelector = document.getElementById('secondary-color-selector');
-    const syncCheckbox = document.getElementById('sync-colors');
+//  const syncCheckbox = document.getElementById('sync-colors');
 
     // Funkcja zmieniająca kolor w stylach CSS
     //function changeColorInCSS(newColor, oldColor) {
@@ -563,7 +563,7 @@ const mainColorSelector = document.getElementById('color-selector');
     }
 
     // Zmienna przechowująca bieżący kolor dla głównego wybieraka
-    let currentColor = "#303030";
+    //let currentColor = "#303030";
 
     // Obsługa głównego wybieraka koloru
     //mainColorSelector.addEventListener('change', function () {
@@ -585,21 +585,21 @@ const mainColorSelector = document.getElementById('color-selector');
     });
 
     // Obsługa synchronizacji z tickboxem
-    syncCheckbox.addEventListener('change', function () {
-      if (this.checked) {
-        // Jeśli checkbox jest zaznaczony, ustaw drugi wybierak na wartość pierwszego i zmień kolory
-        secondaryColorSelector.value = mainColorSelector.value;
-        changeSecondaryColor(mainColorSelector.value);
-        secondaryColorSelector.disabled = true; // Wyszarzenie drugiego wybieraka
-      } else {
-        secondaryColorSelector.disabled = false; // Odblokowanie drugiego wybieraka
-      }
-    });
+    //syncCheckbox.addEventListener('change', function () {
+    //  if (this.checked) {
+    //    // Jeśli checkbox jest zaznaczony, ustaw drugi wybierak na wartość pierwszego i zmień kolory
+    //    secondaryColorSelector.value = mainColorSelector.value;
+    //    changeSecondaryColor(mainColorSelector.value);
+    //    secondaryColorSelector.disabled = true; // Wyszarzenie drugiego wybieraka
+    //  } else {
+    //    secondaryColorSelector.disabled = false; // Odblokowanie drugiego wybieraka
+    //  }
+    //});
 
     // Ustawienie stanu początkowego dla drugiego wybieraka
-    if (syncCheckbox.checked) {
-      secondaryColorSelector.disabled = true;
-    }
+    //if (syncCheckbox.checked) {
+    //  secondaryColorSelector.disabled = true;
+    //}
 
 // Synchronizacja kierunku z ostatnim przystankiem
 document.getElementById('kierunek').addEventListener('input', function() {
