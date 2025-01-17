@@ -6,6 +6,7 @@
   <title>Trasownik v0.98</title>
   <style id="dynamic-style">
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
     body {
       margin: 0;
@@ -47,11 +48,13 @@
 
     .top-section-list {
       font-family: "Inter", serif;
-      font-size: 32px;
-      font-weight: 500;
-      margin-bottom: -5px;
-      padding-right: 4px;
+      font-size: 31px;
+      margin-bottom: -12px;
+      padding-right: 8px;
       color: #f4f8ff;
+      font-family: "Poppins", serif;
+      font-weight: 600;
+      letter-spacing: -4px;
 }
 
     .top-section input {
@@ -67,6 +70,31 @@
       font-weight: 700;
       text-transform: capitalize;
     }
+
+      #time {
+      font-family: "Inter", serif;
+      background: transparent;
+      border: none;
+      color: #f4f8ff;
+      font-size: 20px;
+      outline: none;
+      width: 65px;
+      font-weight: 700;
+      text-align: right;
+      }
+
+      #date {
+      font-family: "Inter", serif;
+      background: transparent;
+      border: none;
+      color: #f4f8ff;
+      font-size: 20px;
+      outline: none;
+      width: 240px;
+      padding-left: 10px;
+      font-weight: 700;
+      text-align: right;
+      }
 
     .container {
       display: flex;
@@ -100,7 +128,7 @@
       background: transparent;
       border: none;
       color: #f4f8ff;
-      font-size: 140px;
+      font-size: 134px;
       font-weight: 700;
       text-align: center;
       width: 100%;
@@ -396,6 +424,10 @@
       text-transform: capitalize;
     }
 
+    .hidden {
+            display: none;
+        }
+
   </style>
 </head>
 <body>
@@ -406,6 +438,8 @@
     <div id="liniaTlo" class="top-section">
       <div class="arrow"></div>
       <input id="kierunek" type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
+      <div id="date">...</div>
+      <div id="time">...</div>
     </div>
     <div class="line" id="line">
       <div class="stop" style="margin-left: 25px; bottom: -8px;">
@@ -445,16 +479,62 @@
   </select>
   <br><br><br>
   <input type="checkbox" id="toggle-ostatniprzystanek">
-      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek</label><br><br>
+      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek
+      </label><br><br>
       <label>
         <input type="checkbox" id="capitalizeToggle" checked>
         Automatyczna kapitalizacja tekstu
-      </label>
+      </label><br><br>
+      <label>
+        <input type="checkbox" id="toggleVisibility" checked>
+        Wyświetl datę i czas
+    </label>
   <br><br><br>
     <button id="skroloff">Odśwież przewijanie</button>
     </div>
 
   <script>
+function updateTime() {
+            // Ustawienie strefy czasowej Warszawa
+            const optionsTime = { timeZone: 'Europe/Warsaw', hour: '2-digit', minute: '2-digit' };
+
+            // Aktualna data i czas
+            const now = new Date();
+
+            // Ręczne formatowanie daty
+            const days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
+            const dayName = days[now.getDay()];
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+
+            const date = `${dayName}, ${day}.${month}.${year},`;
+            const time = now.toLocaleTimeString('pl-PL', optionsTime);
+
+            // Wyświetlanie w HTML
+            document.getElementById('time').textContent = time;
+            document.getElementById('date').textContent = date;
+        }
+
+        // Obsługa checkboxa
+        document.getElementById('toggleVisibility').addEventListener('change', function () {
+            const timeDiv = document.getElementById('time');
+            const dateDiv = document.getElementById('date');
+            if (this.checked) {
+                timeDiv.style.display = 'block'; // Włącz widoczność godziny
+                dateDiv.style.display = 'block'; // Włącz widoczność daty
+            } else {
+                timeDiv.style.display = 'none'; // Wyłącz widoczność godziny
+                dateDiv.style.display = 'none'; // Wyłącz widoczność daty
+            }
+        });
+
+        // Aktualizacja co minutę
+        setInterval(updateTime, 60000);
+
+        // Pierwsze wywołanie funkcji
+        updateTime();
+
 const capitalizeToggle = document.getElementById('capitalizeToggle');
 
 // Funkcja do kapitalizacji tekstu
@@ -668,7 +748,7 @@ function addStop(target) {
       const arrowStop = document.createElement('div');
       arrowStop.className = 'stop arrow';
       arrowStop.innerHTML = `
-        <div class="top-section-list"> > </div>  <!-- Tylko strzałka -->
+        <div class="top-section-list"> >> </div>  <!-- Tylko strzałka -->
       `;
       line.insertBefore(arrowStop, lastStop); // Dodaj strzałkę przed ostatnim przystankiem
       updateStops();
