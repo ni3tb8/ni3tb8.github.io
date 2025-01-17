@@ -208,35 +208,12 @@
       transform: rotate(-50deg);
       margin-bottom: 75px;
       margin-left: 115px;
-      white-space: pre-wrap;
       line-height: 1.2;
       color: #303030;
       font-weight: 550;
       max-width: 300px; /* Limiting max width */
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
-      text-transform: capitalize;
-    }
-
-    .stop input {
-      font-family: "Inter", serif;
-      width: 190px;
-      text-align: left;
-      border: none;
-      font-size: 14px;
-      background: transparent;
-      outline: none;
-      position: relative;
-      transform: rotate(-50deg);
-      margin-bottom: 75px;
-      margin-left: 115px;
-      white-space: pre-wrap;
-      line-height: 1.2;
-      color: #303030;
-      font-weight: 550;
-      max-width: 300px; /* Limiting max width */
-      overflow-x: auto; /* Enable horizontal scrolling */
-      white-space: nowrap; /* Prevent tt from wrapping */
       text-transform: capitalize;
     }
 
@@ -252,7 +229,6 @@
       transform: rotate(-50deg);
       margin-bottom: 60px;
       margin-left: 90px;
-      white-space: pre-wrap;
       line-height: 1.2;
       color: #303030;
       font-weight: 550;
@@ -357,7 +333,7 @@
             display: inline-block;
             white-space: nowrap;
             color: #303030;
-            margin-left: 170px;
+            margin-left: 171px;
             width: 190px;
             font-weight: 550;
             line-height: 1.2;
@@ -428,6 +404,39 @@
             display: none;
         }
 
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #292929;
+            border: solid 4px #292929;
+            border-radius: 3px;
+            cursor: pointer;
+            position: initial;
+            margin-right: 10px;
+            margin-bottom: 6px;
+            transition: 0.05s;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #619945;
+            border: solid 4px #619945;
+            transition: 0.05s;
+        }
+
+        input[type="checkbox"]:hover {
+            background-color: #292929;
+            border: solid 4px #619945;
+            transition: 0.05s;
+        }
+
+        input[type="checkbox"]:checked:hover {
+            background-color: #619945;
+            border: solid 4px #292929;
+            transition: 0.05s;
+        }
   </style>
 </head>
 <body>
@@ -486,14 +495,18 @@
         Automatyczna kapitalizacja tekstu
       </label><br><br>
       <label>
+        <input type="checkbox" id="skroloff">
+        Przewijanie przystanków
+        </label><br><br>
+      <label>
         <input type="checkbox" id="toggleVisibility" checked>
         Wyświetl datę i czas
-    </label>
-  <br><br><br>
-    <button id="skroloff">Odśwież przewijanie</button>
+      </label>
     </div>
 
   <script>
+
+
 function updateTime() {
             // Ustawienie strefy czasowej Warszawa
             const optionsTime = { timeZone: 'Europe/Warsaw', hour: '2-digit', minute: '2-digit' };
@@ -597,9 +610,14 @@ const replacements = {
       " PP": " P+R",
       "skm": "SKM",
       "pkm": "PKM",
-      " ska": "SKA",
+      " ska": " SKA",
       "pl ": "Plac ",
-      "awf": "AWF"
+      "awf": "AWF",
+      "zoo": "ZOO",
+      "cm ": "Cmentarz ",
+      "al ": "Aleja ",
+      "pkp": "PKP",
+      "pks": "PKS"
     };
 
     // Funkcja do automatycznej zamiany tekstu
@@ -895,7 +913,7 @@ function addStop(target) {
         // Attach events to an input
         function attachEventsToInput(inputField) {
             inputField.dataset.marqueeAdded = "false"; // capitalizeize marquee state
-            inputField.addEventListener("blur", handleBlur);
+        //    inputField.addEventListener("blur", handleBlur);
             inputField.addEventListener("focus", handleFocus);
         }
 
@@ -938,7 +956,6 @@ function addStop(target) {
 
         // Attach event to the 'Add Input' button
         document.getElementById('addInput').addEventListener('click', addNewInput);
-
 
   </script>
 </body>
