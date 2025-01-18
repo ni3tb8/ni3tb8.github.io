@@ -14,21 +14,22 @@
   <div class="content" id="content">
   <div class="container" id="container">
     <div id="liniaTlo" class="line-number">
-      <input id="linia" type="text">
+      <input id="linia" type="text" autocomplete="off">
     </div>
     <div id="liniaTlo" class="top-section">
       <div id="kierunekDiv" class="arrow"></div>
-      <input id="kierunek" type="text" placeholder="Kierunek">
+      <input id="kierunek" type="text" placeholder="Kierunek" autocomplete="off">
       <div id="date">wczytywanie</div>
       <div id="time">...</div>
     </div>
+    <div id="liniaKomentarz" class="bottom-section"></div>
     <div class="line" id="line">
       <div class="stop" style="margin-left: 25px; bottom: -8px;">
-        <input class="skrol" type="text" placeholder="Przystanek początkowy">
+        <input class="skrol" type="text" placeholder="Przystanek początkowy" autocomplete="off">
         <div class="circle"></div>
       </div>
       <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
-        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek" disabled>
+        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek" autocomplete="off" disabled>
         <div class="circle-last"></div>
       </div>
     </div>
@@ -50,14 +51,25 @@
   <label for="secondary-color-selector">Wybierz kolor pola linii:</label>
   <select style="margin-left: 8px;" id="secondary-color-selector">
     <option value="#303030">Czarny</option>
-    <option value="#5547a6">Fioletowy</option>
     <option value="#144b77">Niebieski</option>
+    <option value="#5547a6">Fioletowy</option>
     <option value="#872a2a">Czerwony</option>
     <option value="#87592a">Pomarańczowy</option>
     <option value="#877f2a">Żółty</option>
     <option value="#4b872a">Zielony</option>
   </select>
   <br><br><br>
+  <label>
+    <input type="checkbox" id="toggleCheckbox"> Wstaw komentarz do linii:
+  </label><select style="margin-left: 8px;" id="optionSelect" disabled>
+    <option value="">Brak</option>
+    <option value="Zmiana trasy">Zmiana trasy</option>
+    <option value="Nowa trasa">Nowa trasa</option>
+    <option value="Kurs skrócony">Kurs skrócony</option>
+    <option value="Za tramwaj">Za tramwaj</option>
+    <option value="Za pociąg">Za pociąg</option>
+    <option value="Za trolejbus">Za trolejbus</option>
+  </select><br><br>
   <input type="checkbox" id="toggle-ostatniprzystanek">
       <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek
       </label><br><br>
