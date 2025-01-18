@@ -16,6 +16,8 @@
       setTimeout(() => {
           input.value = ''; // Przywrócenie pustego pola
           input.disabled = false; // Włączenie inputa
+          document.getElementById('capitalizeToggle').checked = true;
+          toggleCapitalization();
       }, 1500); // 1.5 sekundy
   }, 500); // Opóźnienie 0.5s dla ekranu ładowania
 }
@@ -117,11 +119,11 @@ function toggleCapitalization() {
   });
 }
 
-// Nasłuchiwanie zmiany stanu checkboxa
-capitalizeToggle.addEventListener('change', toggleCapitalization);
-
 // Domyślne zastosowanie kapitalizacji na początku
 toggleCapitalization();
+
+// Nasłuchiwanie zmiany stanu checkboxa
+capitalizeToggle.addEventListener('change', toggleCapitalization);
 
 // Mapa zamian tekstów
 const replacements = {
@@ -138,7 +140,8 @@ const replacements = {
       "zoo": "ZOO",
       "cm ": "Cmentarz ",
       "pkp": "PKP",
-      "pks": "PKS"
+      "pks": "PKS",
+      "mpk": "MPK"
     };
 
     // Funkcja do automatycznej zamiany tekstu
