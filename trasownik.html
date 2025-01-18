@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, capitalize-scale=1.0">
+  <title>Trasownik v0.98</title>
+  <link rel="stylesheet" href="tras-style.css" id="dynamic-style">
+  <script src="tras-script.js" defer></script>
+  <script src="https://kit.fontawesome.com/662fe054ea.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="loadingScreen" class="loading-screen"></div>
+  <div class="content" id="content">
+  <div class="container" id="container">
+    <div id="liniaTlo" class="line-number">
+      <input type="text">
+    </div>
+    <div id="liniaTlo" class="top-section">
+      <div class="arrow"></div>
+      <input id="kierunek" type="text" placeholder="Kierunek" style="letter-spacing: 1px;">
+      <div id="date">wczytywanie</div>
+      <div id="time">...</div>
+    </div>
+    <div class="line" id="line">
+      <div class="stop" style="margin-left: 25px; bottom: -8px;">
+        <input class="skrol" type="text" placeholder="Przystanek początkowy">
+        <div class="circle"></div>
+      </div>
+      <div class="stop" style="left: 90%; bottom: -8px;" id="ostatni">
+        <input id="ostatniprzystanek" class="skrolOst" type="text" placeholder="Kierunek" disabled>
+        <div class="circle-last"></div>
+      </div>
+    </div>
+  </div>
+  <div class="przykrycie"></div>
+  
+  <!-- Lista wyboru koloru tła znajduje się poniżej kontenera -->
+  <div class="color-picker">
+    <!-- <label for="color-selector">Wybierz kolor bazowy:</label>
+  <select style="margin-left: 10px;" id="color-selector">
+    <option value="#303030">Czarny</option>
+    <option value="#144b77">Niebieski</option>
+    <option value="#9e9531">Żółty</option>
+  </select>
+  <input type="checkbox" id="sync-colors">
+  <label for="sync-colors">Powiąż kolory</label>
+  <br><br>--->
+
+  <label for="secondary-color-selector">Wybierz kolor pola linii:</label>
+  <select style="margin-left: 8px;" id="secondary-color-selector">
+    <option value="#303030">Czarny</option>
+    <option value="#5547a6">Fioletowy</option>
+    <option value="#144b77">Niebieski</option>
+    <option value="#872a2a">Czerwony</option>
+    <option value="#87592a">Pomarańczowy</option>
+    <option value="#877f2a">Żółty</option>
+    <option value="#4b872a">Zielony</option>
+  </select>
+  <br><br><br>
+  <input type="checkbox" id="toggle-ostatniprzystanek">
+      <label for="toggle-ostatniprzystanek"> Przystanek końcowy inny niż kierunek
+      </label><br><br>
+      <label>
+        <input type="checkbox" id="capitalizeToggle" checked>
+        Automatyczna kapitalizacja tekstu
+      </label><br><br>
+      <label>
+        <input type="checkbox" id="skroloff">
+        Przewijanie przystanków
+        </label><br><br>
+      <label>
+        <input type="checkbox" id="toggleVisibility" checked>
+        Wyświetl datę i czas
+      </label>
+    </div>
+    <!-- Ikona "info" w lewym dolnym rogu -->
+    <div id="infoContainer"><i class="fa-solid fa-circle-info"></i></div>
+    
+    <!-- Kontener z informacjami, który się rozwija -->
+    <div id="infoText">
+        <span style="font-weight: 800;">Trasownik v0.98 by ni3tb8 design</span><br><br>
+        <span style="font-weight: 700;">Kolor pola linii: </span><span>pozwala na zmianę wersji kolorystycznej wyświetlacza.</span><br><br>
+        <span style="font-weight: 700;">Końcowy inny niż kierunek: </span><span>pozwala na ręczne wprowadzenie przystanku końcowego.</span><br><br>
+        <span style="font-weight: 700;">Kapitalizacja tekstu: </span><span>automatycznie kapitalizuje pierwsze litery słów, a w przypadku potrzeby ręcznego manipulowania wielkością litery - pozostawia już skapitalizowany tekst.</span><br><br>
+        <span style="font-weight: 700;">Przewijanie przystanków: </span><span>uruchamia przewijanie przystanków zbyt długich na zwykłe wyświetlenie.</span><br><br>
+        <span style="font-weight: 700;">Wyświetl datę i czas: </span><span>wyświetla datę i czas w górnej części wyświetlacza.</span><br><br>
+    </div>
+  </div>
+</body>
+</html>
