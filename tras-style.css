@@ -32,6 +32,29 @@
       top: 0;
       justify-content: flex-start;
       padding: 0 20px;
+      transition: all 0.3s ease;
+    }
+
+    /* Nowa sekcja na dole */
+    .bottom-section {
+      background-color: #303030;
+      color: #f4f8ff;
+      font-size: 24px;
+      font-weight: 700;
+      padding: 20px;
+      text-align: center;
+      width: 300px;
+      height: 50px;
+      position: absolute;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      outline: none;
+      border: none;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
     }
 
     .top-section .arrow {
@@ -66,6 +89,7 @@
       height: 40px;
       padding-left: 10px;
       font-weight: 700;
+      letter-spacing: 1px;
       text-transform: capitalize;
     }
 
@@ -104,7 +128,7 @@
       height: 250px;
       position: relative;
       margin-top: 100px; /* Aby kontener był widoczny poniżej sekcji na górze */
-      transition: 0.1s ease-out;
+      transition: all 0.3s ease;
     }
 
     .line-number {
@@ -115,11 +139,13 @@
       padding: 20px;
       text-align: center;
       width: 300px;
-      height: 100%;
+      height: 250px;
       display: flex;
+      margin-top: 0px;
       justify-content: center;
       align-items: center;
       box-sizing: border-box;
+      transition: all 0.3s ease;
     }
 
     .line-number input {
@@ -153,6 +179,7 @@
       transform: translateX(-50%);
       bottom: -8px;
       margin-left: 25px;
+      transition: all 0.3s ease;
     }
 
     .stopOst {
@@ -172,6 +199,7 @@
       border-radius: 50%;
       border: 5px solid #303030;
       background-color: #f4f8ff;
+      transition: all 0.3s ease;
     }
 
     .circle-last {
@@ -189,6 +217,7 @@
     .stop.night-stop .circle {
       background-color: #303030;
       border-color: #f4f8ff;
+      transition: all 0.3s ease;
     }
 
     .stop.night-stop .circle:active {
@@ -214,6 +243,7 @@
       overflow-x: auto; /* Enable horizontal scrolling */
       white-space: nowrap; /* Prevent text from wrapping */
       text-transform: capitalize;
+      transition: all 0.3s ease;
     }
 
     .stopOst input {
@@ -326,6 +356,10 @@
       outline: none;
     }
 
+    select:disabled {
+      color: #323232;
+  }
+
     .rotated-marquee {
             font-family: "Inter", serif;;
             transform: rotate(-50deg);
@@ -358,7 +392,7 @@
 
     .przykrycie {
         margin-left: 1304px;
-        margin-bottom: 140px;
+        margin-bottom: 240px;
         border-left: 4px solid #222222;;
         background-color: #353535;
         width: 100px;
