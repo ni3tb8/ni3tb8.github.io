@@ -28,7 +28,6 @@ window.addEventListener('load', function () {
   checkIfDataIsUnchanged();
 });
 
-
 function updateTime() {
             // Ustawienie strefy czasowej Warszawa
             const optionsTime = { timeZone: 'Europe/Warsaw', hour: '2-digit', minute: '2-digit' };
@@ -179,7 +178,7 @@ const replacements = {
 
     // Funkcja do zmiany tła dla klas .top-section i .line-number
     function changeSecondaryColor(color) {
-      document.querySelectorAll('.top-section, .line-number').forEach(element => {
+      document.querySelectorAll('.top-section, .line-number, .bottom-section').forEach(element => {
         element.style.backgroundColor = color;
       });
     }
@@ -247,7 +246,38 @@ document.getElementById('kierunek').addEventListener('input', function() {
       }
     });
 
-    
+    const checkbox = document.getElementById('toggleCheckbox');
+        const liniaKomentarz = document.getElementById('liniaKomentarz');
+        const optionSelect = document.getElementById('optionSelect');
+        const lineNumberElement = document.querySelector('.line-number');
+        const lineNumberComment = document.querySelector('.bottom-section');
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                liniaKomentarz.style.display = 'block';
+                optionSelect.disabled = false;
+                if (lineNumberElement) {
+                    lineNumberElement.style.height = '225px';
+                    lineNumberElement.style.marginTop = '-25px';
+                    lineNumberComment.style.height = '65px';
+                }
+            } else {
+              setTimeout(() => {
+                liniaKomentarz.style.display = 'none';
+                optionSelect.disabled = true;
+              }, "300");
+                if (lineNumberElement) {
+                    lineNumberElement.style.height = '250px';
+                    lineNumberElement.style.marginTop = '0px';
+                    lineNumberComment.style.height = '65px';
+                }
+            }
+        });
+
+        optionSelect.addEventListener('change', () => {
+            const selectedValue = optionSelect.value;
+            liniaKomentarz.textContent = selectedValue;
+        });
 
     const line = document.getElementById('line');
 const maxStops = 26;
