@@ -248,7 +248,7 @@
 
     .stopOst input {
       font-family: "Inter", serif;
-      width: 130px;
+      width: 140px;
       text-align: left;
       border: none;
       font-size: 14px;
@@ -256,8 +256,8 @@
       outline: none;
       position: relative;
       transform: rotate(-50deg);
-      margin-bottom: 60px;
-      margin-left: 90px;
+      margin-bottom: 56px;
+      margin-left: 83px;
       line-height: 1.2;
       color: #303030;
       font-weight: 550;
@@ -382,9 +382,9 @@
             display: inline-block;
             white-space: nowrap;
             color: #303030;
-            margin-left: 171px;
-            width: 190px;
-            font-weight: 600;
+            margin-left: 119px;
+            width: 140px;
+            font-weight: 550;
             line-height: 1.2;
             font-size: 14px;
             text-transform: capitalize;
@@ -399,6 +399,7 @@
         height: 200px;
         z-index: 9999;
         position: absolute;
+        transition: all 0.3s ease;
     }
 
     button {
