@@ -1,5 +1,5 @@
 // Funkcja do inicjalizacji
- function initializePage() {
+function initializePage() {
   const loadingScreen = document.getElementById('loadingScreen');
   const content = document.getElementById('content');
   const input = document.getElementById('kierunek');
@@ -451,7 +451,7 @@ function addStop(target) {
             const isSkrolOst = inputField.classList.contains("skrolOst");
 
             // Trigger marquee based on the class and length of the value
-            if ((isSkrol && inputField.value.length > 25 || isSkrolOst && inputField.value.length > 20) && areMarqueesEnabled) {
+            if ((isSkrol && inputField.value.length > 25 || isSkrolOst && inputField.value.length > 17) && areMarqueesEnabled) {
                 toggleMarquee(inputField);
             }
         }
@@ -481,7 +481,7 @@ function addStop(target) {
 
                 // Trigger marquee based on the class and length of the value
                 if (areMarqueesEnabled && 
-                    ((isSkrol && inputField.value.length > 25) || (isSkrolOst && inputField.value.length > 20)) && 
+                    ((isSkrol && inputField.value.length > 25) || (isSkrolOst && inputField.value.length > 17)) && 
                     !isMarqueeAdded) {
                     toggleMarquee(inputField);
                 } else if (!areMarqueesEnabled && isMarqueeAdded) {
