@@ -390,18 +390,6 @@
             text-transform: capitalize;
         }
 
-    .przykrycie {
-        margin-left: 1304px;
-        margin-bottom: 240px;
-        border-left: 4px solid #222222;;
-        background-color: #353535;
-        width: 100px;
-        height: 200px;
-        z-index: 9999;
-        position: absolute;
-        transition: all 0.3s ease;
-    }
-
     button {
             font-family: "Inter", serif;
             font-weight: 400;
