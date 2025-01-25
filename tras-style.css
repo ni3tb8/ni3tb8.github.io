@@ -433,32 +433,36 @@
             appearance: none;
             -webkit-appearance: none;
             background-color: #292929;
-            border: solid 4px #292929;
+            border-left: solid 8px #994545;
+            border-right: solid 8px #292929;
             border-radius: 3px;
             cursor: pointer;
             position: initial;
             margin-right: 10px;
             margin-bottom: 6px;
-            transition: 0.05s;
+            transition: all 0.1s ease;
             vertical-align: middle;
         }
 
         input[type="checkbox"]:checked {
-            background-color: #619945;
-            border: solid 4px #619945;
-            transition: 0.05s;
+            background-color: #292929;
+            border-right: solid 8px #619945;
+            border-left: solid 8px #292929;
+            transition: all 0.1s ease;
+        }
+
+        input[type="checkbox"]:checked:hover {
+            background-color: #292929;
+            border-right: solid 8px #78bb56;
+            border-left: solid 8px #292929;
+            transition: all 0.1s ease;
         }
 
         input[type="checkbox"]:hover {
             background-color: #292929;
-            border: solid 4px #619945;
-            transition: 0.05s;
-        }
-
-        input[type="checkbox"]:checked:hover {
-            background-color: #619945;
-            border: solid 4px #292929;
-            transition: 0.05s;
+            border-left: solid 8px #bd5757;
+            border-right: solid 8px #292929;
+            transition: all 0.1s ease;
         }
 
 /* Ekran ładowania */
