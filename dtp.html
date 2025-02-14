@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamiczna tablica przystankowa</title>
+    <title>Dynamiczna tablica przystankowa v0.9</title>
     <link rel="stylesheet" href="tabl-style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -46,6 +46,22 @@
     </table>
 
     <script>
+// Funkcja pobierająca dane z backendu
+  function fetchBusData(stopId) {
+    fetch(`https://yourusername.pythonanywhere.com/buses/${stopId}`)
+      .then(response => response.json())  // Oczekiwanie na odpowiedź w formacie JSON
+      .then(data => {
+        console.log(data);  // Wyświetlanie danych w konsoli
+        // Tutaj można zaktualizować tabelę HTML lub inne elementy strony
+      })
+      .catch(error => {
+        console.error("Error fetching bus data:", error);
+      });
+  }
+
+  // Przykład: wywołanie funkcji dla przystanku o id "1799"
+  fetchBusData('1799');
+        
         $(document).ready(function() {
     let stopId = null; // ID przystanku
     let firstLoad = true; // Flaga wskazująca, czy to jest pierwsze załadowanie danych
