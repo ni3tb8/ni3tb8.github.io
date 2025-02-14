@@ -48,7 +48,7 @@
     <script>
 // Funkcja pobierająca dane z backendu
   function fetchBusData(stopId) {
-    fetch(`https://yourusername.pythonanywhere.com/buses/${stopId}`)
+    fetch(`https://ni3tb8.pythonanywhere.com/buses/${stopId}`)
       .then(response => response.json())  // Oczekiwanie na odpowiedź w formacie JSON
       .then(data => {
         console.log(data);  // Wyświetlanie danych w konsoli
