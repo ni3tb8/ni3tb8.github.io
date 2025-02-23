@@ -1,0 +1,101 @@
+ @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+            margin-top: 5%;
+        }
+        .led-display {
+            display: grid;
+            grid-template-columns: repeat(140, 5px);
+            grid-template-rows: repeat(24, 5px);
+            gap: 1px;
+            margin: 20px auto;
+            width: max-content;
+            border: 10px solid #858585;
+            border-left: 35px solid #858585;
+            border-right: 35px solid #858585;
+            border-radius: 10px;
+            background-color: #050505;
+            padding: 10px;
+            box-shadow: 0 0 30px #101010;
+        }
+        .pixel {
+            width: 5px;
+            height: 5px;
+            background-color: #272727;
+            border-radius: 50%;
+        }
+        .lit {
+            background-color: red;
+            box-shadow: 0 0 8px red;
+        }
+        input {
+            font-family: "Inter", serif;
+            margin: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            font-family: "Inter", serif;
+            font-weight: 400;
+            padding: 8px 16px;
+            border-radius: 3px;
+            background: #292929;
+            color: #f4f8ff;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+            width: 50px;
+        }
+        button:hover {
+            background: #3b3b3b;
+            transition: 0.3s ease;
+        }
+
+        button:active {
+            background: #464646;
+            transition: 0.3s ease;
+        }
+        .zatwierdz:hover {
+            background: #3b3b3b;
+            transition: 0.3s ease;
+        }
+
+        .zatwierdz:active {
+            background: #619945;
+            transition: 0.3s ease;
+        }
+        .wyczysc:hover {
+            background: #3b3b3b;
+            transition: 0.3s ease;
+        }
+
+        .wyczysc:active {
+            background: #994545;
+            transition: 0.3s ease;
+        }
+
+        .label-tickbox {
+            font-family: "Inter", serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #f4f8ff;
+        }
+
+        input {
+            background-color: #191919;
+            color: #f4f8ff;
+            outline: none;
+            border: none;
+            border-radius: 3px;
+        }
+
+        input::placeholder {
+            font-family: "Inter", serif;
+            color: #8d8d8d;
+        }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symulator wyświetlacza LED</title>
+    <script src="https://kit.fontawesome.com/662fe054ea.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="ledtabl.ico">
+    <link rel="stylesheet" href="moza-style.css">
+    <script src="mozaB-script.js" defer></script>
+</head>
+<body>
+    
+    <div class="led-display" id="ledDisplay"></div>
+
+    <div>
+        <input type="text" id="text1" placeholder="Wiersz 1">
+        <button class="scroll-button fa-solid fa-pause" onclick="toggleScroll(0)" id="scroll-btn-0"></button>
+        <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(0)"></button>
+        <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(0)"></button>
+    </div>
+    <div>
+        <input type="text" id="text2" placeholder="Wiersz 2">
+        <button class="scroll-button fa-solid fa-pause" onclick="toggleScroll(1)" id="scroll-btn-1"></button>
+        <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(1)"></button>
+        <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(1)"></button>
+    </div><br>
+    <div>
+        <input type="text" id="text3" placeholder="Wiersz">
+        <button class="scroll-button fa-solid fa-pause" onclick="toggleScroll(2)" id="scroll-btn-2"></button>
+        <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(2)"></button>
+        <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(2)"></button>
+    </div><br><br>
+
+    <button class="zatwierdz" onclick="updateDisplay()"><i class="fa-solid fa-square-check"></i></button>
+    <button id="auto-mode-button" onclick="toggleAutoMode()"><i class="fa-solid fa-user-pen"></i></button><br><br>
+    <button class="wyczysc" onclick="clearInputs()"><i class="fa-solid fa-delete-left"></i></button>
+
+    <!-- Ukryte inputy do przechowywania wartości -->
+    <input type="hidden" id="hiddenText1">
+    <input type="hidden" id="hiddenText2">
+    <input type="hidden" id="hiddenText3">
+</body>
+</html>
