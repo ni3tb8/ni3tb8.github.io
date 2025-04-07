@@ -261,15 +261,15 @@ const ledDisplay = document.getElementById("ledDisplay");
     ],
     "S": [
         "000000",
-        "011111",
-        "110000",
+        "011110",
+        "110011",
         "110000",
         "011000",
         "001100",
         "000110",
         "000011",
-        "000011",
-        "111110",
+        "110011",
+        "011110",
         "000000",
         "000000"
     ],
@@ -975,15 +975,15 @@ const ledDisplay = document.getElementById("ledDisplay");
     ],
     "\u015a": [
         "000010",
-        "011111",
-        "110100",
+        "011110",
+        "110111",
         "110000",
         "011000",
         "001100",
         "000110",
         "000011",
-        "000011",
-        "111110",
+        "110011",
+        "011110",
         "000000",
         "000000"
     ],
@@ -1311,50 +1311,600 @@ const ledDisplay = document.getElementById("ledDisplay");
     ]
 };
 
+const charMapAlt = {
+    "A": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1001",
+        "1111",
+        "1001",
+        "1001",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "B": [
+        "0000",
+        "0000",
+        "1110",
+        "1001",
+        "1001",
+        "1110",
+        "1001",
+        "1001",
+        "1110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "C": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1000",
+        "1000",
+        "1000",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u0104": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1001",
+        "1111",
+        "1001",
+        "1001",
+        "1001",
+        "0010",
+        "0000",
+        "0000"
+    ],
+    "\u0106": [
+        "0001",
+        "0010",
+        "0110",
+        "1001",
+        "1000",
+        "1000",
+        "1000",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "D": [
+        "0000",
+        "0000",
+        "1110",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "E": [
+        "0000",
+        "0000",
+        "1111",
+        "1000",
+        "1000",
+        "1110",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u0118": [
+        "0000",
+        "0000",
+        "1111",
+        "1000",
+        "1000",
+        "1110",
+        "1000",
+        "1000",
+        "1111",
+        "0001",
+        "0000",
+        "0000"
+    ],
+    "F": [
+        "0000",
+        "0000",
+        "1111",
+        "1000",
+        "1000",
+        "1110",
+        "1000",
+        "1000",
+        "1000",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "G": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1000",
+        "1011",
+        "1001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "H": [
+        "0000",
+        "0000",
+        "1001",
+        "1001",
+        "1001",
+        "1111",
+        "1001",
+        "1001",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "I": [
+        "0",
+        "0",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "0",
+        "0",
+        "0"
+    ],
+    "J": [
+        "0000",
+        "0000",
+        "1111",
+        "0001",
+        "0001",
+        "0001",
+        "0001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "K": [
+        "0000",
+        "0000",
+        "1001",
+        "1010",
+        "1100",
+        "1000",
+        "1100",
+        "1010",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "L": [
+        "0000",
+        "0000",
+        "1000",
+        "1000",
+        "1000",
+        "1000",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u0141": [
+        "0000",
+        "0000",
+        "1000",
+        "1000",
+        "1010",
+        "1100",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "M": [
+        "00000",
+        "00000",
+        "10001",
+        "11011",
+        "10101",
+        "10001",
+        "10001",
+        "10001",
+        "10001",
+        "00000",
+        "00000",
+        "00000"
+    ],
+    "N": [
+        "0000",
+        "0000",
+        "1001",
+        "1101",
+        "1011",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u0143": [
+        "0001",
+        "0010",
+        "1001",
+        "1101",
+        "1011",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "O": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "P": [
+        "0000",
+        "0000",
+        "1110",
+        "1001",
+        "1001",
+        "1110",
+        "1000",
+        "1000",
+        "1000",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "R": [
+        "0000",
+        "0000",
+        "1110",
+        "1001",
+        "1001",
+        "1110",
+        "1100",
+        "1010",
+        "1001",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "S": [
+        "0000",
+        "0000",
+        "0110",
+        "1001",
+        "1000",
+        "0110",
+        "0001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u015a": [
+        "0001",
+        "0010",
+        "0110",
+        "1001",
+        "1000",
+        "0110",
+        "0001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "T": [
+        "00000",
+        "00000",
+        "11111",
+        "00100",
+        "00100",
+        "00100",
+        "00100",
+        "00100",
+        "00100",
+        "00000",
+        "00000",
+        "00000"
+    ],
+    "U": [
+        "0000",
+        "0000",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "W": [
+        "00000",
+        "00000",
+        "10001",
+        "10001",
+        "10001",
+        "10001",
+        "10101",
+        "11011",
+        "10001",
+        "00000",
+        "00000",
+        "00000"
+    ],
+    "Y": [
+        "00000",
+        "00000",
+        "10001",
+        "10001",
+        "01010",
+        "00100",
+        "00100",
+        "00100",
+        "00100",
+        "00000",
+        "00000",
+        "00000"
+    ],
+    "Z": [
+        "0000",
+        "0000",
+        "1111",
+        "0001",
+        "0010",
+        "0100",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u017b": [
+        "0010",
+        "0000",
+        "1111",
+        "0001",
+        "0010",
+        "0100",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u0179": [
+        "0001",
+        "0010",
+        "1111",
+        "0001",
+        "0010",
+        "0100",
+        "1000",
+        "1000",
+        "1111",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    ":": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0"
+    ],
+    ".": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0"
+    ],
+    ",": [
+        "00",
+        "00",
+        "00",
+        "00",
+        "00",
+        "00",
+        "00",
+        "00",
+        "01",
+        "10",
+        "00",
+        "00"
+    ],
+    " ": [
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000",
+        "0000"
+    ],
+    "\u00d3": [
+        "0001",
+        "0010",
+        "0110",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "1001",
+        "0110",
+        "0000",
+        "0000",
+        "0000"
+    ]
+};
+
+const fonts = {
+    default: charMap,
+    alt: charMapAlt
+};
+
+let currentFonts = ["default", "default", "default"];
+let currentColors = ["lit", "lit", "lit"];
+
+function toggleFont(rowIndex) {
+    let btn = document.getElementById("fontBtn" + rowIndex);
+    if (currentFonts[rowIndex] === "default") {
+        currentFonts[rowIndex] = "alt";
+        // Zmieniamy klasę ikony: usuwamy fa-a, dodajemy fa-b
+        btn.classList.remove("fa-a");
+        btn.classList.add("fa-b");
+    } else {
+        currentFonts[rowIndex] = "default";
+        btn.classList.remove("fa-b");
+        btn.classList.add("fa-a");
+    }
+}
+
+function toggleColor(rowIndex) {
+    let btn = document.getElementById("colorBtn" + rowIndex);
+    if (currentColors[rowIndex] === "lit") {
+        currentColors[rowIndex] = "litCZ";
+        // Aktualizujemy kolor ikony (przyjmujemy, że ikona ma kolor odpowiadający klasie)
+        btn.style.color = "rgb(245,24,24)";
+    } else if (currentColors[rowIndex] === "litCZ") {
+        currentColors[rowIndex] = "litWH";
+        btn.style.color = "rgb(238,238,238)";
+    } else if (currentColors[rowIndex] === "litWH") {
+        currentColors[rowIndex] = "lit";
+        btn.style.color = "rgb(245,156,24)";
+    }
+}
+
+// Globalna tablica przechowująca referencje do pikseli
+let pixelElements = [];
+
 function createPixels() {
     for (let i = 0; i < rows * cols; i++) {
         const pixel = document.createElement("div");
         pixel.classList.add("pixel");
         ledDisplay.appendChild(pixel);
+        pixelElements.push(pixel);
     }
 }
 
 function updateDisplay() {
-    const pixels = document.querySelectorAll(".pixel");
-    pixels.forEach(pixel => pixel.classList.remove("lit"));
+    pixelElements.forEach(pixel => pixel.classList.remove("lit"));
 
-    const text1 = document.getElementById("hiddenText1").value;
-    const text2 = document.getElementById("hiddenText2").value;
-    const text3 = document.getElementById("hiddenText3").value;
-
+    // Wiersz 0 (wiersz 1)
     if (scrollingIntervals[0]) {
         renderRow(0, '', 0, currentAlignments[0], invertedRows[0]);
-        renderText(scrollingTexts[0], 0, currentAlignments[0], invertedRows[0], scrollOffsets[0]);
+        renderText(scrollingTexts[0], 0, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0);
     } else {
+        let text1 = document.getElementById("hiddenText1").value;
         renderRow(0, text1, 0, currentAlignments[0], invertedRows[0]);
-        renderText(text1, 0, currentAlignments[0], invertedRows[0], 0);
+        renderText(text1, 0, currentAlignments[0], invertedRows[0], 0, 0);
     }
 
+    // Wiersz 1 (wiersz 2)
     if (scrollingIntervals[1]) {
         renderRow(1, '', 12, currentAlignments[1], invertedRows[1]);
-        renderText(scrollingTexts[1], 12, currentAlignments[1], invertedRows[1], scrollOffsets[1]);
+        renderText(scrollingTexts[1], 12, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1);
     } else {
+        let text2 = document.getElementById("hiddenText2").value;
         renderRow(1, text2, 12, currentAlignments[1], invertedRows[1]);
-        renderText(text2, 12, currentAlignments[1], invertedRows[1], 0);
+        renderText(text2, 12, currentAlignments[1], invertedRows[1], 0, 1);
     }
 
+    // Wiersz 2 (wiersz 3)
     if (scrollingIntervals[2]) {
         renderRow(2, '', 6, currentAlignments[2], invertedRows[2]);
-        renderText(scrollingTexts[2], 6, currentAlignments[2], invertedRows[2], scrollOffsets[2]);
+        renderText(scrollingTexts[2], 6, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2);
     } else {
+        let text3 = document.getElementById("hiddenText3").value;
         renderRow(2, text3, 6, currentAlignments[2], invertedRows[2]);
-        renderText(text3, 6, currentAlignments[2], invertedRows[2], 0);
+        renderText(text3, 6, currentAlignments[2], invertedRows[2], 0, 2);
     }
 
     if (isFullScreenInverted) {
-        pixels.forEach(pixel => pixel.classList.toggle("lit"));
+        pixelElements.forEach(pixel => pixel.classList.toggle("lit"));
     }
 }
+
 
 // Funkcja do synchronizacji tekstu z widocznych inputów do ukrytych
 function syncHiddenInputs() {
@@ -1363,8 +1913,8 @@ function syncHiddenInputs() {
     document.getElementById("hiddenText3").value = document.getElementById("text3").value;
 }
 
-function getMaxVisibleChars(text) {
-    let widthUsed = 0;
+function getMaxVisibleChars(text, rowOffset = 0) {
+    let widthUsed = rowOffset; // Ustawienie rowOffset jako początkowego przesunięcia
     let maxChars = 0;
 
     for (const char of text) {
@@ -1378,42 +1928,58 @@ function getMaxVisibleChars(text) {
     return maxChars;
 }
 
+
 function renderRow(rowIndex, text, rowOffset, alignment, invertRow) {
     if (invertRow && rowIndex !== 2) {
         invertWholeRow(rowOffset);
     }
     const maxChars = getMaxVisibleChars(text);
-    renderText(text.slice(0, maxChars), rowOffset, alignment, invertRow);
+    // Dodajemy szósty argument rowIndex
+    renderText(text.slice(0, maxChars), rowOffset, alignment, invertRow, 0, rowIndex);
 }
+
 
 function clearDisplay() {
     document.querySelectorAll(".pixel").forEach(pixel => pixel.classList.remove("lit"));
 }
 
-function renderText(text, rowOffset, alignment, invert, scrollOffset = 0) {
-    let textWidth = text.split("").reduce((acc, char) => acc + (charMap[char] ? charMap[char][0].length + 1 : 0), 0);
-    let colOffset = alignment === 1 ? Math.floor((140 - textWidth) / 2) + 1 :
-                    alignment === 2 ? (140 - textWidth) : 1;
+function renderText(text, rowOffset, alignment, invert, scrollOffset = 0, rowIndex) {
+    console.log("Render row", rowIndex, "font:", document.getElementById("fontSelector" + rowIndex));
 
-    colOffset = (colOffset - scrollOffset + 140) % 140; // Płynne przewijanie bez resetowania
+    // Pobieramy wartość fontu z selektora odpowiadającego wierszowi
+    let selectedFont = currentFonts[rowIndex];
+    let currentCharMap = fonts[selectedFont];
+
+    let textWidth = text.split("").reduce((acc, char) =>
+        acc + (currentCharMap[char] ? currentCharMap[char][0].length + 1 : 0), 0);
+
+    let colOffset;
+    if (textWidth > cols - 2) {
+        colOffset = cols - scrollOffset;
+    } else {
+        colOffset = alignment === 1 
+            ? Math.floor((cols - textWidth) / 2) + 1 
+            : alignment === 2 
+                ? (cols - textWidth)
+                : 1;
+    }
 
     for (const char of text) {
-        if (charMap[char]) {
-            const charData = charMap[char];
-
+        if (currentCharMap[char]) {
+            const charData = currentCharMap[char];
             for (let row = 0; row < charData.length; row++) {
                 for (let col = 0; col < charData[row].length; col++) {
-                    let pixelCol = colOffset + col + rowOffset;
-
-                    // Rysujemy tylko jeśli znak jest w granicach ekranu
+                    let pixelCol = colOffset + col;
                     if (pixelCol >= 1 && pixelCol < (cols - 1)) {
-                        const index = (rowOffset + row) * cols + ((colOffset + col + cols) % cols);
-
-                        if (index < rows * cols) {
-                            const pixel = document.querySelectorAll(".pixel")[index];
-                            const shouldBeLit = (charData[row][col] === "1") !== invert;
-
-                            pixel.classList.toggle("lit", shouldBeLit);
+                        const index = (rowOffset + row) * cols + pixelCol;
+                        if (index < pixelElements.length) {
+                            const pixel = pixelElements[index];
+                            // Usuwamy ewentualne poprzednie klasy koloru
+                            pixel.classList.remove("lit", "litCZ", "litWH");
+                            // Dodajemy odpowiednią klasę tylko jeśli piksel ma być aktywny
+                            if ((charData[row][col] === "1") !== invert) {
+                                pixel.classList.add(currentColors[rowIndex]);
+                            }
                         }
                     }
                 }
@@ -1421,8 +1987,8 @@ function renderText(text, rowOffset, alignment, invert, scrollOffset = 0) {
             colOffset += charData[0].length + 1;
         }
     }
+    
 }
-
 
 function invertWholeRow(rowOffset) {
     for (let col = 0; col < cols; col++) {
@@ -1477,36 +2043,37 @@ function clearInputs() {
     syncHiddenInputs();
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     // Funkcja do wyświetlenia "Dzień dobry" w 3 wierszu na 3 sekundy
-//     function displayGreeting() {
-//         const text3 = "Dzień dobry!";
-//         const hiddenText3 = document.getElementById("hiddenText3");
+document.addEventListener("DOMContentLoaded", () => {
+    // Funkcja do wyświetlenia "Dzień dobry" w 3 wierszu na 3 sekundy
+    function displayGreeting() {
+        const text3 = "Dzień dobry!";
+        const hiddenText3 = document.getElementById("hiddenText3");
 
-//         // Ustawienie "Dzień dobry" w ukrytym inpucie
-//         hiddenText3.value = text3;
+        // Ustawienie "Dzień dobry" w ukrytym inpucie
+        hiddenText3.value = text3;
 
-//         // Wymuszenie wyśrodkowanego wyrównania dla 3 wiersza
-//         currentAlignments[2] = 1; // 1 oznacza wyśrodkowanie (dla alignments 0: left, 1: center, 2: right)
+        // Wymuszenie wyśrodkowanego wyrównania dla 3 wiersza
+        currentAlignments[2] = 1; // 1 oznacza wyśrodkowanie (dla alignments 0: left, 1: center, 2: right)
 
-//         // Odświeżenie wyświetlacza, aby wyświetlić "Dzień dobry"
-//         updateDisplay();
+        // Odświeżenie wyświetlacza, aby wyświetlić "Dzień dobry"
+        updateDisplay();
 
-//         // Ukrycie tekstu po 3 sekundach
-//         setTimeout(() => {
-//             hiddenText3.value = ""; // Wyczyść tekst
-//             currentAlignments[2] = 0;
-//             toggleInvert(2)
-//             updateDisplay(); // Zaktualizuj wyświetlacz
-//         }, 2000); // 3000ms = 3 sekundy
-//     }
+        // Ukrycie tekstu po 3 sekundach
+        setTimeout(() => {
+            hiddenText3.value = ""; // Wyczyść tekst
+            currentAlignments[2] = 0;
+            toggleInvert(2)
+            updateDisplay(); // Zaktualizuj wyświetlacz
+            //toggleAutoMode();
+        }, 2000); // 3000ms = 3 sekundy
+    }
 
-//     // Opóźnienie o 1 sekundę przed wywołaniem displayGreeting
-//     setTimeout(() => {
-//         toggleInvert(2)
-//         displayGreeting();
-//     }, 500); // 1000ms = 1 sekunda
-// });
+    // Opóźnienie o 1 sekundę przed wywołaniem displayGreeting
+    setTimeout(() => {
+        toggleInvert(2)
+        displayGreeting();
+    }, 500); // 1000ms = 1 sekunda
+});
 
 let isAutoMode = false; // Flaga trybu automatycznego
 let savedText1 = ''; // Zmienna przechowująca zapisany tekst dla hiddenText1
@@ -1547,20 +2114,14 @@ function updateAutoModeDisplay() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, "0");
     const minutes = now.getMinutes().toString().padStart(2, "0");
-    const dayOfMonth = now.getDate();
-    const dayOfWeek = now.toLocaleString('default', { weekday: 'long' });
-
-    // Mapowanie na polskie nazwy miesięcy
-    const monthNames = [
-        "stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", 
-        "lipca", "sierpnia", "września", "października", "listopada", "grudnia"
-    ];
-    const month = monthNames[now.getMonth()]; // Pełna nazwa miesiąca po polsku
+    const dayOfMonth = now.getDate().toString().padStart(2, "0");
+    const month = (now.getMonth() + 1).toString().padStart(2, "0"); // Numer miesiąca w formacie 2-cyfrowym
     const year = now.getFullYear().toString().slice(2);
+    const dayOfWeek = now.toLocaleString('default', { weekday: 'long' });
 
     // Aktualizacja tekstu
     hiddenText1.value = `${hours}:${minutes}`;
-    hiddenText2.value = `${dayOfWeek}, ${dayOfMonth} ${month} '${year}`;
+    hiddenText2.value = `${dayOfWeek}, ${dayOfMonth}.${month}.${year}`;
 
     // Wymuszenie wyśrodkowanego wyrównania
     currentAlignments[0] = 1;
@@ -1620,6 +2181,43 @@ function restoreSavedAlignments() {
     currentAlignments[2] = savedAlignments[2];
 }
 
+// Funkcja odświeżająca tylko wybrany (przewijany) wiersz
+function updateScrollingRow(row) {
+    // Ustalamy pionowy offset wiersza
+    let rowOffset = row === 0 ? 0 : (row === 1 ? 12 : 6);
+    let rowHeight = 12; // Zakładamy, że każdy wiersz ma 12 pikseli wysokości
+
+    // Czyścimy piksele tylko dla danego wiersza
+    for (let r = rowOffset; r < rowOffset + rowHeight; r++) {
+        for (let c = 0; c < cols; c++) {
+            const index = r * cols + c;
+            pixelElements[index].classList.remove("lit");
+        }
+    }
+
+    // Rysujemy ponownie tylko ten wiersz
+    if (row === 0) {
+        renderRow(0, '', rowOffset, currentAlignments[0], invertedRows[0]);
+        renderText(scrollingTexts[0], rowOffset, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0);
+    } else if (row === 1) {
+        renderRow(1, '', rowOffset, currentAlignments[1], invertedRows[1]);
+        renderText(scrollingTexts[1], rowOffset, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1);
+    } else if (row === 2) {
+        renderRow(2, '', rowOffset, currentAlignments[2], invertedRows[2]);
+        renderText(scrollingTexts[2], rowOffset, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2);
+    }
+
+    // Jeśli globalny negatyw jest włączony, odwracamy tylko ten wiersz
+    if (isFullScreenInverted) {
+        for (let r = rowOffset; r < rowOffset + rowHeight; r++) {
+            for (let c = 0; c < cols; c++) {
+                const index = r * cols + c;
+                pixelElements[index].classList.toggle("lit");
+            }
+        }
+    }
+}
+
 let scrollingIntervals = [null, null, null];
 let scrollOffsets = [0, 0, 0];
 let scrollingTexts = ["", "", ""];
@@ -1630,30 +2228,37 @@ function togglePixelScroll(row) {
     const hiddenText = document.getElementById(`hiddenText${row + 1}`);
 
     if (scrollingIntervals[row]) {
+        // Wyłączamy przewijanie dla danego wiersza
         clearInterval(scrollingIntervals[row]);
         scrollingIntervals[row] = null;
-        scrollOffsets[row] = 0; 
+        scrollOffsets[row] = 0;
         button.classList.remove("fa-angles-left");
         button.classList.add("fa-pause");
         hiddenText.value = originalTexts[row];
+        // Zamiast updateScrollingRow wywołujemy updateDisplay(), aby wyświetlić tekst w pozycji 0
         updateDisplay();
     } else {
+        // Aktywujemy przewijanie
         originalTexts[row] = hiddenText.value;
-        
-        // Dodajemy odstęp, aby tekst miał czas na wyjechanie
         scrollingTexts[row] = hiddenText.value;
+
+        let textWidth = scrollingTexts[row].split("").reduce((acc, char) =>
+            acc + (charMap[char] ? charMap[char][0].length + 1 : 0), 0);
+
+        scrollOffsets[row] = 0;
         scrollingIntervals[row] = setInterval(() => {
-            // Poprawiamy obliczanie scrollOffsets - teraz tekst ma przejść całą szerokość i wrócić do początku
-            scrollOffsets[row] = (scrollOffsets[row] + 1) - 140;  // Pełne przewinięcie
-            updateDisplay();
-        }, 50);  // Prędkość przewijania (można zmienić, aby dopasować do oczekiwań)
-    
+            scrollOffsets[row]++;
+            if ((cols - scrollOffsets[row] + textWidth) <= 0) {
+                scrollOffsets[row] = 0;
+            }
+            updateScrollingRow(row);
+        }, 50);
+
         button.classList.remove("fa-pause");
         button.classList.add("fa-angles-left");
     }
-    
-    
 }
+
 
 document.querySelectorAll(".scroll-button").forEach((button, index) => {
     button.addEventListener("click", () => togglePixelScroll(index));

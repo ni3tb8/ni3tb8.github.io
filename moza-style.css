@@ -21,16 +21,29 @@
             background-color: #050505;
             padding: 10px;
             box-shadow: 0 0 30px #101010;
+            /* transition: 0.2s ease; */
         }
         .pixel {
             width: 5px;
             height: 5px;
             background-color: #272727;
             border-radius: 50%;
+            /* transition: 0.2s ease; */
         }
         .lit {
-            background-color: red;
-            box-shadow: 0 0 8px red;
+            background-color: rgb(245, 156, 24);
+            box-shadow: 0 0 8px rgb(207, 141, 42);
+            /* transition: 0.2s ease; */
+        }
+        .litCZ {
+            background-color: rgb(245, 24, 24);
+            box-shadow: 0 0 8px rgb(207, 42, 42);
+            /* transition: 0.2s ease; */
+        }
+        .litWH {
+            background-color: rgb(238, 238, 238);
+            box-shadow: 0 0 8px rgb(201, 201, 201);
+            /* transition: 0.2s ease; */
         }
         input {
             font-family: "Inter", serif;
