@@ -1789,18 +1789,18 @@ const charMapAlt = {
         "00"
     ],
     " ": [
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000",
-        "0000"
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000",
+        "000"
     ],
     "\u00d3": [
         "0001",
@@ -1817,6 +1817,62 @@ const charMapAlt = {
         "0000"
     ]
 };
+
+// Dla wierszy 0 i 1 (czyli wiersze 1 i 2) – domyślnie wyłączone
+let extraEnabled = [false, false];
+let extraWidths = [0, 0]; // dla wierszy 0 i 1
+
+function toggleExtra(rowIndex) {
+    let btn = document.getElementById("extraToggleBtn" + rowIndex);
+    let extraInput = document.getElementById("extraText" + (rowIndex + 1));
+    extraEnabled[rowIndex] = !extraEnabled[rowIndex];
+    if (extraEnabled[rowIndex]) {
+        extraInput.style.display = "inline-block";
+        btn.classList.remove("fa-square");
+        btn.classList.add("fa-square-binary");
+    } else {
+        extraInput.style.display = "none";
+        extraInput.value = "";
+        btn.classList.remove("fa-square-binary");
+        btn.classList.add("fa-square");
+    }
+}
+
+function getTextWidth(text, charMapRef) {
+    let width = 0;
+    for (const char of text) {
+        if (charMapRef[char]) {
+            width += charMapRef[char][0].length + 1; // szerokość znaku + odstęp
+        }
+    }
+    return width;
+}
+
+function renderExtraText(text, verticalOffset) {
+    let extraCharMap = fonts["default"];
+    let colOffset = 1; // zaczynamy od kolumny 1
+    for (const char of text) {
+        if (extraCharMap[char]) {
+            const charData = extraCharMap[char];
+            for (let row = 0; row < charData.length; row++) {
+                for (let col = 0; col < charData[row].length; col++) {
+                    let pixelCol = colOffset + col;
+                    const index = (verticalOffset + row) * cols + pixelCol;
+                    if (index < pixelElements.length) {
+                        const pixel = pixelElements[index];
+                        pixel.classList.remove("lit", "litCZ", "litWH");
+                        if (charData[row][col] === "1") {
+                            pixel.classList.add("lit");
+                        }
+                    }
+                }
+            }
+            colOffset += extraCharMap[char][0].length + 1;
+        }
+    }
+    return colOffset; // zwraca szerokość strefy
+}
+
 
 const fonts = {
     default: charMap,
@@ -1868,36 +1924,61 @@ function createPixels() {
 }
 
 function updateDisplay() {
-    pixelElements.forEach(pixel => pixel.classList.remove("lit"));
+    // Czyścimy wszystkie piksele (usuwamy klasy koloru)
+    pixelElements.forEach(pixel => pixel.classList.remove("lit", "litCZ", "litWH"));
 
     // Wiersz 0 (wiersz 1)
+    let baseOffset0 = 0;
+    if (extraEnabled[0]) {
+        let extraText = document.getElementById("extraText1").value;
+        // Obliczamy szerokość dodatkowej strefy – używamy domyślnej charMap
+        extraWidths[0] = getTextWidth(extraText, fonts["default"]);
+        // Możemy dodać dodatkowy odstęp, np. 1 kolumnę:
+        baseOffset0 = extraWidths[0] + 1;
+        // Renderujemy dodatkową strefę na wierszu 0, zaczynając od kolumny 0
+        renderExtraText(extraText, 0);
+    } else {
+        extraWidths[0] = 0;
+        baseOffset0 = 0;
+    }
     if (scrollingIntervals[0]) {
-        renderRow(0, '', 0, currentAlignments[0], invertedRows[0]);
-        renderText(scrollingTexts[0], 0, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0);
+        renderRow(0, '', 0, currentAlignments[0], invertedRows[0], baseOffset0);
+        renderText(scrollingTexts[0], 0, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0, baseOffset0);
     } else {
         let text1 = document.getElementById("hiddenText1").value;
-        renderRow(0, text1, 0, currentAlignments[0], invertedRows[0]);
-        renderText(text1, 0, currentAlignments[0], invertedRows[0], 0, 0);
+        renderRow(0, text1, 0, currentAlignments[0], invertedRows[0], baseOffset0);
+        renderText(text1, 0, currentAlignments[0], invertedRows[0], 0, 0, baseOffset0);
     }
 
     // Wiersz 1 (wiersz 2)
+    let baseOffset1 = 0;
+    if (extraEnabled[1]) {
+        let extraText = document.getElementById("extraText2").value;
+        extraWidths[1] = getTextWidth(extraText, fonts["default"]);
+        baseOffset1 = extraWidths[1] + 1;
+        // Dla wiersza 1, vertical offset wynosi 12
+        renderExtraText(extraText, 12);
+    } else {
+        extraWidths[1] = 0;
+        baseOffset1 = 0;
+    }
     if (scrollingIntervals[1]) {
-        renderRow(1, '', 12, currentAlignments[1], invertedRows[1]);
-        renderText(scrollingTexts[1], 12, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1);
+        renderRow(1, '', 12, currentAlignments[1], invertedRows[1], baseOffset1);
+        renderText(scrollingTexts[1], 12, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1, baseOffset1);
     } else {
         let text2 = document.getElementById("hiddenText2").value;
-        renderRow(1, text2, 12, currentAlignments[1], invertedRows[1]);
-        renderText(text2, 12, currentAlignments[1], invertedRows[1], 0, 1);
+        renderRow(1, text2, 12, currentAlignments[1], invertedRows[1], baseOffset1);
+        renderText(text2, 12, currentAlignments[1], invertedRows[1], 0, 1, baseOffset1);
     }
 
-    // Wiersz 2 (wiersz 3)
+    // Wiersz 2 (wiersz 3) – bez dodatkowej strefy, więc baseOffset = 0
     if (scrollingIntervals[2]) {
-        renderRow(2, '', 6, currentAlignments[2], invertedRows[2]);
-        renderText(scrollingTexts[2], 6, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2);
+        renderRow(2, '', 6, currentAlignments[2], invertedRows[2], 0);
+        renderText(scrollingTexts[2], 6, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2, 0);
     } else {
         let text3 = document.getElementById("hiddenText3").value;
-        renderRow(2, text3, 6, currentAlignments[2], invertedRows[2]);
-        renderText(text3, 6, currentAlignments[2], invertedRows[2], 0, 2);
+        renderRow(2, text3, 6, currentAlignments[2], invertedRows[2], 0);
+        renderText(text3, 6, currentAlignments[2], invertedRows[2], 0, 2, 0);
     }
 
     if (isFullScreenInverted) {
@@ -1913,13 +1994,13 @@ function syncHiddenInputs() {
     document.getElementById("hiddenText3").value = document.getElementById("text3").value;
 }
 
-function getMaxVisibleChars(text, rowOffset = 0) {
-    let widthUsed = rowOffset; // Ustawienie rowOffset jako początkowego przesunięcia
+function getMaxVisibleChars(text, rowOffset = 0, currentCharMap) {
+    let widthUsed = rowOffset; // Początkowe przesunięcie
     let maxChars = 0;
 
     for (const char of text) {
-        if (charMap[char]) {
-            const charWidth = charMap[char][0].length + 1; // Szerokość znaku + odstęp
+        if (currentCharMap[char]) {
+            const charWidth = currentCharMap[char][0].length + 1; // Szerokość znaku + odstęp
             if (widthUsed + charWidth > cols) break;
             widthUsed += charWidth;
             maxChars++;
@@ -1929,39 +2010,38 @@ function getMaxVisibleChars(text, rowOffset = 0) {
 }
 
 
-function renderRow(rowIndex, text, rowOffset, alignment, invertRow) {
+function renderRow(rowIndex, text, verticalOffset, alignment, invertRow, baseOffset = 0) {
     if (invertRow && rowIndex !== 2) {
-        invertWholeRow(rowOffset);
+        invertWholeRow(verticalOffset);
     }
-    const maxChars = getMaxVisibleChars(text);
-    // Dodajemy szósty argument rowIndex
-    renderText(text.slice(0, maxChars), rowOffset, alignment, invertRow, 0, rowIndex);
+    const currentCharMap = fonts[currentFonts[rowIndex]];
+    const maxChars = getMaxVisibleChars(text, 0, currentCharMap); // nie uwzględniamy extra – main text będzie skalowany względem dostępnego miejsca
+    renderText(text.slice(0, maxChars), verticalOffset, alignment, invertRow, 0, rowIndex, baseOffset);
 }
-
 
 function clearDisplay() {
     document.querySelectorAll(".pixel").forEach(pixel => pixel.classList.remove("lit"));
 }
 
-function renderText(text, rowOffset, alignment, invert, scrollOffset = 0, rowIndex) {
-    console.log("Render row", rowIndex, "font:", document.getElementById("fontSelector" + rowIndex));
-
-    // Pobieramy wartość fontu z selektora odpowiadającego wierszowi
+function renderText(text, verticalOffset, alignment, invert, scrollOffset = 0, rowIndex, baseOffset = 0) {
     let selectedFont = currentFonts[rowIndex];
     let currentCharMap = fonts[selectedFont];
 
     let textWidth = text.split("").reduce((acc, char) =>
         acc + (currentCharMap[char] ? currentCharMap[char][0].length + 1 : 0), 0);
 
+    let availableWidth = cols - baseOffset; // dostępna szerokość dla głównego tekstu
     let colOffset;
-    if (textWidth > cols - 2) {
-        colOffset = cols - scrollOffset;
+    if (textWidth > availableWidth) {
+        colOffset = baseOffset + (availableWidth - scrollOffset);
     } else {
-        colOffset = alignment === 1 
-            ? Math.floor((cols - textWidth) / 2) + 1 
-            : alignment === 2 
-                ? (cols - textWidth)
-                : 1;
+        if (alignment === 1) {
+            colOffset = baseOffset + Math.floor((availableWidth - textWidth) / 2) + 1;
+        } else if (alignment === 2) {
+            colOffset = baseOffset + (availableWidth - textWidth);
+        } else {
+            colOffset = baseOffset + 1;
+        }
     }
 
     for (const char of text) {
@@ -1970,13 +2050,12 @@ function renderText(text, rowOffset, alignment, invert, scrollOffset = 0, rowInd
             for (let row = 0; row < charData.length; row++) {
                 for (let col = 0; col < charData[row].length; col++) {
                     let pixelCol = colOffset + col;
-                    if (pixelCol >= 1 && pixelCol < (cols - 1)) {
-                        const index = (rowOffset + row) * cols + pixelCol;
+                    // Zmiana warunku – tekst rysowany od kolumny baseOffset+1
+                    if (pixelCol >= baseOffset + 1 && pixelCol < (cols - 1)) {
+                        const index = (verticalOffset + row) * cols + pixelCol;
                         if (index < pixelElements.length) {
                             const pixel = pixelElements[index];
-                            // Usuwamy ewentualne poprzednie klasy koloru
                             pixel.classList.remove("lit", "litCZ", "litWH");
-                            // Dodajemy odpowiednią klasę tylko jeśli piksel ma być aktywny
                             if ((charData[row][col] === "1") !== invert) {
                                 pixel.classList.add(currentColors[rowIndex]);
                             }
@@ -1984,11 +2063,14 @@ function renderText(text, rowOffset, alignment, invert, scrollOffset = 0, rowInd
                     }
                 }
             }
-            colOffset += charData[0].length + 1;
+            colOffset += currentCharMap[char][0].length + 1;
         }
     }
-    
 }
+
+
+
+
 
 function invertWholeRow(rowOffset) {
     for (let col = 0; col < cols; col++) {
@@ -2183,31 +2265,41 @@ function restoreSavedAlignments() {
 
 // Funkcja odświeżająca tylko wybrany (przewijany) wiersz
 function updateScrollingRow(row) {
-    // Ustalamy pionowy offset wiersza
+    // Ustalamy pionowy offset wiersza (0 dla wiersza 1, 12 dla wiersza 2, 6 dla wiersza 3)
     let rowOffset = row === 0 ? 0 : (row === 1 ? 12 : 6);
-    let rowHeight = 12; // Zakładamy, że każdy wiersz ma 12 pikseli wysokości
+    let rowHeight = 12; // Załóżmy, że każdy wiersz ma 12 pikseli wysokości
 
     // Czyścimy piksele tylko dla danego wiersza
     for (let r = rowOffset; r < rowOffset + rowHeight; r++) {
         for (let c = 0; c < cols; c++) {
             const index = r * cols + c;
-            pixelElements[index].classList.remove("lit");
+            pixelElements[index].classList.remove("lit", "litCZ", "litWH");
         }
     }
 
-    // Rysujemy ponownie tylko ten wiersz
+    // Dla wierszy 0 i 1 (odpowiadających wierszom 1 i 2) sprawdzamy, czy włączona jest dodatkowa strefa
+    let baseOffset = 0;
+    if (row < 2 && extraEnabled[row]) {
+         let extraText = document.getElementById("extraText" + (row + 1)).value;
+         baseOffset = getTextWidth(extraText, fonts["default"]) + 1;
+         // Renderujemy dodatkową strefę w danym wierszu
+         renderExtraText(extraText, rowOffset);
+    }
+    
+    // Renderowanie głównego tekstu z uwzględnieniem baseOffset
     if (row === 0) {
-        renderRow(0, '', rowOffset, currentAlignments[0], invertedRows[0]);
-        renderText(scrollingTexts[0], rowOffset, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0);
+        renderRow(0, '', rowOffset, currentAlignments[0], invertedRows[0], baseOffset);
+        renderText(scrollingTexts[0], rowOffset, currentAlignments[0], invertedRows[0], scrollOffsets[0], 0, baseOffset);
     } else if (row === 1) {
-        renderRow(1, '', rowOffset, currentAlignments[1], invertedRows[1]);
-        renderText(scrollingTexts[1], rowOffset, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1);
+        renderRow(1, '', rowOffset, currentAlignments[1], invertedRows[1], baseOffset);
+        renderText(scrollingTexts[1], rowOffset, currentAlignments[1], invertedRows[1], scrollOffsets[1], 1, baseOffset);
     } else if (row === 2) {
-        renderRow(2, '', rowOffset, currentAlignments[2], invertedRows[2]);
-        renderText(scrollingTexts[2], rowOffset, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2);
+        // Wiersz 3 nie ma dodatkowej strefy, więc baseOffset = 0
+        renderRow(2, '', rowOffset, currentAlignments[2], invertedRows[2], 0);
+        renderText(scrollingTexts[2], rowOffset, currentAlignments[2], invertedRows[2], scrollOffsets[2], 2, 0);
     }
 
-    // Jeśli globalny negatyw jest włączony, odwracamy tylko ten wiersz
+    // Jeśli globalna inwersja jest włączona, odwracamy tylko ten wiersz
     if (isFullScreenInverted) {
         for (let r = rowOffset; r < rowOffset + rowHeight; r++) {
             for (let c = 0; c < cols; c++) {
@@ -2226,31 +2318,33 @@ let originalTexts = ["", "", ""];
 function togglePixelScroll(row) {
     const button = document.querySelectorAll(".scroll-button")[row];
     const hiddenText = document.getElementById(`hiddenText${row + 1}`);
-
+    // Dla wierszy 0 i 1, jeżeli dodatkowa strefa jest włączona, ustawiamy effectiveWidth
+    let effectiveWidth = cols;
+    if (row < 2 && extraEnabled[row]) {
+        effectiveWidth = cols - (extraWidths[row] + 1);
+    }
+    
     if (scrollingIntervals[row]) {
-        // Wyłączamy przewijanie dla danego wiersza
         clearInterval(scrollingIntervals[row]);
         scrollingIntervals[row] = null;
         scrollOffsets[row] = 0;
         button.classList.remove("fa-angles-left");
         button.classList.add("fa-pause");
         hiddenText.value = originalTexts[row];
-        // Zamiast updateScrollingRow wywołujemy updateDisplay(), aby wyświetlić tekst w pozycji 0
         updateDisplay();
     } else {
-        // Aktywujemy przewijanie
         originalTexts[row] = hiddenText.value;
         scrollingTexts[row] = hiddenText.value;
-
+        let currentCharMap = fonts[currentFonts[row]];
         let textWidth = scrollingTexts[row].split("").reduce((acc, char) =>
-            acc + (charMap[char] ? charMap[char][0].length + 1 : 0), 0);
+            acc + (currentCharMap[char] ? currentCharMap[char][0].length + 1 : 0), 0);
 
         scrollOffsets[row] = 0;
         scrollingIntervals[row] = setInterval(() => {
             scrollOffsets[row]++;
-            if ((cols - scrollOffsets[row] + textWidth) <= 0) {
+            if ((effectiveWidth - scrollOffsets[row] + textWidth) <= 2) {
                 scrollOffsets[row] = 0;
-            }
+            }            
             updateScrollingRow(row);
         }, 50);
 
@@ -2258,6 +2352,8 @@ function togglePixelScroll(row) {
         button.classList.add("fa-angles-left");
     }
 }
+
+
 
 
 document.querySelectorAll(".scroll-button").forEach((button, index) => {
