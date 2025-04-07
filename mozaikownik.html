@@ -11,39 +11,39 @@
 </head>
 <body>
     
-    <div class="led-display" id="ledDisplay"></div>
+    <div class="led-display" id="ledDisplay"></div><br>
 
     <!-- Wiersz 1 -->
 <div>
     <input type="text" id="extraText1" placeholder="Extra 1" maxlength="10" style="display: none;" class="extraInp">
-    <input type="text" id="text1" placeholder="Wiersz 1">
+    <input type="text" id="text1" placeholder="Wiersz 1"><br>
     <button class="scroll-button fa-solid fa-pause" id="scroll-btn-0"></button>
     <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(0)"></button>
     <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(0)"></button>
-    <button class="extra-toggle-button" id="extraToggleBtn0" onclick="toggleExtra(0)"><i class="fa-solid fa-square"></i></button>
+    <button class="font-button fa-solid fa-square" id="extraToggleBtn0" onclick="toggleExtra(0)"></button>
     <button class="font-button fa-solid fa-a" id="fontBtn0" onclick="toggleFont(0)"></button>
-</div>
+</div><br>
 
 <!-- Wiersz 2 -->
 <div>
     <input type="text" id="extraText2" placeholder="Extra 2" maxlength="10" style="display: none;" class="extraInp">
-    <input type="text" id="text2" placeholder="Wiersz 2">
+    <input type="text" id="text2" placeholder="Wiersz 2"><br>
     <button class="scroll-button fa-solid fa-pause" id="scroll-btn-1"></button>
     <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(1)"></button>
     <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(1)"></button>
-    <button class="extra-toggle-button" id="extraToggleBtn1" onclick="toggleExtra(1)"><i class="fa-solid fa-square"></i></button>
+    <button class="font-button fa-solid fa-square" id="extraToggleBtn1" onclick="toggleExtra(1)"></button>
     <button class="font-button fa-solid fa-a" id="fontBtn1" onclick="toggleFont(1)"></button>
-</div>
+</div><br><br>
 
 <!-- Wiersz 3 -->
 <div>
-    <input type="text" id="text3" placeholder="Wiersz">
+    <input type="text" id="text3" placeholder="Wiersz"><br>
     <button class="scroll-button fa-solid fa-pause" id="scroll-btn-2"></button>
     <button class="alignment-button fa-solid fa-align-left" onclick="toggleAlignment(2)"></button>
     <button class="invert-button fa-regular fa-circle-dot" onclick="toggleInvert(2)"></button>
     <button class="font-button fa-solid fa-a" id="fontBtn2" onclick="toggleFont(2)"></button>
 </div>
-<br><br>  
+<br><br><br>
 
     <button class="zatwierdz" onclick="updateDisplay()"><i class="fa-solid fa-square-check"></i></button>
     <button id="auto-mode-button" onclick="toggleAutoMode()"><i class="fa-solid fa-user-pen"></i></button><br><br>
