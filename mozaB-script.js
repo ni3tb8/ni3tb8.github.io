@@ -1986,6 +1986,11 @@ function updateDisplay() {
     }
 }
 
+function submitUserInput() {
+    syncHiddenInputs();
+    updateDisplay();
+}
+
 
 // Funkcja do synchronizacji tekstu z widocznych inputów do ukrytych
 function syncHiddenInputs() {
@@ -2121,6 +2126,8 @@ function clearInputs() {
     document.getElementById("text1").value = "";
     document.getElementById("text2").value = "";
     document.getElementById("text3").value = "";
+    document.getElementById("extraText1").value = "";
+    document.getElementById("extraText2").value = "";
 
     syncHiddenInputs();
 }
@@ -2375,7 +2382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("input").forEach(input => {
                 input.addEventListener("keydown", event => {
-                    if (event.key === "Enter") updateDisplay();
+                    if (event.key === "Enter") submitUserInput();
                 });
             });
         });
