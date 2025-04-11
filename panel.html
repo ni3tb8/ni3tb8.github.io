@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Sterowania</title>
+  <script src="https://kit.fontawesome.com/662fe054ea.js" crossorigin="anonymous"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+  
+    body {
+      font-family: "Inter", sans-serif;
+      background: #222;
+      color: #f4f8ff;
+      padding: 20px;
+    }
+  
+    textarea {
+      width: 55%;
+      height: 100px;
+      margin-top: 10px;
+      background: #191919;
+      color: #f4f8ff;
+      border: 1px solid #444;
+      padding: 8px;
+    }
+  
+    button {
+      margin: 5px 5px 5px 0;
+      padding: 10px 14px;
+      background: #343434;
+      color: #f4f8ff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-radius: 5px;
+    }
+  
+    button:hover {
+      background: #3b3b3b;
+    }
+  
+    button:active {
+      background: #505050;
+    }
+
+    button:disabled {
+      background-color: #191919;
+      color: #b8b9bd;
+      cursor: context-menu;
+    }
+  
+    .row {
+      margin-bottom: 15px;
+    }
+  
+    .disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 5px;
+    }
+  
+    select {
+      background: #111;
+      color: #f4f8ff;
+      border: 1px solid #444;
+      padding: 4px 8px;
+    }
+  
+    #multiplierNotice {
+      color: #ff8080;
+      font-weight: bold;
+    }
+
+    select {
+      font-family: "Inter", serif;
+      font-size: 16px;
+      padding: 5px;
+      border: none;
+      outline: none;
+      border-radius: 4px;
+      background-color: #343434;
+      color: #f4f8ff;
+      font-weight: 400;
+      width: 50px;
+    }
+
+    input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #343434;
+            border-left: solid 8px #619945;
+            border-right: solid 8px #343434;
+            border-radius: 3px;
+            cursor: pointer;
+            position: initial;
+            margin-right: 10px;
+            margin-bottom: 6px;
+            transition: all 0.1s ease;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #343434;
+            border-right: solid 8px #994545;
+            border-left: solid 8px #343434;
+            transition: all 0.1s ease;
+        }
+
+        input[type="checkbox"]:checked:hover {
+            background-color: #343434;
+            border-right: solid 8px #bd5757;
+            border-left: solid 8px #343434;
+            transition: all 0.1s ease;
+        }
+
+        input[type="checkbox"]:hover {
+            background-color: #343434;
+            border-left: solid 8px #78bb56;
+            border-right: solid 8px #343434;
+            transition: all 0.1s ease;
+        }
+
+        i {
+          margin-right: 8px;
+        }
+
+        .iksy {
+          width: 140px;
+        }
+
+        .iksy-reset {
+          width: 290px;
+        }
+
+        .odslon {
+          width: 95px;
+        }
+
+        hr {
+          margin-top: 25px;
+          margin-bottom: 25px;
+          border: 2px solid #191919;
+        }
+
+    
+  </style>
+  
+</head>
+<body>
+
+  <h2 style="margin-top: -5px;">Panel sterowania – Familiada</h2>
+  <h3>Status tablicy: <span id="connectionStatus"></span></h3>
+
+  <hr>
+
+  <h3>Drużyna 1: <span id="team1" style="font-weight: bold;">0</span> pkt &nbsp;|&nbsp; Drużyna 2: <span id="team2">0</span> pkt</h3>
+  <h3>Punkty do przerzucenia: <span id="total">0</span> pkt</h3>
+
+  <hr>
+  
+  <div class="row">
+    <button onclick="openBoard()" id="openBoardBtn"><i class="fa-solid fa-display"></i>Otwórz tablicę</button>
+    <button onclick="newRound()" id="newRoundBtn" disabled><i class="fa-solid fa-arrows-rotate"></i>Nowa runda</button>
+    <input type="file" id="fileInput" accept=".txt" style="display:none" onchange="loadFromFile()" />
+    <button onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-file-arrow-up"></i>Wybierz plik</button>
+    <button id="sendBtn" onclick="sendData()" disabled><i class="fa-solid fa-square-check"></i>Załaduj pytanie</button>
+    <span id="multiplierNotice" style="margin-left: 0px; color: rgb(214, 69, 69); font-weight: bold;"></span>
+    <span id="questionLockNotice" style="margin-left: 0px; color: orange; font-weight: bold;"></span>
+  </div>
+
+  <hr>
+
+  <h3 style="margin-top: 40px;">Lista odpowiedzi <span id="fileNameLabel"></span></h3>
+  <textarea id="inputData" placeholder="Wpisz odpowiedzi w formie NR / ODPOWIEDŹ / PUNKTY lub wgraj plik" oninput="validateInput()"></textarea>
+
+  <div id="answers" style="margin-top: 25px;"></div>
+
+  <hr>
+
+  <h3 style="margin-top: 40px;">Punkty</h3>
+
+  <select id="multiplier" onchange="updateMultiplierLabel(); validateInput();">
+    <option value="1">1x</option>
+    <option value="2">2x</option>
+    <option value="3">3x</option>
+  </select><label style="margin-left: 12px;">Mnożnik punktów</label><br><br>
+  <label>
+    <input type="checkbox" id="lockSumToggle" onchange="toggleSumLock()" />
+    Zablokuj sumowanie punktów
+  </label><br><br>
+
+  <button class="iksy" onclick="sendPoints(1)" id="pointsBtn1" disabled><i class="fa-solid fa-1"></i><i class="fa-solid fa-user-plus"></i>Drużyna 1</button>
+  <button class="iksy" onclick="sendPoints(2)" id="pointsBtn2" disabled><i class="fa-solid fa-2"></i><i class="fa-solid fa-user-plus"></i>Drużyna 2</button>
+
+  <hr>
+
+  <h3 style="margin-top: 40px;">Szanse</h3>
+  <button class="iksy" onclick="sendX('one1')"><i class="fa-solid fa-1"></i><i class="fa-solid fa-x"></i>Drużyna 1</button>
+  <button class="iksy" onclick="sendX('one2')"><i class="fa-solid fa-2"></i><i class="fa-solid fa-x"></i>Drużyna 2</button><br>
+  <button class="iksy" onclick="sendX('add1')"><i class="fa-solid fa-1"></i><i class="fa-solid fa-xmarks-lines"></i>Drużyna 1</button>
+  <button class="iksy" onclick="sendX('add2')"><i class="fa-solid fa-2"></i><i class="fa-solid fa-xmarks-lines"></i>Drużyna 2</button><br>
+  <!-- Przycisk resetu X-ów jest teraz domyślnie wygaszony -->
+  <button class="iksy-reset" onclick="sendX('reset')" id="resetXsBtn" disabled>
+    <i class="fa-solid fa-delete-left"></i>Reset szans
+  </button>
+
+  <script>
+    let boardWindow = null;
+    let answers = [];
+    let total = 0;
+    let lastMultiplier = "1";
+  
+    function openBoard() {
+      boardWindow = window.open("tablica.html", "Tablica", "width=800,height=600");
+    }
+  
+    function loadFromFile() {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("inputData").value = e.target.result;
+        const name = file.name.replace(/\.[^/.]+$/, "");
+        document.getElementById("fileNameLabel").textContent = `- z pliku: ${name}`;
+        validateInput();
+      };
+      reader.readAsText(file);
+    }
+  
+    function validateInput() {
+      const raw = document.getElementById("inputData").value.trim();
+      const lines = raw.split("\n").filter(l => l.includes("/") && l.split("/").length === 3);
+      document.getElementById("sendBtn").disabled = lines.length === 0;
+      updateMultiplierLabel();
+    }
+  
+    function updateMultiplierLabel() {
+      const current = document.getElementById("multiplier").value;
+      const notice = document.getElementById("multiplierNotice");
+      if (current !== lastMultiplier) {
+        notice.textContent = "Zmieniono mnożnik – załaduj pytanie";
+      } else {
+        notice.textContent = "";
+      }
+    }
+  
+    function updatePointsButtons() {
+      const disabled = total === 0;
+      document.getElementById("pointsBtn1").disabled = disabled;
+      document.getElementById("pointsBtn2").disabled = disabled;
+    }
+  
+    function updateResetXsButton(status) {
+      const anyX = status.hasX1 || status.hasX2 || status.hasOneX1 || status.hasOneX2;
+      document.getElementById("resetXsBtn").disabled = !anyX;
+    }
+  
+    function sendData() {
+      const raw = document.getElementById("inputData").value.trim();
+      const lines = raw.split("\n");
+      const mult = parseInt(document.getElementById("multiplier").value);
+      answers = lines.map(line => {
+        const [nr, text, pts] = line.split("/").map(s => s.trim());
+        return { text, points: parseInt(pts), realPoints: parseInt(pts) * mult };
+      });
+      total = 0;
+      lastMultiplier = document.getElementById("multiplier").value;
+      document.getElementById("total").textContent = 0;
+      renderAnswerControls();
+      document.getElementById("questionLockNotice").textContent = "";
+      document.getElementById("newRoundBtn").disabled = false;
+      boardWindow?.postMessage({ type: "init", answers }, "*");
+    }
+  
+    function renderAnswerControls() {
+      const container = document.getElementById("answers");
+      container.innerHTML = "";
+      answers.forEach((ans, i) => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <button onclick="reveal(${i})" id="revealBtn_${i}" class="odslon">
+            <i class="fa-solid fa-eye-slash"></i>Odsłoń
+          </button>
+          ${i + 1}. ${ans.text} (${ans.points} pkt)
+        `;
+        container.appendChild(div);
+      });
+    }
+  
+    function reveal(index) {
+      const btn = document.getElementById(`revealBtn_${index}`);
+      if (!btn) return;
+      const icon = btn.querySelector("i");
+      if (icon) icon.classList.replace("fa-eye-slash", "fa-eye");
+      btn.disabled = true;
+  
+      const locked = document.getElementById("lockSumToggle").checked;
+      boardWindow?.postMessage({ type: "show", index, points: answers[index].realPoints }, "*");
+  
+      if (!locked) {
+        total += answers[index].realPoints;
+        document.getElementById("total").textContent = total;
+      }
+  
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("questionLockNotice").textContent = "Pytanie w trakcie gry";
+      updatePointsButtons();
+    }
+  
+    function sendPoints(team) {
+      boardWindow?.postMessage({ type: "points", team, amount: total }, "*");
+      total = 0;
+      document.getElementById("total").textContent = total;
+      updatePointsButtons();
+    }
+  
+    function sendX(mode) {
+      boardWindow?.postMessage({ type: "x", mode }, "*");
+    }
+  
+    function newRound() {
+      total = 0;
+      document.getElementById("total").textContent = 0;
+      document.getElementById("inputData").value = "";
+      document.getElementById("answers").innerHTML = "";
+      document.getElementById("fileNameLabel").textContent = "";
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("questionLockNotice").textContent = "";
+      document.getElementById("newRoundBtn").disabled = true;
+      document.getElementById("lockSumToggle").checked = false;
+      updatePointsButtons();
+      document.getElementById("resetXsBtn").disabled = true;
+      lastMultiplier = document.getElementById("multiplier").value;
+      boardWindow?.postMessage({ type: "newround" }, "*");
+    }
+  
+    function toggleSumLock() {
+      const value = document.getElementById("lockSumToggle").checked;
+      boardWindow?.postMessage({ type: "locksum", value }, "*");
+    }
+  
+    // Nasłuchiwanie komunikatów z okna tablicy
+window.addEventListener("message", (e) => {
+  const msg = e.data;
+  
+  if (msg.type === "connection") {
+    const statusElem = document.getElementById("connectionStatus");
+    statusElem.textContent = msg.message;
+    statusElem.style.color = "lightgreen";  // okno tablicy jest połączone
+    document.getElementById("questionLockNotice").textContent = "";
+    sendBtn.disabled = false;
+    openBoardBtn.disabled = true;
+  }
+  
+  if (msg.type === "xStatus") {
+    updateResetXsButton(msg);
+  }
+});
+
+// Sprawdzanie stanu okna tablicy co sekundę
+setInterval(() => {
+  const statusElem = document.getElementById("connectionStatus");
+  if (!boardWindow || boardWindow.closed) {
+    statusElem.textContent = "nieaktywna";
+    statusElem.style.color = "#d14d4d";    // kolor czerwony, gdy brak połączenia
+    document.getElementById("questionLockNotice").textContent = "Tablica nieaktywna";
+    sendBtn.disabled = true;
+    openBoardBtn.disabled = false;
+  }
+}, 1000);
+
+
+
+  </script>
+
+</body>
+</html>

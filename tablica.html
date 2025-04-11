@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Tablica Familiada</title>
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap');
+
+    body {
+      background: #191919;
+      color: #FFD700;
+      font-family: "Inter", sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .scoreboard {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22px;
+      margin-bottom: 10px;
+      padding: 0 20px;
+    }
+
+    .board {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #191919;
+      padding: 20px;
+      border: 4px solid #FFD700;
+      border-radius: 10px;
+    }
+
+    .answer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      border: 2px solid #FFD700;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-size: 26px;
+      background: #191919;
+      text-transform: uppercase;
+    }
+
+    .answer .text,
+    .answer .points {
+      visibility: hidden;
+    }
+
+    .answer.visible .text,
+    .answer.visible .points {
+      visibility: visible;
+    }
+
+    .answer .number {
+      visibility: visible;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .sum {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    .x-one {
+      font-size: 100px;
+      color: red;
+      display: none;
+    }
+
+    .xOneWrapper {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 0 40px;
+    }
+
+    .x-multi {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 0 40px;
+    }
+
+    .x-multi .side {
+      display: flex;
+      gap: 10px;
+    }
+
+    .x-multi span {
+      font-size: 60px;
+      color: red;
+      display: none;
+    }
+
+    .x-multi span.active {
+      display: inline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scoreboard">
+    <div>Drużyna 1: <span id="t1">0</span> pkt</div>
+    <div>Drużyna 2: <span id="t2">0</span> pkt</div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="sum">
+      Suma punktów: <span id="sumPoints">0</span>
+    </div>
+  </div>
+
+  <!-- DUŻE X-Y poza tablicą -->
+  <div class="x-multi">
+    <div class="side">
+      <div id="xOneLeft" class="x-one">X</div>
+    </div>
+    <div class="side">
+      <div id="xOneRight" class="x-one">X</div>
+    </div>
+  </div>  
+
+  <div class="x-multi">
+    <div class="side">
+      <span id="x1_1">X</span>
+      <span id="x1_2">X</span>
+      <span id="x1_3">X</span>
+    </div>
+    <div class="side">
+      <span id="x2_1">X</span>
+      <span id="x2_2">X</span>
+      <span id="x2_3">X</span>
+    </div>
+  </div>
+
+  <script>
+    let team1 = 0, team2 = 0;
+    let x1 = 0, x2 = 0;
+    let sumPoints = 0;
+    let answers = [];
+    let sumLocked = false;
+    let xOne1Visible = false;
+    let xOne2Visible = false;
+
+    window.onload = function() {
+  if (window.opener) {
+    window.opener.postMessage({
+      type: "connection",
+      message: "połączona"
+    }, "*");
+  }
+};
+
+
+    function sendXStatus() {
+      // Używamy window.opener, aby wysłać komunikat do okna macierzystego
+      window.opener.postMessage({
+        type: "xStatus",
+        hasX1: x1 > 0,
+        hasX2: x2 > 0,
+        hasOneX1: xOne1Visible,
+        hasOneX2: xOne2Visible
+      }, "*");
+    }
+
+    function resetXs() {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`x1_${i}`)?.classList.remove("active");
+        document.getElementById(`x2_${i}`)?.classList.remove("active");
+      }
+    }
+
+    window.addEventListener("message", (e) => {
+      const msg = e.data;
+
+      if (msg.type === "init") {
+        const board = document.getElementById("board");
+        board.innerHTML = "";
+
+        x1 = x2 = 0;
+        sumPoints = 0;
+        answers = msg.answers;
+
+        answers.forEach((ans, i) => {
+          const div = document.createElement("div");
+          div.className = "answer";
+          div.id = `a${i}`;
+          div.innerHTML = `
+            <div class="number">${i + 1}.</div>
+            <div class="text">${ans.text}</div>
+            <div class="points">${ans.points}</div>
+          `;
+          board.appendChild(div);
+          sendXStatus();
+        });
+
+        const sumDiv = document.createElement("div");
+        sumDiv.className = "sum";
+        sumDiv.innerHTML = `Suma punktów: <span id="sumPoints">0</span>`;
+        board.appendChild(sumDiv);
+
+        document.getElementById("xOneLeft").style.display = "none";
+        document.getElementById("xOneRight").style.display = "none";
+        resetXs();
+      }
+
+      if (msg.type === "show") {
+        const el = document.getElementById(`a${msg.index}`);
+        if (el.classList.contains("visible")) return;
+
+        el.classList.add("visible");
+
+        if (!sumLocked) {
+          sumPoints += msg.points ?? answers[msg.index].points;
+          document.getElementById("sumPoints").textContent = sumPoints;
+        }
+      }
+
+      if (msg.type === "points") {
+        if (msg.team === 1) {
+          team1 += msg.amount;
+          document.getElementById("t1").textContent = team1;
+        } else {
+          team2 += msg.amount;
+          document.getElementById("t2").textContent = team2;
+        }
+      }
+
+      if (msg.type === "x") {
+        if (msg.mode === "one1") {
+          document.getElementById("xOneLeft").style.display = "block";
+          xOne1Visible = true;
+          sendXStatus();
+        }
+        if (msg.mode === "one2") {
+          document.getElementById("xOneRight").style.display = "block";
+          xOne2Visible = true;
+          sendXStatus();
+        }
+        if (msg.mode === "add1" && x1 < 3) {
+          x1++;
+          document.getElementById(`x1_${x1}`)?.classList.add("active");
+          sendXStatus();
+        }
+        if (msg.mode === "add2" && x2 < 3) {
+          x2++;
+          document.getElementById(`x2_${x2}`)?.classList.add("active");
+          sendXStatus();
+        }
+        if (msg.mode === "reset") {
+          x1 = x2 = 0;
+          xOne1Visible = false;
+          xOne2Visible = false;
+          document.getElementById("xOneLeft").style.display = "none";
+          document.getElementById("xOneRight").style.display = "none";
+          resetXs();
+          sendXStatus();
+        }
+      }
+
+      if (msg.type === "locksum") {
+        sumLocked = msg.value;
+      }
+
+      if (msg.type === "newround") {
+        const board = document.getElementById("board");
+        board.innerHTML = "";
+
+        x1 = x2 = 0;
+        sumPoints = 0;
+        answers = [];
+
+        const sumDiv = document.createElement("div");
+        sumDiv.className = "sum";
+        sumDiv.innerHTML = `Suma punktów: <span id="sumPoints">0</span>`;
+        board.appendChild(sumDiv);
+
+        document.getElementById("xOneLeft").style.display = "none";
+        document.getElementById("xOneRight").style.display = "none";
+        resetXs();
+      }
+    });
+  </script>
+
+</body>
+</html>
