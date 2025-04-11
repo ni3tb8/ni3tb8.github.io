@@ -227,7 +227,7 @@
       reader.onload = function (e) {
         document.getElementById("inputData").value = e.target.result;
         const name = file.name.replace(/\.[^/.]+$/, "");
-        document.getElementById("fileNameLabel").textContent = `- z pliku: ${name}`;
+        document.getElementById("fileNameLabel").textContent = `- z pliku: ${name}?`;
         validateInput();
       };
       reader.readAsText(file);
