@@ -233,7 +233,7 @@
 
   <div class="row">
     <button onclick="openBoard()" id="openBoardBtn"><i class="fa-solid fa-display"></i>Otwórz tablicę</button>
-    <button id="openRemoteBtn"><i class="fa-solid fa-globe"></i>Połącz z tablicą</button>
+    <button id="connectBtn"><i class="fa-solid fa-globe"></i>Połącz z tablicą</button>
     <button onclick="hardReset()" id="hardResetBtn" disabled><i class="fa-solid fa-power-off"></i>Reset gry</button>
     <button onclick="newRound()" id="newRoundBtn" disabled><i class="fa-solid fa-arrows-rotate"></i>Nowa runda</button>
     <input type="file" id="fileInput" accept=".txt" style="display:none" onchange="loadFromFile()" />
@@ -297,15 +297,43 @@ function markGameDirty() {
       document.getElementById("fileInputBtn").disabled = false;
     }
 
-    let remoteIp = null, remoteCode = null;
 
-document.getElementById('openRemoteBtn')
-  .addEventListener('click', () => {
-    const ip   = prompt('Wprowadź adres IP tablicy:');
-    const code = prompt('Wprowadź kod dostępu:');
-    if (!ip || !code) return;
-    openRemoteBoard(ip, code);
-  });
+
+document.getElementById('connectBtn').addEventListener('click', () => {
+  const url  = prompt('Podaj pełny URL do tablicy (np. https://…/tablica%20flipdot.html)');
+  const code = prompt('Podaj kod dostępu, który widzisz na tablicy:');
+  if (!url || !code) return;
+
+  // próbujemy złapać okno o tej nazwie
+  let win;
+  try {
+    win = window.open('', code);  // nie podajemy URL, tylko nazwę
+  } catch (_) {
+    win = null;
+  }
+
+  const needOpen = !win
+    || win.closed
+    // czasami cross-origin uniemożliwia dostęp do win.location.href → traktujemy jako istniejące
+    || (() => {
+         try { return win.location.href === 'about:blank'; }
+         catch { return false; }
+       })();
+
+  if (needOpen) {
+    // otwieramy i przekazujemy kod jako query ↓ (żeby tablica go odczytała i ustawiła window.name)
+    boardWindow = window.open(`${url}?code=${encodeURIComponent(code)}`, code, 'width=1100,height=600');
+  } else {
+    boardWindow = win;  // mamy referencję do już otwartego okna
+    boardWindow.focus();
+  }
+
+  // powiadamiamy tablicę, że panel jest gotowy
+  boardWindow.postMessage({ type: 'connection', message: 'połączona' }, '*');
+  document.getElementById('connectBtn').disabled = true;
+  document.getElementById('connectionStatus').textContent = 'połączona';
+});
+
 
 function openRemoteBoard(ip, code) {
   // otwieramy tablicę pod podanym adresem, przekazując kod jako parametr URL
