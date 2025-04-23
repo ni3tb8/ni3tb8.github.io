@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Tablica Familiada - Flipdot</title><style>
+    :root {
+      --pixel-size: 8px;
+      --disp-pixel-size: calc(var(--pixel-size) * 2);
+      --pixel-gap: 2px;
+      --board-gap-x: 15px;
+      --board-gap-y: 20px;
+    }
+    body { background: #191919; color: #FFD700; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; overflow: hidden;}
+    .display-container { display: flex; justify-content: space-between; width: max-content; margin: 0 auto 20px; }
+    .disp-segment {
+      display: grid;
+      grid-template-columns: repeat(17, var(--disp-pixel-size));
+      grid-template-rows: repeat(9, var(--disp-pixel-size));
+      gap: var(--pixel-gap);
+      background: #111;
+      padding: var(--pixel-gap);
+      padding: 30px;
+      border-radius: 30px;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(31, calc(var(--pixel-size) * 5 + var(--pixel-gap) * 4));
+      grid-template-rows: repeat(11, calc(var(--pixel-size) * 9 + var(--pixel-gap) * 8));
+      gap: var(--board-gap-y) var(--board-gap-x);
+      background: #151515;
+      padding: 20px;
+      border: 15px solid #111;
+      margin: 0 auto;
+      margin-left: 25px;
+      margin-right: 25px;
+      width: max-content;
+      border-radius: 30px;
+    }
+    .segment {
+      display: grid;
+      grid-template-columns: repeat(5, var(--pixel-size));
+      grid-template-rows: repeat(9, var(--pixel-size));
+      gap: var(--pixel-gap);
+      background: #111;
+    }
+    .pixel, .disp-pixel {
+      background: #222;
+      border-radius: 50%;
+      transform-style: preserve-3d;
+      transform-origin: center;
+    }
+    .pixel { width: var(--pixel-size); height: var(--pixel-size); }
+    .disp-pixel { width: var(--disp-pixel-size); height: var(--disp-pixel-size); }
+    @keyframes flipOn {
+      0% { transform: rotateX(-180deg); background: #222; }
+      50% { transform: rotateX(-90deg); background: #222; }
+      100% { transform: rotateX(0deg); background: #ffe345; }
+    }
+    @keyframes flipOff {
+      0% { transform: rotateX(-180deg); background: #ffe345; }
+      50% { transform: rotateX(-90deg); background: #222; }
+      100% { transform: rotateX(0deg); background: #222; }
+    }
+    .pixel.on, .disp-pixel.on {
+      animation: flipOn 0.12s ease-in forwards;
+    }
+    .pixel.off, .disp-pixel.off {
+      animation: flipOff 0.24s ease-out forwards;
+    }
+    /* ───  UKŁAD FLEX  ──────────────────────────────────────────── */
+#wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;     /* dla skalowania */
+  padding-bottom: 110px;
+}
+.layout-center{
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--board-gap-y);
+}
+/* ───  UKŁAD FLEX (wyświetlacze „doklejone” do tablicy)  ────── */
+.layout-row{
+  display: flex;
+  align-items: flex-start;
+  gap: 0;                        /* zero odstępu → przylegają do tablicy */
+}
+/* padding pozostaje 20 px – jeśli chcesz jeszcze ciaśniej, zmniejsz */
+.disp-segment{ padding: 20px; }
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #191919; /* Tło ekranowe */
+    z-index: 10;
+    opacity: 1; /* Początkowo pełna widoczność */
+    transition: 0.2s ease-out; /* Animacja znikania */
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 3.5em;
+    color: #080808;
+    font-weight: 600;
+    padding-top: 5%;
+}
+
+
+  </style>
+</head>
+<body>
+  <div id="loadingScreen" class="loading-screen">2025 &copy; ni3tb8 design</div>
+
+  <!-- <audio id="errorSound"   src="Sounds/bledna.mp3"   preload="none"></audio>
+  <audio id="correctSound" src="Sounds/poprawna.mp3" preload="none"></audio>
+  <audio id="bellSound"    src="Sounds/dzwonki.mp3"  preload="none"></audio> -->
+  <!-- <audio id="changeSound"  src="Sounds/przejscie.mp3"preload="auto"></audio> -->
+      <!-- ───  NOWY UKŁAD  ────────────────────────────────────────── -->
+<div id="wrapper">
+      <!-- górny, środkowy wyświetlacz SUMY -->
+      <div class="layout-center">
+        <div id="dispSum" class="disp-segment" style="border: solid 5px; border-color: #111;"></div>
+      </div>
+    
+      <!-- rząd:  wyświetlacz D1  |  główna tablica  |  wyświetlacz D2 -->
+      <div class="layout-row">
+        <div id="disp1" class="disp-segment" style="border: solid 5px; border-color: #af4444;"></div>
+        <div id="board"></div>
+        <div id="disp2" class="disp-segment" style="border: solid 5px; border-color: #5167b3;"></div>
+      </div>
+    </div>
+    
+    <div id="remoteInfo" style="
+     position: fixed;
+     bottom: 10px;
+     left: 10px;
+     color: #FFD700;
+     font-family: 'Inter', sans-serif;
+     background: rgba(0,0,0,0.5);
+     padding: 4px 8px;
+     border-radius: 4px;
+   ">
+  <!-- tutaj wypełni się IP i kod -->
+</div>
+
+  <script>
+window.addEventListener('load', () => {
+    // po 1 s zaczynamy znikać
+    setTimeout(() => {
+      const loader = document.getElementById('loadingScreen');
+      // animacja opacity z 1 do 0 zgodnie z transition:0.2s
+      loader.style.opacity = '0';
+      // po zakończonym fade-out, usuwamy z layoutu
+      setTimeout(() => {
+        loader.style.display = 'none';
+      }, 300); // 200 ms = czas transition
+    }, 2500);   // 1000 ms = czas trwania loading screena
+  });
+
+      const ROWS = 11, COLS = 31;
+      const ROW_OFFSET = 2, COL_OFFSET = 5;
+      const DASH_COUNT = 15;
+      const X_ONE_ROW = 5, X_ONE_COL1 = 0, X_ONE_COL2 = COLS - 1;
+      const X_SMALL_ROWS = [10, 9, 6];
+      /* dolny wiersz pierwszego „małego” X‑a */
+const SMALL_X_BOTTOM_ROW = 10;   // nic nie zmieniaj, pasuje wizualnie
+const SMALL_X_HEIGHT     = 3;    // każdy X zajmuje 3 wiersze
+
+    
+      let answers = [], sumPoints = 0, sumLocked = false;
+      let team1 = 0, team2 = 0;
+      let xCount1 = 0, xCount2 = 0, xOne1 = false, xOne2 = false;
+    
+      const FULL = Array.from({ length: 9 }, () => Array(5).fill(1));
+  const FONT = {
+ 'A': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ą': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0]],
+ 'B': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'C': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'Ć': [[0, 0, 0, 1, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 1, 0, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'D': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'E': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ę': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 1, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 1, 0, 0]],
+ 'F': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'G': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 1, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'H': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'I': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'J': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'K': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 1, 0],
+       [1, 0, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 0, 1, 0, 0],
+       [1, 0, 0, 1, 0],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'L': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ł': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'M': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 1, 0, 1, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'N': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 1, 0, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 0, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ń': [[0, 0, 0, 1, 0],
+       [1, 0, 1, 0, 1],
+       [1, 1, 0, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 0, 1, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'O': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'Ó': [[0, 0, 0, 1, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 1, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'P': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'Q': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 1, 1],
+       [1, 0, 1, 0, 1],
+       [0, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'R': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [1, 0, 1, 0, 0],
+       [1, 0, 0, 1, 0],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'S': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 1],
+       [1, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'Ś': [[0, 0, 0, 1, 0],
+       [0, 1, 1, 1, 1],
+       [1, 0, 1, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [1, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'T': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'U': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ 'V': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 0, 1, 0],
+       [0, 1, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'W': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 1, 0, 1, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'X': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'Y': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'Z': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ź': [[0, 0, 1, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 1, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'Ż': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [1, 1, 1, 1, 1],
+       [0, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ '0': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '1': [[0, 0, 0, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 1, 0, 0],
+       [1, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ '2': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [2, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ '3': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 1, 0],
+       [0, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '4': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 1, 0],
+       [0, 1, 0, 1, 0],
+       [1, 0, 0, 1, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 0, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '5': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '6': [[0, 0, 0, 0, 0],
+       [0, 0, 1, 1, 0],
+       [0, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '7': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 0, 0],
+       [0, 1, 0, 0, 0],
+       [0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '8': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 0, 0, 0]],
+ '9': [[0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 0, 0, 0, 1],
+       [1, 0, 0, 0, 1],
+       [0, 1, 1, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 0],
+       [0, 1, 1, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '.': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '-': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '_': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 0, 1, 0, 1],
+       [0, 0, 0, 0, 0]],
+ ':': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '<': [[1, 0, 1, 0, 1],
+       [0, 1, 0, 1, 0],
+       [1, 0, 1, 0, 1],
+       [0, 1, 0, 10, 0],
+       [1, 0, 1, 0, 1],
+       [0, 1, 0, 1, 0],
+       [1, 0, 1, 0, 1],
+       [0, 1, 0, 1, 0],
+       [1, 0, 1, 0, 1]],
+ '>': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ '/': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 0],
+       [0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 0, 0, 0],
+       [0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ ' ': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'a': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'b': [[0, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 1, 1, 0],
+       [0, 1, 1, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'c': [[0, 0, 0, 0, 0],
+       [1, 1, 0, 1, 1],
+       [1, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'd': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 1, 1, 1, 0],
+       [0, 0, 1, 0, 0],
+       [0, 1, 1, 1, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'e': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 1],
+       [1, 1, 0, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'f': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 1, 1, 0],
+       [0, 1, 1, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'g': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'h': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'i': [[0, 0, 0, 0, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0]],
+ 'j': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'k': [[0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 0, 0, 0, 0]],
+ 'l': [[1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1]],
+ 'm': [[0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1]],
+ 'n': [[1, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1]],
+ 'o': [[1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0]],
+ 'p': [[1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'q': [[1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0]],
+ 'r': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1],
+       [0, 0, 0, 1, 1],
+       [0, 0, 1, 1, 1],
+       [0, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1]],
+ 's': [[0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0],
+       [1, 1, 0, 0, 0],
+       [1, 1, 1, 0, 0],
+       [1, 1, 1, 1, 0],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1],
+       [1, 1, 1, 1, 1]],
+}
+
+/* napis 7‑segmentowy 5 wierszy × 31 kolumn  */
+const TITLE = [
+"lll mln l  l l l  l mln lln mln",
+"l   l l lsrl l l  l l l l l l l",
+"ll  lll lqpl l l  l lll l l lll",
+"l   l l l  l l l  l l l l l l l",
+"l   l l l  l l ll l l l llo l l"
+];
+
+let autoTransferDone = false;   // resetowany w init / newround
+
+function triggerAutoTransfer(team) {
+  if (autoTransferDone || sumPoints === 0) return;   // tylko raz
+  autoTransferDone = true;
+  sumLocked = true;                                  // blokujemy dalsze sumowanie
+  window.opener?.postMessage({ type:"autoTransfer", team }, "*");
+}
+
+
+
+function generateDisplays() {
+  /* trzy wyświetlacze: drużyna 1, suma, drużyna 2 */
+  ['disp1', 'dispSum', 'disp2'].forEach(id => {
+    const disp = document.getElementById(id);
+    for (let r = 0; r < 9; r++) for (let c = 0; c < 17; c++) {
+      const pix = document.createElement('div');
+      pix.className = 'disp-pixel';
+      pix.dataset.r = r;
+      pix.dataset.c = c;
+      disp.appendChild(pix);
+    }
+    updateDisplay(id, 0);          // startowo „0”
+  });
+}
+
+  function clearDisplay(id) {
+    document.querySelectorAll(`#${id} .disp-pixel.on`).forEach(p => p.classList.remove('on'));
+  }
+  function drawCharDisp(id, col, ch) {
+    const pattern = FONT[ch] || FULL;
+    for (let y = 0; y < 9; y++) for (let x = 0; x < 5; x++) {
+      if (pattern[y][x]) {
+        const sel = `#${id} .disp-pixel[data-r='${y}'][data-c='${col+x}']`;
+        document.querySelector(sel)?.classList.add('on');
+      }
+    }
+  }
+
+  function clearAnswerArea(row) {
+  /* kolumny 5‑25 to:  nr, kropka, tekst, podkreślenia, >>, punkty */
+  const start = COL_OFFSET;                       // 5
+  const end   = COL_OFFSET + 3 + DASH_COUNT + 2;  // 25
+  for (let c = start; c <= end; c++) {
+    clearSeg(row, c);
+  }
+}
+
+
+  /* kolumn w jednym wyświetlaczu jest 17, a znak zajmuje 5 + 1 (odstęp) = 6 kolumn */
+function updateDisplay(id, value) {
+  clearDisplay(id);
+
+  const s = String(value);           // bez dodatkowego padStart
+  const neededWidth = s.length * 6;  // pełne „wirtualne” szerokości
+  /* +1 ponieważ po ostatniej cyfrze nie ma już odstępu; dzięki temu dla 3 cyfr
+     potrzebujemy dokładnie 16 kolumn (pasuje do szerokości 17)                */
+  const startCol = Math.max(0, 17 - neededWidth + 1);
+
+  s.split('').forEach((ch, i) => {
+    drawCharDisp(id, startCol + i * 6, ch);
+  });
+}
+
+
+function generateGrid() {
+    const board = document.getElementById('board');
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const seg = document.createElement('div'); seg.className = 'segment'; seg.dataset.r = r; seg.dataset.c = c;
+      for (let y = 0; y < 9; y++) for (let x = 0; x < 5; x++) {
+        const pix = document.createElement('div'); pix.className = 'pixel'; seg.appendChild(pix);
+      }
+      board.appendChild(seg);
+    }
+  }
+
+  
+
+
+//   function showTitle(){
+//   const row0 = 3;                          // zaczynamy od wiersza 1
+//   TITLE.forEach((line,dr)=>{
+//     for(let dc=0;dc<Math.min(COLS,line.length);dc++){
+//       const ch=line[dc];
+//       if(ch!==' ') drawChar(row0+dr, dc, ch);
+//     }
+//   });
+// }
+
+function showWelcome() {
+  const lines = ["GRA FAMILIJNA", "by ni3tb8 design"];
+
+  lines.forEach((txt, i) => {
+    const s = txt.toUpperCase();
+
+    /* —►   dobór kroku (szerokości znaku + odstępu)   ◄— */
+    let step = 1;                     // 5 kolumn znaku + 1 przerwy
+    if (s.length * step > COLS)   // nie mieści się?  zacieśniamy!
+      step = 5;                       // 0‑przerw (znaki „przytulone”)
+
+    const fullWidth = s.length * step;
+    const row       = ROWS - 2 + i;               // dwa ostatnie wiersze
+    const colStart  = Math.max(0, COLS - fullWidth);
+
+    s.split('').forEach((ch, j) => {
+      drawChar(row, colStart + j * step, ch);
+    });
+  });
+
+  /* schowaj napis po 5 sekundach */
+  setTimeout(() => {
+    for (let r = ROWS - 2; r < ROWS; r++)
+      for (let c = 0; c < COLS; c++)
+        clearSeg(r, c);
+  }, 3000);
+}
+
+
+  function clearSeg(row, col) {
+    document.querySelectorAll(`.segment[data-r='${row}'][data-c='${col}'] .pixel.on`)  
+      .forEach(p => p.classList.remove('on'));
+  }
+  function drawChar(row, col, ch) {
+    const pattern = FONT[ch] || FULL;
+    const seg = document.querySelector(`.segment[data-r='${row}'][data-c='${col}']`);
+    if (!seg) return;
+    pattern.forEach((line,y) => line.forEach((bit,x) => bit && seg.children[y*5 + x].classList.add('on')));
+  }
+
+  /* ───  TRUNCATE – ucinanie tekstu odpowiedzi  ──────────────────────────────
+   • zamienia tekst na UPPER‑CASE
+   • jeśli długość ≤ 14 znaków – zwraca bez zmian
+   • jeśli >14, sprawdza 14‑ty znak (index 13):
+        – gdy to SPACJA → spację zastępujemy kropką (nie dokładamy nowej)
+        – w przeciwnym razie dokładamy kropkę na końcu                   */
+function truncate(text) {
+  text = text.toUpperCase();
+
+  if (text.length <= 15) return text;          // nic do ucinania
+
+  const slice = text.slice(0, 14);             // pierwsze 14 znaków (0‑13)
+
+  // jeżeli 14‑ty znak to spacja, kropka wskakuje w jej miejsce
+  if (slice[14] === ' ') {
+    return slice.slice(0, 14) + '.';           // usuwamy spację → wstawiamy '.'
+  }
+
+  // standardowo – 14 znaków + kropka
+  return slice + '.';
+}
+
+  function updateBoardSum() {
+  const sumRow = ROW_OFFSET + answers.length + 1;
+
+  /* czyszczenie TYLKO kolumn środkowych (3 … COLS‑4),
+   aby nie usuwać ramienia dużego X‑a */
+for(let c=3;c<COLS-3;c++) clearSeg(sumRow, c);
+
+
+  /* brak odpowiedzi ➜ na tablicy nic nie wyświetlamy,
+     a wyświetlacz sumy pokazuje 0                      */
+  if (!answers.length) {
+    updateDisplay('dispSum', 0);
+    return;
+  }
+
+  const label = 'SUMA:';
+  const p1    = COL_OFFSET + 3 + DASH_COUNT - 6;
+
+  /* słowo "SUMA:" */
+  for (let i = 0; i < label.length; i++)
+    drawChar(sumRow, p1 + i, label[i]);
+
+  /* wartość punktowa */
+  const s     = String(sumPoints);
+  const start = p1 + label.length + 4 - s.length;
+  for (let i = 0; i < s.length; i++)
+    drawChar(sumRow, start + i, s[i]);
+
+  /* aktualizujemy także wyświetlacz nad tablicą */
+  updateDisplay('dispSum', sumPoints);
+}
+
+/* === 7‑segmentowe znaki ======== */
+
+/*  MAŁY X – układ:
+    e f g
+      d
+    a b c            (3 × 3 segmenty – używany w stosie)          */
+    function drawSmallX(side, rowBtm){
+  const cs = (side==='left') ? 0 : COLS-3, r0 = rowBtm-2;
+  // górny rząd
+  drawChar(r0    , cs    , 'f');
+  drawChar(r0    , cs+1  , 'e');
+  drawChar(r0    , cs+2  , 'g');
+  // środkowy
+  drawChar(r0+1  , cs+1  , 'd');
+  // dolny
+  drawChar(r0+2  , cs    , 'a');
+  drawChar(r0+2  , cs+1  , 'c');
+  drawChar(r0+2  , cs+2  , 'b');
+}
+function clearSmallX(side, rowBtm){
+  const cs = (side==='left') ? 0 : COLS-3, r0 = rowBtm-2;
+  for(let dr=0;dr<3;dr++) for(let dc=0;dc<3;dc++) clearSeg(r0+dr,cs+dc);
+}
+
+/*  DUŻY X – układ:
+    k   j
+    i   h
+      d
+    j   k
+    h   i            (5 × 3 segmenty – pojedyncza szansa)         */
+function drawLargeX(side, rowMid){
+  const cs = (side==='left') ? 0 : COLS-3, r0 = rowMid-2;
+  // górny
+  drawChar(r0    , cs    , 'k');
+  drawChar(r0    , cs+2  , 'j');
+  // drugi
+  drawChar(r0+1  , cs    , 'i');
+  drawChar(r0+1  , cs+2  , 'h');
+  // środek
+  drawChar(r0+2  , cs+1  , 'd');
+  // czwarty
+  drawChar(r0+3  , cs    , 'j');
+  drawChar(r0+3  , cs+2  , 'k');
+  // dolny
+  drawChar(r0+4  , cs    , 'h');
+  drawChar(r0+4  , cs+2  , 'i');
+}
+function clearLargeX(side, rowMid){
+  const cs = (side==='left') ? 0 : COLS-3, r0 = rowMid-2;
+  for(let dr=0;dr<5;dr++) for(let dc=0;dc<3;dc++) clearSeg(r0+dr,cs+dc);
+}
+
+
+function clearBigX(side, rowBtm) {
+  const colStart = (side === 'left') ? 0 : COLS - 3;
+  const r0 = rowBtm - 2;
+  for (let dr = 0; dr < 3; dr++)
+    for (let dc = 0; dc < 3; dc++)
+      clearSeg(r0 + dr, colStart + dc);
+}
+
+
+function clearBigX(side, rowBtm) {
+  const colStart = (side === 'left') ? 0 : COLS - 3;
+  const rowStart = rowBtm - 2;                       // górny rząd
+
+  for (let dr = 0; dr < 3; dr++)
+    for (let dc = 0; dc < 3; dc++)
+      clearSeg(rowStart + dr, colStart + dc);
+}
+
+
+
+  /* ───  AKTUALNE STATYSTYKI IKSÓW ➜ do panelu  ───────────────── */
+function sendXStatus() {
+  window.opener?.postMessage(
+    {
+      type       : "xStatus",
+      /* liczebność „małych” X‑ów w drużynach */
+      xCount1,
+      xCount2,
+      /* czy w drużynie istnieje ≥ 1 mały X (przydatne do resetu) */
+      hasX1     : xCount1 > 0,
+      hasX2     : xCount2 > 0,
+      /* czy istnieją „duże” X‑y */
+      hasOneX1  : xOne1,
+      hasOneX2  : xOne2
+    },
+    "*"
+  );
+}
+
+  function handleX(mode){
+
+/*  DUŻE X‑y (pojedyncza szansa)  */
+if(mode==='one1'){ drawLargeX('left' , X_ONE_ROW);  xOne1=true; }//document.getElementById('errorSound').play();}
+if(mode==='one2'){ drawLargeX('right', X_ONE_ROW);  xOne2=true; }//document.getElementById('errorSound').play();}
+
+/*  MAŁE X‑y w stosie (max 3) – każdy nad poprzednim  */
+if(mode==='add1' && xCount1<3){
+  const rb = SMALL_X_BOTTOM_ROW - xCount1*SMALL_X_HEIGHT;
+  drawSmallX('left', rb);  xCount1++;
+  // document.getElementById('errorSound').play();
+}
+if(mode==='add2' && xCount2<3){
+  const rb = SMALL_X_BOTTOM_ROW - xCount2*SMALL_X_HEIGHT;
+  drawSmallX('right', rb); xCount2++;
+  // document.getElementById('errorSound').play();
+}
+
+/*  RESET wszystkich X‑ów  */
+if(mode==='reset'){
+  clearLargeX('left', X_ONE_ROW);  clearLargeX('right', X_ONE_ROW);
+  for(let i=0;i<3;i++){
+    const rb = SMALL_X_BOTTOM_ROW - i*SMALL_X_HEIGHT;
+    clearSmallX('left', rb); clearSmallX('right', rb);
+  }
+  xCount1=xCount2=0; xOne1=xOne2=false;
+}
+if (xCount1 === 3 && xOne2 && !xOne1) triggerAutoTransfer(1);
+if (xCount2 === 3 && xOne1 && !xOne2) triggerAutoTransfer(2);
+sendXStatus();
+}
+
+
+  function showAnswer(idx, extraPoints) {
+  const row = ROW_OFFSET + idx;
+
+  /* czyścimy wyłącznie obszar, który będziemy nadpisywać */
+  clearAnswerArea(row);
+
+  /* numer + kropka */
+  drawChar(row, COL_OFFSET,     String(idx + 1));
+  drawChar(row, COL_OFFSET + 1, '.');
+
+  /* tekst odpowiedzi (max 14 znaków) */
+  const txt = truncate(answers[idx].text);
+  txt.split('').forEach((ch, i) => {
+    drawChar(row, COL_OFFSET + 3 + i, ch);
+  });
+
+  /* punkty (wyrównanie do prawej w dwucyfrowym polu) */
+  const base   = COL_OFFSET + 3 + DASH_COUNT + 1;  // pierwsza kolumna strzałek
+  const ptsStr = String(answers[idx].points);
+  const offs   = 2 - ptsStr.length;
+  ptsStr.split('').forEach((d, i) => {
+    drawChar(row, base + offs + i, d);
+  });
+
+  /* aktualizacja sumy rundy */
+  if (!sumLocked) {
+    sumPoints += extraPoints || answers[idx].realPoints;
+  }
+  if (!autoTransferDone) {
+  if (xCount1 === 3 && xCount2 < 3) triggerAutoTransfer(2); // punkty dla D‑2
+  if (xCount2 === 3 && xCount1 < 3) triggerAutoTransfer(1); // punkty dla D‑1
+}
+  updateBoardSum();
+}
+
+
+
+
+  window.addEventListener('message', e => {
+  const m = e.data;
+
+  if (m.type === 'connection') {
+    // po otrzymaniu komunikatu “połączona” chowamy IP i kod
+    const infoEl = document.getElementById('remoteInfo');
+    infoEl.style.display = 'none';
+  }
+
+  switch (m.type) {
+
+    /* ─── INIT PYTANIA ───────────────────────────────────────── */
+    case 'init':
+      answers = m.answers;
+      sumPoints = 0;
+      xCount1 = xCount2 = 0;
+      xOne1 = xOne2 = false;
+
+      /* czyścimy tablicę */
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
+          clearSeg(r, c);
+
+      /* rysujemy szablon odpowiedzi */
+      answers.forEach((_, i) => {
+        const row = ROW_OFFSET + i;
+        drawChar(row, COL_OFFSET, String(i + 1));
+        drawChar(row, COL_OFFSET + 1, '.');
+        for (let d = 0; d < DASH_COUNT; d++)
+          drawChar(row, COL_OFFSET + 3 + d, '_');
+        drawChar(row, COL_OFFSET + 3 + DASH_COUNT + 1, '>');
+        drawChar(row, COL_OFFSET + 3 + DASH_COUNT + 2, '>');
+      });
+
+      //document.getElementById('changeSound').play();
+
+      updateBoardSum();
+      autoTransferDone = false;   // ← resetujemy
+      break;
+
+    /* ─── ODSŁONIĘCIE ODPOWIEDZI ────────────────────────────── */
+    case 'show':
+      // document.getElementById('correctSound').play();
+      showAnswer(m.index, m.points);
+      break;
+
+    /* ─── KRZYŻYKI (SZANSE) ─────────────────────────────────── */
+    case 'x':
+      handleX(m.mode);
+      break;
+
+    /* ─── PRZYDZIAŁ PUNKTÓW DRUŻYNIE ────────────────────────── */
+    case 'points':
+      if (m.team === 1) team1 += m.amount;
+      else               team2 += m.amount;
+
+      // document.getElementById('bellSound').play();
+      sumPoints = 0;
+
+      setTimeout(() => {
+        updateDisplay('disp1', team1);
+        updateDisplay('disp2', team2);
+        updateBoardSum();
+      }, 1000);
+      break;
+
+    /* ─── BLOKADA SUMOWANIA ─────────────────────────────────── */
+    case 'locksum':
+      sumLocked = m.value;
+      break;
+
+    /* ─── NOWA RUNDA ────────────────────────────────────────── */
+    case 'newround':
+      answers = [];
+      sumPoints = 0;
+      xCount1 = xCount2 = 0;
+      xOne1 = xOne2 = false;
+
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
+          clearSeg(r, c);
+
+      updateBoardSum();
+      // document.getElementById('bellSound').play();
+      //document.getElementById('changeSound').play();
+      autoTransferDone = false;   // ← resetujemy
+      break;
+
+      case 'hardreset':
+  // reset wszystkich struktur
+  answers = [];
+  sumPoints = 0;
+  sumLocked = false;
+
+  team1 = 0;
+  team2 = 0;
+
+  xCount1 = xCount2 = 0;
+  xOne1   = xOne2   = false;
+
+  // czyścimy każdy segment tablicy
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++)
+      clearSeg(r, c);
+
+  // wyzeruj wszystkie wyświetlacze
+  updateDisplay('disp1',  0);
+  updateDisplay('disp2',  0);
+  updateDisplay('dispSum',0);
+
+  break;
+
+  }
+});
+
+/* ───  Skalowanie wrappera do okna  ─────────────────────────── */
+function applyScale(){
+  const wrapper = document.getElementById('wrapper');
+  if (!wrapper) return;
+
+  const w = wrapper.scrollWidth;
+  const h = wrapper.scrollHeight;
+
+  /* czynnik skalowania nie większy niż 1, żeby nie rozciągać */
+  const scale = Math.min(window.innerWidth / w,
+                         window.innerHeight / h, 1);
+
+  wrapper.style.transform = `scale(${scale})`;
+}
+
+/* ───  Inicjalizacja  ──────────────────────────────────────── */
+window.onload = () => {
+  generateDisplays();
+  generateGrid();
+  //showTitle();
+  setTimeout(showWelcome, 3000);
+  window.opener?.postMessage({ type:'connection', message:'połączona' }, '*');
+  applyScale();                      // pierwsze dopasowanie
+  const params     = new URLSearchParams(window.location.search);
+  const accessCode = params.get('code');
+  if (accessCode) {
+    const infoEl = document.getElementById('remoteInfo');
+    // window.location.host to "IP:port"
+    infoEl.textContent = `IP: ${window.location.host} | Kod: ${accessCode}`;
+  } else {
+    // lokalne otwarcie – ukrywamy
+    document.getElementById('remoteInfo').style.display = 'none';
+  }
+};
+
+window.addEventListener('resize', applyScale);
+
+// na starcie (np. zaraz po wygenerowaniu grid i display):
+(function() {
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      if (m.type === 'attributes' && m.attributeName === 'class') {
+        const el = m.target;
+        const oldClass = m.oldValue || '';
+        const nowClass = el.className;
+        // jeśli wcześniej miał .on, a teraz go nie ma
+        if (oldClass.split(' ').includes('on') && !nowClass.split(' ').includes('on')) {
+          // dopisz .off, ale tylko raz
+          if (!nowClass.split(' ').includes('off')) {
+            el.classList.add('off');
+            const cleanup = e => {
+              if (e.animationName === 'flipOff') {
+                el.classList.remove('off');
+                el.removeEventListener('animationend', cleanup);
+              }
+            };
+            el.addEventListener('animationend', cleanup);
+          }
+        }
+      }
+    }
+  });
+
+  observer.observe(document.body, {
+    subtree: true,
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: ['class']
+  });
+})();
+
+
+</script>
+</body>
+</html>

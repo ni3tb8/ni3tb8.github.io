@@ -33,20 +33,24 @@
       cursor: pointer;
       transition: background 0.2s ease;
       border-radius: 5px;
+      border: 1px solid #343434;
     }
   
     button:hover {
       background: #3b3b3b;
+      border: 1px solid #3b3b3b;
     }
   
     button:active {
       background: #505050;
+      border: 1px solid #505050;
     }
-
+  
     button:disabled {
       background-color: #191919;
       color: #b8b9bd;
       cursor: context-menu;
+      border: 1px solid #191919;
     }
   
     .row {
@@ -56,6 +60,7 @@
     .disabled {
       opacity: 0.6;
       pointer-events: none;
+      border: 1px solid #191919;
     }
   
     input[type="checkbox"] {
@@ -74,7 +79,7 @@
       color: #ff8080;
       font-weight: bold;
     }
-
+  
     select {
       font-family: "Inter", serif;
       font-size: 16px;
@@ -87,297 +92,628 @@
       font-weight: 400;
       width: 50px;
     }
-
+  
     input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            appearance: none;
-            -webkit-appearance: none;
-            background-color: #343434;
-            border-left: solid 8px #619945;
-            border-right: solid 8px #343434;
-            border-radius: 3px;
-            cursor: pointer;
-            position: initial;
-            margin-right: 10px;
-            margin-bottom: 6px;
-            transition: all 0.1s ease;
-            vertical-align: middle;
-        }
+      width: 18px;
+      height: 18px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #343434;
+      border-left: solid 8px #619945;
+      border-right: solid 8px #343434;
+      border-radius: 3px;
+      cursor: pointer;
+      position: initial;
+      margin-right: 10px;
+      margin-bottom: 6px;
+      transition: all 0.1s ease;
+      vertical-align: middle;
+    }
+  
+    input[type="checkbox"]:checked {
+      background-color: #343434;
+      border-right: solid 8px #994545;
+      border-left: solid 8px #343434;
+      transition: all 0.1s ease;
+    }
+  
+    input[type="checkbox"]:checked:hover {
+      background-color: #343434;
+      border-right: solid 8px #bd5757;
+      border-left: solid 8px #343434;
+      transition: all 0.1s ease;
+    }
+  
+    input[type="checkbox"]:hover {
+      background-color: #343434;
+      border-left: solid 8px #78bb56;
+      border-right: solid 8px #343434;
+      transition: all 0.1s ease;
+    }
+  
+    i {
+      margin-right: 8px;
+    }
+  
+    .iksy {
+      width: 140px;
+    }
+  
+    .iksy-reset {
+      width: 290px;
+    }
+  
+    .odslon {
+      width: 95px;
+    }
+  
+    hr {
+      margin-top: 25px;
+      margin-bottom: 25px;
+      border: 2px solid #191919;
+    }
 
-        input[type="checkbox"]:checked {
-            background-color: #343434;
-            border-right: solid 8px #994545;
-            border-left: solid 8px #343434;
-            transition: all 0.1s ease;
-        }
+    .stickyHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #222;
+  /* Opcjonalnie: ustaw tło lub inne style dla sticky headera */
+}
 
-        input[type="checkbox"]:checked:hover {
-            background-color: #343434;
-            border-right: solid 8px #bd5757;
-            border-left: solid 8px #343434;
-            transition: all 0.1s ease;
-        }
+/* Ustawienie nagłówków jako elastyczny kontener */
+.stickyHeader h3 {
+  display: flex;
+  background-color: #222;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -10px;
+  margin-top: 15px;
+  padding: 0 10px; /* Opcjonalne odstępy wewnętrzne */
+}
 
-        input[type="checkbox"]:hover {
-            background-color: #343434;
-            border-left: solid 8px #78bb56;
-            border-right: solid 8px #343434;
-            transition: all 0.1s ease;
-        }
+/* Lewa część zawsze przy lewej stronie */
+.stickyHeader .left-info {
+  text-align: left;
+  background-color: #222;
+}
 
-        i {
-          margin-right: 8px;
-        }
+/* Prawa część zawsze przy prawej krawędzi */
+.stickyHeader .right-info {
+  text-align: right;
+  background-color: #222;
+}
 
-        .iksy {
-          width: 140px;
-        }
 
-        .iksy-reset {
-          width: 290px;
-        }
+    .stickySectionLow {
+      position: sticky;
+      bottom: 0;
+      background-color: #222; /* lub inny kolor, który pasuje do Twojego designu */
+      z-index: 1000; /* wyższy z-index, aby element był na wierzchu */
+    }
 
-        .odslon {
-          width: 95px;
-        }
+    .sekcja-lewo {
+      display: inline-table;
+      margin-right: 50px;
+      margin-top: -20px;
+    }
 
-        hr {
-          margin-top: 25px;
-          margin-bottom: 25px;
-          border: 2px solid #191919;
-        }
-
+    .sekcja-prawo {
+      display: inline-table;
+      margin-left: 50px;
+      margin-top: -20px;
+    }
     
+  
   </style>
   
 </head>
 <body>
-
-  <h2 style="margin-top: -5px;">Panel sterowania – Familiada</h2>
-  <h3>Status tablicy: <span id="connectionStatus"></span></h3>
-
-  <hr>
-
-  <h3>Drużyna 1: <span id="team1" style="font-weight: bold;">0</span> pkt &nbsp;|&nbsp; Drużyna 2: <span id="team2">0</span> pkt</h3>
-  <h3>Punkty do przerzucenia: <span id="total">0</span> pkt</h3>
-
-  <hr>
+  <hr style="margin-top: 0px;">
+  <h2 style="margin-top: -5px;">Panel sterowania – Gra familijna</h2>
+  <h3>Status tablicy: <span id="connectionStatus">...</span></h3>
+  <!-- Wyniki drużyn oraz suma punktów -->
   
-  <div class="row">
-    <button onclick="openBoard()" id="openBoardBtn"><i class="fa-solid fa-display"></i>Otwórz tablicę</button>
-    <button onclick="newRound()" id="newRoundBtn" disabled><i class="fa-solid fa-arrows-rotate"></i>Nowa runda</button>
-    <input type="file" id="fileInput" accept=".txt" style="display:none" onchange="loadFromFile()" />
-    <button onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-file-arrow-up"></i>Wybierz plik</button>
-    <button id="sendBtn" onclick="sendData()" disabled><i class="fa-solid fa-square-check"></i>Załaduj pytanie</button>
-    <span id="multiplierNotice" style="margin-left: 0px; color: rgb(214, 69, 69); font-weight: bold;"></span>
-    <span id="questionLockNotice" style="margin-left: 0px; color: orange; font-weight: bold;"></span>
+  <div class="stickyHeader">
+    <hr>
+    <h3>
+      <span class="left-info">
+        Drużyna 1: <span id="team1" style="font-weight: bold;">0</span> pkt &nbsp;|&nbsp; Drużyna 2: <span id="team2">0</span> pkt
+      </span>
+      <span class="right-info" id="multiplierNotice" style="color: rgb(214, 69, 69); font-weight: bold;"></span>
+    </h3>
+    <h3>
+      <span class="left-info">
+        Punkty do przejęcia: <span id="total">0</span> pkt (<span id="loadedMultiplier">1</span>x)
+      </span>
+      <span class="right-info" id="questionLockNotice" style="color: orange; font-weight: bold;"></span>
+    </h3>
+    <hr>
   </div>
 
+  <div class="row">
+    <button onclick="openBoard()" id="openBoardBtn"><i class="fa-solid fa-display"></i>Otwórz tablicę</button>
+    <button id="openRemoteBtn"><i class="fa-solid fa-globe"></i>Połącz z tablicą</button>
+    <button onclick="hardReset()" id="hardResetBtn" disabled><i class="fa-solid fa-power-off"></i>Reset gry</button>
+    <button onclick="newRound()" id="newRoundBtn" disabled><i class="fa-solid fa-arrows-rotate"></i>Nowa runda</button>
+    <input type="file" id="fileInput" accept=".txt" style="display:none" onchange="loadFromFile()" />
+    <button id="fileInputBtn" onclick="document.getElementById('fileInput').click()" disabled><i class="fa-solid fa-file-arrow-up"></i>Wybierz plik</button>
+    <button id="sendBtn" onclick="sendData()" disabled><i class="fa-solid fa-square-check" disabled></i>Załaduj pytanie</button>
+    </div>
   <hr>
+  <h3>Lista odpowiedzi <span id="fileNameLabel"></span></h3>
 
-  <h3 style="margin-top: 40px;">Lista odpowiedzi <span id="fileNameLabel"></span></h3>
-  <textarea id="inputData" placeholder="Wpisz odpowiedzi w formie NR / ODPOWIEDŹ / PUNKTY lub wgraj plik" oninput="validateInput()"></textarea>
+  <textarea style="visibility: hidden; height: 0px;" id="inputData" placeholder="Wpisz odpowiedzi w formie NR / ODPOWIEDŹ / PUNKTY lub wgraj plik" oninput="validateInput()"></textarea>
+  <!-- <div id="answers" style="margin-top: 25px;"></div> -->
 
-  <div id="answers" style="margin-top: 25px;"></div>
-
+  <div id="answers" style="margin-top: -25px;">Wczytaj plik i załaduj pytanie</div>
+  <div>
   <hr>
-
-  <h3 style="margin-top: 40px;">Punkty</h3>
-
+  <div class="sekcja-lewo">
+  <h3>Punkty</h3>
   <select id="multiplier" onchange="updateMultiplierLabel(); validateInput();">
     <option value="1">1x</option>
     <option value="2">2x</option>
     <option value="3">3x</option>
-  </select><label style="margin-left: 12px;">Mnożnik punktów</label><br><br>
+  </select>
+  <label style="margin-left: 10px;">Mnożnik punktów</label><br><br>
   <label>
     <input type="checkbox" id="lockSumToggle" onchange="toggleSumLock()" />
     Zablokuj sumowanie punktów
   </label><br><br>
-
-  <button class="iksy" onclick="sendPoints(1)" id="pointsBtn1" disabled><i class="fa-solid fa-1"></i><i class="fa-solid fa-user-plus"></i>Drużyna 1</button>
-  <button class="iksy" onclick="sendPoints(2)" id="pointsBtn2" disabled><i class="fa-solid fa-2"></i><i class="fa-solid fa-user-plus"></i>Drużyna 2</button>
-
-  <hr>
-
-  <h3 style="margin-top: 40px;">Szanse</h3>
-  <button class="iksy" onclick="sendX('one1')"><i class="fa-solid fa-1"></i><i class="fa-solid fa-x"></i>Drużyna 1</button>
-  <button class="iksy" onclick="sendX('one2')"><i class="fa-solid fa-2"></i><i class="fa-solid fa-x"></i>Drużyna 2</button><br>
-  <button class="iksy" onclick="sendX('add1')"><i class="fa-solid fa-1"></i><i class="fa-solid fa-xmarks-lines"></i>Drużyna 1</button>
-  <button class="iksy" onclick="sendX('add2')"><i class="fa-solid fa-2"></i><i class="fa-solid fa-xmarks-lines"></i>Drużyna 2</button><br>
-  <!-- Przycisk resetu X-ów jest teraz domyślnie wygaszony -->
+  <button class="iksy" onclick="sendPoints(1)" id="pointsBtn1" style="border: 1px solid #af4444;" disabled><i class="fa-solid fa-1"></i><i class="fa-solid fa-user-plus"></i>Drużyna 1</button>
+  <button class="iksy" onclick="sendPoints(2)" id="pointsBtn2" style="border: 1px solid #5167b3;" disabled><i class="fa-solid fa-2"></i><i class="fa-solid fa-user-plus"></i>Drużyna 2</button>
+  </div>
+  <div class="sekcja-prawo">
+  <h3>Szanse</h3>
+  <button class="iksy" id="xOne1Btn" onclick="sendX('one1')" style="border: 1px solid #af4444;" disabled><i class="fa-solid fa-1"></i><i class="fa-solid fa-x"></i>Utrata duża</button>
+  <button class="iksy" id="xOne2Btn" onclick="sendX('one2')" style="border: 1px solid #5167b3;" disabled><i class="fa-solid fa-2"></i><i class="fa-solid fa-x"></i>Utrata duża</button><br>
+  <button class="iksy" id="xAdd1Btn" onclick="sendX('add1')" style="border: 1px solid #af4444;" disabled><i class="fa-solid fa-1"></i><i class="fa-solid fa-xmarks-lines"></i>Utrata mała</button>
+  <button class="iksy" id="xAdd2Btn" onclick="sendX('add2')" style="border: 1px solid #5167b3;" disabled><i class="fa-solid fa-2"></i><i class="fa-solid fa-xmarks-lines"></i>Utrata mała</button><br>
+  <!-- Przycisk resetu szans pozostaje wygaszony -->
   <button class="iksy-reset" onclick="sendX('reset')" id="resetXsBtn" disabled>
     <i class="fa-solid fa-delete-left"></i>Reset szans
   </button>
-
+  </div>
+  <hr>
+  </div>
   <script>
+    // Globalne zmienne do panelu
     let boardWindow = null;
     let answers = [];
-    let total = 0;
+    let panelTotal = 0;        // suma punktów odsłoniętych w bieżącym pytaniu
+    let panelTeam1 = 0, panelTeam2 = 0;  // wyniki drużyn w panelu
     let lastMultiplier = "1";
+
+    /*  AKTYWUJE przycisk Reset, jeśli jeszcze jest wyłączony  */
+function markGameDirty() {
+  const btn = document.getElementById('hardResetBtn');
+  if (btn && btn.disabled) btn.disabled = false;
+}
+
   
     function openBoard() {
-      boardWindow = window.open("tablica.html", "Tablica", "width=800,height=600");
+      boardWindow = window.open("tablica flipdot.html", "Tablica", "width=1100,height=600");
+      document.getElementById("fileInputBtn").disabled = false;
     }
+
+    let remoteIp = null, remoteCode = null;
+
+document.getElementById('openRemoteBtn')
+  .addEventListener('click', () => {
+    const ip   = prompt('Wprowadź adres IP tablicy:');
+    const code = prompt('Wprowadź kod dostępu:');
+    if (!ip || !code) return;
+    openRemoteBoard(ip, code);
+  });
+
+function openRemoteBoard(ip, code) {
+  // otwieramy tablicę pod podanym adresem, przekazując kod jako parametr URL
+  const url = `http://${ip}/tablica%20flipdot.html?code=${encodeURIComponent(code)}`;
+  boardWindow = window.open(url, 'Tablica', 'width=1100,height=600');
+  remoteIp   = ip;
+  remoteCode = code;
+  document.getElementById("fileInputBtn").disabled = false;
+}
+
   
     function loadFromFile() {
-      const file = document.getElementById("fileInput").files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("inputData").value = e.target.result;
-        const name = file.name.replace(/\.[^/.]+$/, "");
-        document.getElementById("fileNameLabel").textContent = `- z pliku: ${name}?`;
-        validateInput();
-      };
-      reader.readAsText(file);
-    }
-  
-    function validateInput() {
-      const raw = document.getElementById("inputData").value.trim();
-      const lines = raw.split("\n").filter(l => l.includes("/") && l.split("/").length === 3);
-      document.getElementById("sendBtn").disabled = lines.length === 0;
-      updateMultiplierLabel();
-    }
-  
-    function updateMultiplierLabel() {
-      const current = document.getElementById("multiplier").value;
-      const notice = document.getElementById("multiplierNotice");
-      if (current !== lastMultiplier) {
-        notice.textContent = "Zmieniono mnożnik – załaduj pytanie";
-      } else {
-        notice.textContent = "";
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const content = e.target.result;
+    // wpisz całość do ukrytego textarea
+    document.getElementById("inputData").value = content;
+
+    // pobierz i ustaw mnożnik (linia zaczynająca się od '*')
+    const multLine = content.split("\n").find(l => l.startsWith("*"));
+    if (multLine) {
+      const m = multLine.slice(1).trim();
+      if (["1","2","3"].includes(m)) {
+        document.getElementById("multiplier").value = m;
+        document.getElementById("loadedMultiplier").textContent = m;
+        document.getElementById("multiplierNotice").textContent = "";
       }
     }
+
+    // pokaż nazwę pliku
+    const name = file.name.replace(/\.[^/.]+$/, "");
+    document.getElementById("fileNameLabel").innerHTML = `- z pliku: <span style="color:#f2dfaa;">${name}?</span>`;
+
+    // teraz weryfikuj i odblokuj przycisk
+    validateInput();
+  };
+  reader.readAsText(file);
+}
+  
+    function validateInput() {
+  const raw = document.getElementById("inputData").value.trim();
+
+  // linie poprawne: NR/ODP/PUNKTY
+  const lines = raw.split("\n")
+                   .filter(line => line.includes("|") && line.split("|").length === 3);
+
+  const canSend = raw !== "" && lines.length > 0;
+  document.getElementById("sendBtn").disabled = !canSend;
+
+  if (canSend) markGameDirty();          // ← kluczowe
+
+  updateMultiplierLabel();
+}
+
+
+
+  
+function updateMultiplierLabel() {
+  const current = document.getElementById("multiplier").value;
+  const notice  = document.getElementById("multiplierNotice");
+
+  if (current !== lastMultiplier) {
+    notice.textContent = "Zmieniono mnożnik – załaduj pytanie";
+    markGameDirty();                     // ← cokolwiek zmieniono
+  } else {
+    notice.textContent = "";
+  }
+}
+
   
     function updatePointsButtons() {
-      const disabled = total === 0;
+      const disabled = panelTotal === 0;
       document.getElementById("pointsBtn1").disabled = disabled;
       document.getElementById("pointsBtn2").disabled = disabled;
     }
+
+    /* ───  AKTUALIZACJA STANU PRZYCISKÓW IKSÓW  ────────────────────
+   • mały X drużyny N → guzik OFF, gdy:
+        – w przeciwniku jest ≥ 1 mały X LUB
+        – w drużynie N jest już 3 małe X‑y
+   • duży X drużyny N → guzik OFF, gdy w drużynie N istnieje ≥ 1 mały X
+-----------------------------------------------------------------*/
+function updateXButtons(status) {
+  /* ── MAŁE X‑y ─────────────────────────────── */
+  const add1 = document.getElementById("xAdd1Btn");
+  const add2 = document.getElementById("xAdd2Btn");
+
+  /* blokada, gdy:
+       – przeciwnik ma ≥1 mały X  LUB
+       – drużyna ma już 3 małe X‑y LUB
+       – drużyna ma włączony DUŻY X   ← NOWE
+  */
+  add1.disabled = status.hasX2     || status.xCount1 >= 3 || status.hasOneX1;
+  add2.disabled = status.hasX1     || status.xCount2 >= 3 || status.hasOneX2;
+
+  /* ── DUŻE X‑y (pozostają bez zmian) ───────── */
+  const one1 = document.getElementById("xOne1Btn");
+  const one2 = document.getElementById("xOne2Btn");
+
+  one1.disabled = status.hasX1 || status.hasOneX1;
+  one2.disabled = status.hasX2 || status.hasOneX2;
+}
+
+
   
     function updateResetXsButton(status) {
       const anyX = status.hasX1 || status.hasX2 || status.hasOneX1 || status.hasOneX2;
       document.getElementById("resetXsBtn").disabled = !anyX;
     }
-  
-    function sendData() {
-      const raw = document.getElementById("inputData").value.trim();
-      const lines = raw.split("\n");
-      const mult = parseInt(document.getElementById("multiplier").value);
-      answers = lines.map(line => {
-        const [nr, text, pts] = line.split("/").map(s => s.trim());
-        return { text, points: parseInt(pts), realPoints: parseInt(pts) * mult };
-      });
-      total = 0;
-      lastMultiplier = document.getElementById("multiplier").value;
-      document.getElementById("total").textContent = 0;
-      renderAnswerControls();
-      document.getElementById("questionLockNotice").textContent = "";
-      document.getElementById("newRoundBtn").disabled = false;
-      boardWindow?.postMessage({ type: "init", answers }, "*");
-    }
-  
-    function renderAnswerControls() {
-      const container = document.getElementById("answers");
-      container.innerHTML = "";
-      answers.forEach((ans, i) => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <button onclick="reveal(${i})" id="revealBtn_${i}" class="odslon">
-            <i class="fa-solid fa-eye-slash"></i>Odsłoń
-          </button>
-          ${i + 1}. ${ans.text} (${ans.points} pkt)
-        `;
-        container.appendChild(div);
-      });
-    }
-  
-    function reveal(index) {
-      const btn = document.getElementById(`revealBtn_${index}`);
-      if (!btn) return;
-      const icon = btn.querySelector("i");
-      if (icon) icon.classList.replace("fa-eye-slash", "fa-eye");
-      btn.disabled = true;
-  
-      const locked = document.getElementById("lockSumToggle").checked;
-      boardWindow?.postMessage({ type: "show", index, points: answers[index].realPoints }, "*");
-  
-      if (!locked) {
-        total += answers[index].realPoints;
-        document.getElementById("total").textContent = total;
-      }
-  
-      document.getElementById("sendBtn").disabled = true;
-      document.getElementById("questionLockNotice").textContent = "Pytanie w trakcie gry";
-      updatePointsButtons();
-    }
-  
-    function sendPoints(team) {
-      boardWindow?.postMessage({ type: "points", team, amount: total }, "*");
-      total = 0;
-      document.getElementById("total").textContent = total;
-      updatePointsButtons();
-    }
-  
+
     function sendX(mode) {
-      boardWindow?.postMessage({ type: "x", mode }, "*");
-    }
+  boardWindow?.postMessage({ type: "x", mode }, "*");
+  markGameDirty();                       // ← zaznacz zmianę stanu gry
+}
+
   
-    function newRound() {
-      total = 0;
-      document.getElementById("total").textContent = 0;
-      document.getElementById("inputData").value = "";
-      document.getElementById("answers").innerHTML = "";
-      document.getElementById("fileNameLabel").textContent = "";
-      document.getElementById("sendBtn").disabled = true;
-      document.getElementById("questionLockNotice").textContent = "";
-      document.getElementById("newRoundBtn").disabled = true;
-      document.getElementById("lockSumToggle").checked = false;
-      updatePointsButtons();
-      document.getElementById("resetXsBtn").disabled = true;
-      lastMultiplier = document.getElementById("multiplier").value;
-      boardWindow?.postMessage({ type: "newround" }, "*");
+function sendData() {
+  // odblokuj sumowanie, jeśli był lock
+  if (document.getElementById("lockSumToggle").checked) {
+    document.getElementById("lockSumToggle").checked = false;
+    toggleSumLock();
+  }
+
+  const raw = document.getElementById("inputData").value.trim();
+  const lines = raw.split("\n");
+
+  // ekstrahuje odpowiedzi (tylko te z trzema polami oddzielonymi '|')
+  const answerLines = lines.filter(l => l.includes("|") && l.split("|").length === 3);
+
+  // przelicz realPoints z mnożnikiem
+  const mult = parseInt(document.getElementById("multiplier").value, 10);
+  answers = answerLines.map(line => {
+    const [nr, text, pts] = line.split("|").map(s => s.trim());
+    const p = parseInt(pts, 10);
+    return { text, points: p, realPoints: p * mult };
+  });
+
+  // zeruj sumę i renderuj panel
+  panelTotal = 0;
+  document.getElementById("total").textContent = panelTotal;
+  renderAnswerControls();
+  document.getElementById("questionLockNotice").textContent = "";
+
+  // wyślij init do tablicy
+  boardWindow?.postMessage({ type: "init", answers }, "*");
+
+  // odblokuj X‑y i przyciski
+  ['xOne1Btn','xOne2Btn','xAdd1Btn','xAdd2Btn'].forEach(id => 
+    document.getElementById(id).disabled = false
+  );
+  updateXButtons({ xCount1: 0, xCount2: 0 });
+
+  lastMultiplier = document.getElementById("multiplier").value;
+  document.getElementById("loadedMultiplier").textContent = lastMultiplier;
+  document.getElementById("multiplierNotice").textContent = "";
+
+  // blokuj ponowne ładowanie do czasu zmiany inputu
+  document.getElementById("sendBtn").disabled = true;
+  document.getElementById("newRoundBtn").disabled = true;
+}
+
+
+
+  function renderAnswerControls() {
+    const container = document.getElementById("answers");
+    container.innerHTML = "";
+    answers.forEach((ans, i) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <button onclick="reveal(${i})" id="revealBtn_${i}" class="odslon">
+          <i class="fa-solid fa-eye-slash"></i>Odkryj
+        </button>
+        ${i + 1}. ${ans.text} (${ans.points} pkt)
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Funkcja odsłaniająca odpowiedź – tu aktywujemy "nową rundę" po pierwszym odsłonięciu
+  function reveal(index) {
+  const btn  = document.getElementById(`revealBtn_${index}`);
+  if (!btn) return;
+
+  const icon = btn.querySelector("i");
+  if (icon) icon.classList.replace("fa-eye-slash", "fa-eye");
+  btn.disabled = true;
+
+  const locked = document.getElementById("lockSumToggle").checked;
+
+  boardWindow?.postMessage({ type: "show", index, points: answers[index].realPoints }, "*");
+
+  if (!locked) {
+    panelTotal += answers[index].realPoints;
+    document.getElementById("total").textContent = panelTotal;
+  }
+
+  document.getElementById("questionLockNotice").textContent = "Pytanie w trakcie gry";
+  updatePointsButtons();
+
+  // włącz „Nową rundę” po pierwszym odsłonięciu
+  document.getElementById("newRoundBtn").disabled = false;
+
+  markGameDirty();                       // ← ważne!
+}
+
+
+  function sendPoints(team) {
+    boardWindow?.postMessage({ type: "points", team, amount: panelTotal }, "*");
+    if (team === 1) {
+      panelTeam1 += panelTotal;
+      document.getElementById("team1").textContent = panelTeam1;
+    } else {
+      panelTeam2 += panelTotal;
+      document.getElementById("team2").textContent = panelTeam2;
     }
-  
-    function toggleSumLock() {
-      const value = document.getElementById("lockSumToggle").checked;
-      boardWindow?.postMessage({ type: "locksum", value }, "*");
-    }
-  
-    // Nasłuchiwanie komunikatów z okna tablicy
-window.addEventListener("message", (e) => {
+    panelTotal = 0;
+    document.getElementById("total").textContent = panelTotal;
+    updatePointsButtons();
+  }
+
+  function newRound() {
+    panelTotal = 0;
+    document.getElementById("total").textContent = panelTotal;
+    document.getElementById("inputData").value = "";
+    document.getElementById("answers").innerHTML = "Wczytaj plik i załaduj pytanie";
+    document.getElementById("fileNameLabel").textContent = "";
+    document.getElementById("sendBtn").disabled = true;
+    document.getElementById("questionLockNotice").textContent = "";
+    // Przy rozpoczęciu nowej rundy przycisk "nowa runda" powinien być zablokowany,
+    // dopóki nie odsłoniemy choć jednej odpowiedzi w nowym pytaniu
+    document.getElementById("newRoundBtn").disabled = true;
+    document.getElementById("lockSumToggle").checked = false;
+    updateXButtons({ xCount1: 0, xCount2: 0 });
+
+    toggleSumLock();
+    updatePointsButtons();
+    document.getElementById("resetXsBtn").disabled = true;
+    ['xOne1Btn','xOne2Btn','xAdd1Btn','xAdd2Btn'].forEach(id=>{
+  document.getElementById(id).disabled = true;
+});
+
+    lastMultiplier = document.getElementById("multiplier").value;
+    boardWindow?.postMessage({ type: "newround" }, "*");
+  }
+
+  function toggleSumLock() {
+    const value = document.getElementById("lockSumToggle").checked;
+    boardWindow?.postMessage({ type: "locksum", value }, "*");
+  }
+
+  // Nasłuchiwanie komunikatów z okna tablicy (pozostałe fragmenty)
+  window.addEventListener("message", (e) => {
   const msg = e.data;
-  
+
   if (msg.type === "connection") {
     const statusElem = document.getElementById("connectionStatus");
     statusElem.textContent = msg.message;
-    statusElem.style.color = "lightgreen";  // okno tablicy jest połączone
+    statusElem.style.color = "lightgreen";
     document.getElementById("questionLockNotice").textContent = "";
-    sendBtn.disabled = false;
-    openBoardBtn.disabled = true;
+    validateInput();
+    document.getElementById("openBoardBtn").disabled = true;
   }
-  
+
   if (msg.type === "xStatus") {
-    updateResetXsButton(msg);
+    if (msg.type === "xStatus") {
+  updateResetXsButton(msg);
+  updateXButtons(msg);          // ➜ nowe sterowanie przyciskami
+}
+
+  }
+
+  /* ── NOWOŚĆ: automatyczny transfer po dużym „X” ─────────── */
+  if (msg.type === "autoTransfer") {
+    /* 1) natychmiast blokujemy sumowanie */
+    const lockBox = document.getElementById("lockSumToggle");
+    if (!lockBox.checked) {
+      lockBox.checked = true;
+      toggleSumLock();        // informujemy tablicę
+    }
+
+    /* 2) po 3 s przekazujemy punkty wskazanej drużynie */
+    setTimeout(() => {
+      sendPoints(msg.team);   // używa aktualnej wartości panelTotal
+    }, 2000);
   }
 });
 
-// Sprawdzanie stanu okna tablicy co sekundę
-setInterval(() => {
-  const statusElem = document.getElementById("connectionStatus");
-  if (!boardWindow || boardWindow.closed) {
-    statusElem.textContent = "nieaktywna";
-    statusElem.style.color = "#d14d4d";    // kolor czerwony, gdy brak połączenia
-    document.getElementById("questionLockNotice").textContent = "Tablica nieaktywna";
-    sendBtn.disabled = true;
-    openBoardBtn.disabled = false;
+
+
+  // Sprawdzanie stanu okna tablicy co sekundę
+  setInterval(() => {
+    const statusElem = document.getElementById("connectionStatus");
+    if (!boardWindow || boardWindow.closed) {
+      statusElem.textContent = "nieaktywna";
+      statusElem.style.color = "#d14d4d";
+      document.getElementById("questionLockNotice").textContent = "Tablica nieaktywna";
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("openBoardBtn").disabled = false;
+    }
+  }, 1000);
+
+  /* ───  TWARDY RESET  ─────────────────────────────────────────────── */
+function hardReset() {
+  // zmienne panelu
+  answers       = [];
+  panelTotal    = 0;
+  panelTeam1    = 0;
+  panelTeam2    = 0;
+  lastMultiplier = "1";
+
+  // UI – czyścimy wszystko
+  document.getElementById("inputData").value      = "";
+  document.getElementById("answers").innerHTML    = "Wczytaj plik i załaduj pytanie";
+  document.getElementById("fileNameLabel").textContent = "";
+
+  document.getElementById("total").textContent = "0";
+  document.getElementById("team1").textContent = "0";
+  document.getElementById("team2").textContent = "0";
+
+  // przyciski
+  document.getElementById("sendBtn").disabled      = true;
+  document.getElementById("newRoundBtn").disabled  = true;
+  document.getElementById("pointsBtn1").disabled   = true;
+  document.getElementById("pointsBtn2").disabled   = true;
+  document.getElementById("resetXsBtn").disabled   = true;
+  document.getElementById("hardResetBtn").disabled = true;
+  ['xOne1Btn','xOne2Btn','xAdd1Btn','xAdd2Btn'].forEach(id=>{
+  document.getElementById(id).disabled = true;
+});
+
+
+  // pozostałe kontrolki
+  document.getElementById("multiplier").value        = "1";
+  document.getElementById("loadedMultiplier").textContent = "1";
+  document.getElementById("multiplierNotice").textContent = "";
+  document.getElementById("lockSumToggle").checked   = false;
+
+  // komunikat do tablicy
+  boardWindow?.postMessage({ type: "hardreset" }, "*");
+}
+
+/* Nie przechwytujemy klawiszy, gdy fokus jest w polu edycyjnym */
+function inEditable() {
+  const t = document.activeElement.tagName;
+  return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (inEditable()) return;           // użytkownik coś wpisuje
+
+  /* 1‑6  ALT → odsłanianie odpowiedzi ---------------------------------- */
+  if (e.altKey && /^[1-6]$/.test(e.key)) {
+    const idx = Number(e.key) - 1;    // 0…5
+    reveal(idx);
+    e.preventDefault();
+    return;
   }
-}, 1000);
 
+  /* = / ‑  → zmiana mnożnika ------------------------------------------ */
+  const multSel = document.getElementById('multiplier');
+  if (e.key === '=' || e.key === '+') {            // „większy”
+    if (multSel.selectedIndex < multSel.length - 1) multSel.selectedIndex++;
+    updateMultiplierLabel(); validateInput();
+    e.preventDefault(); return;
+  }
+  if (e.key === '-') {                             // „mniejszy”
+    if (multSel.selectedIndex > 0) multSel.selectedIndex--;
+    updateMultiplierLabel(); validateInput();
+    e.preventDefault(); return;
+  }
 
+  /* Enter  → załaduj pytanie ------------------------------------------ */
+  if (e.key === 'Enter' && !document.getElementById('sendBtn').disabled) {
+    sendData(); e.preventDefault(); return;
+  }
 
+  /* Małe iksy ---------------------------------------------------------- */
+  if (e.key === ',') { sendX('add1'); e.preventDefault(); return; }  // Druż. 1
+  if (e.key === '.') { sendX('add2'); e.preventDefault(); return; }  // Druż. 2
+
+  /* Duże iksy ---------------------------------------------------------- */
+  if (e.key === '<') { sendX('one1'); e.preventDefault(); return; }  // Druż. 1
+  if (e.key === '>') { sendX('one2'); e.preventDefault(); return; }  // Druż. 2
+
+  /* Przekazanie punktów (SHIFT + 1 / 2) ------------------------------- */
+  if (e.shiftKey && e.code === 'Digit1') { sendPoints(1); e.preventDefault(); return; }
+  if (e.shiftKey && e.code === 'Digit2') { sendPoints(2); e.preventDefault(); return; }
+
+  /* Reset szans -------------------------------------------------------- */
+  if (e.key === '/') { sendX('reset'); e.preventDefault(); return; }
+
+  /* Blokada / odblokowanie sumy --------------------------------------- */
+  if (e.key === '`') {
+    const box = document.getElementById('lockSumToggle');
+    box.checked = !box.checked;
+    toggleSumLock();
+    e.preventDefault(); return;
+  }
+
+  /* Wybór pliku z dysku ----------------------------------------------- */
+  if (e.key === '\\') {
+    document.getElementById('fileInput').click();
+    e.preventDefault(); return;
+  }
+});
+  
   </script>
-
 </body>
 </html>
