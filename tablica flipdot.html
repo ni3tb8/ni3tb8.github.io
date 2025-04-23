@@ -130,20 +130,40 @@
         <div id="board"></div>
         <div id="disp2" class="disp-segment" style="border: solid 5px; border-color: #5167b3;"></div>
       </div>
-   <div id="remoteInfo" style="
+      <div id="remoteInfo" style="
      color: #FFD700;
      font-family: 'Inter', sans-serif;
      background: rgba(0,0,0,0.5);
      padding: 4px 8px;
      border-radius: 4px;
    ">
+   Ładuję…
   <!-- tutaj wypełni się IP i kod -->
 </div>
     </div>
-    
-   
 
   <script>
+    window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
+  // odczytaj istniejący code albo wygeneruj 6-znakowy
+  const code = params.get('code') 
+                 || Math.random().toString(36).substring(2, 8).toUpperCase();
+  // nadaj unikalną nazwę oknu
+  window.name = code;
+  // wyświetl kod i host
+  const infoEl = document.getElementById('remoteInfo');
+  infoEl.textContent = `Host: ${window.location.host} | Kod dostępu: ${code}`;
+  // … (dalej Twoje generateDisplays(), generateGrid() itp.) …
+});
+
+// Jeśli chcesz schować to Info po połączeniu z panelem:
+window.addEventListener('message', e => {
+  if (e.data.type === 'connection') {
+    document.getElementById('remoteInfo').style.display = 'none';
+  }
+});
+
+
 window.addEventListener('load', () => {
     // po 1 s zaczynamy znikać
     setTimeout(() => {
@@ -1318,14 +1338,10 @@ window.onload = () => {
   applyScale();                      // pierwsze dopasowanie
   const params     = new URLSearchParams(window.location.search);
   const accessCode = params.get('code');
-  if (accessCode) {
-    const infoEl = document.getElementById('remoteInfo');
-    // window.location.host to "IP:port"
-    infoEl.textContent = `IP: ${window.location.host} | Kod: ${accessCode}`;
-  } else {
-    // lokalne otwarcie – ukrywamy
-    document.getElementById('remoteInfo').style.display = 'none';
-  }
+  const host = window.location.host;             // np. username.github.io
+const code = params.get('code') || '[brak]';
+infoEl.textContent = `Host: ${host} | Kod: ${code}`;
+
 };
 
 window.addEventListener('resize', applyScale);
