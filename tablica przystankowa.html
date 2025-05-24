@@ -1,0 +1,1238 @@
+ <!doctype html>
+
+<html>
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Tablica przystankowa 0.97</title>
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+        <!-- Load external CSS styles -->
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+
+    
+
+        <style type="text/css">
+
+  @font-face {
+    font-family: 'ledmatrixbusn';
+    src: url('ledmatrixbusn.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'led2matrixbus';
+    src: url('led2matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'led3matrixbus';
+    src: url('led3matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledsmallmatrixbus';
+    src: url('ledsmallmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'leddwuwaltmatrixbus';
+    src: url('leddwuwaltmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledsmallwidematrixbus';
+    src: url('ledsmallwidematrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledsmall5matrixbus';
+    src: url('ledsmall5matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledsmall5altmatrixbus';
+    src: url('ledsmall5altmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwasmatrixbus';
+    src: url('ledwasmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwas2matrixbus';
+    src: url('ledwas2matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwas3matrixbus';
+    src: url('ledwas3matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwas5matrixbus';
+    src: url('ledwas5matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledkolejowy';
+    src: url('ledkolejowy.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledkolejowywas';
+    src: url('ledkolejowywas.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwas6matrixbus';
+    src: url('ledwas6matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledwas7matrixbus';
+    src: url('ledwas7matrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'leddwuwmatrixbus';
+    src: url('leddwuwmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'leddwuwwasmatrixbus';
+    src: url('leddwuwwasmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'lednummatrixbus';
+    src: url('lednummatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledbigmatrixbus';
+    src: url('ledbigmatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'lednegnummatrixbus';
+    src: url('lednegnummatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'ledicomatrixbus';
+    src: url('ledicomatrixbus.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'lato';
+    src: url('lato-regular.ttf')  format('truetype')
+}
+
+@font-face {
+    font-family: 'leddwuwsammatrixbus';
+    src: url('leddwuwsammatrixbus.ttf')  format('truetype')
+}
+
+
+
+textarea:focus, input:focus{
+    outline: none;
+}
+      
+  .content{
+  width: 2240px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 2%;
+  background-color: #292929;
+  }
+
+  .content2{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  }
+
+  .content3{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  background-color: #292929;
+  }
+
+  .obram{
+  border: 2px solid #eeeeee;
+  border-collapse: collapse;
+  }
+
+  label{
+  color: #eeeeee;
+  font-family:Arial, sans-serif;
+  cursor: pointer;
+  }
+
+  .button {
+  border: 1px solid #292929;
+  border-left: 4px solid #fefefe;
+  border-right: 4px solid #fefefe;
+  color: #fefefe;
+  padding: 4px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  transition-duration: 0.1s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button5:hover {
+  border-left: 4px solid #d18c8c;
+  border-right: 4px solid #d18c8c;
+}
+
+.button5:active {
+  color: #fefefe;
+  border-left: 4px solid #d12424;
+  border-right: 4px solid #d12424;
+}
+
+.button5:before {
+  background-color: #292929;
+  border-left: 4px solid #fefefe;
+  border-right: 4px solid #fefefe;
+  color: #fefefe;
+}
+
+.button5 {
+  float: center;
+  background-color: #292929;
+  border-left: 4px solid #fefefe;
+  color: #fefefe;
+  width: 200px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.switch {
+  position: absolute;
+  display: inline-block;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #292929;
+  -webkit-transition: .2s;
+  transition: .2s;
+  border-left: 4px solid #2d7fbd;
+  border-right: 4px solid #fefefe;
+}
+
+.slider:hover{
+  border-left: 4px solid #2d7fbd;
+  border-right: 4px solid #8cb3d1;
+}
+
+.slider:before {
+  position: absolute;
+  background-color: #fefefe;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: #292929;
+  border-right: 4px solid #2d7fbd;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 4px;
+}
+
+.slider.round:before {
+  border-radius: 25%;
+}
+
+
+.switchreg {
+  position: absolute;
+  display: inline-block;
+  width: 200px;
+  height: 25px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 22px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.switchreg inputreg { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.sliderreg {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #292929;
+  -webkit-transition: .2s;
+  transition: .2s;
+  border-left: 4px solid #fefefe;
+  border-right: 4px solid #fefefe;
+}
+
+.sliderreg:hover{
+  border-left: 4px solid #7fb877;
+  border-right: 4px solid #7fb877;
+}
+
+.sliderreg:before {
+  position: absolute;
+  background-color: #fefefe;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .sliderreg {
+  background-color: #292929;
+  border-right: 4px solid #218a12;
+  border-left: 4px solid #218a12;
+}
+
+/* Rounded sliders */
+.sliderreg.round {
+  border-radius: 4px;
+}
+
+.sliderreg.round:before {
+  border-radius: 25%;
+}
+
+.hidden {
+      display: none;
+    }
+
+
+.ramka {
+  border: 5px solid #222222;
+  padding: 50px;
+  width: 2125px;
+}
+
+
+
+.tg  {border-collapse:collapse;border-spacing:0;text-transform: uppercase}
+.tg td{border-color:white;border-style:solid;border-width:0px;font-family: ledmatrixbusn;font-size:24px;
+  overflow:hidden;;word-break:normal;color:orange;background-color:#222222;text-shadow: 0 0 8px orange;font-weight: bold}
+.tg th{border-color:white;border-style:solid;border-width:0px;font-family:ledmatrixbusn, sans-serif;font-size:24px;
+  font-weight:normal;overflow:hidden;word-break:normal;}
+.tg .tg-0pky{border-color:inherit;text-align:center;vertical-align:center;}
+input[type=textlin]{text-align:right;vertical-align:center;background-color:#222222;font-family: ledmatrixbusn;color:orange;font-size:24px;border:none;width:100%}
+input[type=textkier]{text-shadow: 0 0 8px orange;text-align:center;vertical-align:center;background-color:#222222;font-family: ledmatrixbuskwadrregular;color:orange;font-size:16px;border:none;width:100%}
+input[type=textodj]{text-align:right;vertical-align:center;background-color:#222222;font-family: ledmatrixbusn;color:orange;font-size:24px;border:none;width:100%;text-transform: lowercase;}
+input[type=textprzyst]{text-align:center;vertical-align:center;background-color:#222222;font-family: ledmatrixbusprzystregular;color:orange;font-size:24px;border:none;width:100%;height: 40%;word-wrap: break-word;}
+.przystlew{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:left;vertical-align:center;background-color:#222222;font-family: dispb14;color:orange;font-size:50px;border:none;height: 60px;word-wrap: break-word;resize: none}
+
+.przyst{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledmatrixbusn;color:orange;font-size:100px;border:none;height: 130px;word-wrap: break-word;resize: none}
+.przystbial{text-shadow: 0 0 6px white;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#262626;font-family: lednummatrixbus;color:white;font-size:123px;border:none;height: 145px;line-height: 145px;word-wrap: break-word;resize: none}
+.przystpom{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: lednummatrixbus;color:orange;font-size:123px;border:none;height: 139.5px;line-height: 140px;word-wrap: break-word;resize: none}
+
+.przystico{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledicomatrixbus;color:orange;font-size:90px;border:none;height: 100px;word-wrap: break-word;resize: none}
+
+.przystbig{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledbigmatrixbus;color:orange;font-size:100px;border:none;height: 130px;word-wrap: break-word;resize: none}
+
+
+.przystsm{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmallmatrixbus;color:orange;font-size:80px;border:none;height: 130px; line-height: 116px;word-wrap: break-word;resize: none}
+.przystsmwide{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmallwidematrixbus;color:orange;font-size:80px;border:none;height: 130px; line-height: 116px;word-wrap: break-word;resize: none}
+.przystsmbial{text-shadow: 0 0 6px white;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#262626;font-family: lednummatrixbus;color:white;font-size:122px;border:none;height: 140px;word-wrap: break-word;resize: none}
+
+.przystbial2{text-shadow: 0 0 6px rgb(222, 255, 36);font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#262626;font-family: lednegnummatrixbus;color:rgb(222, 255, 36);font-size:140.85px;border:none;height: 140.5px;word-wrap: break-word;resize: none}
+
+.przystsm2{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledwas7matrixbus;color:orange;font-size:55px;border:none;height: 130px; line-height: 116px;word-wrap: break-word;resize: none}
+
+.przystsm3{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwaltmatrixbus;color:orange;font-size:55px;border:none;height: 130px; line-height: 116px;word-wrap: break-word;resize: none}
+.przystsm3dwuw{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwaltmatrixbus;color:orange;font-size:55px;border:none;height: 110px; line-height: 110px; margin-bottom: -10px; margin-top: -18px;word-wrap: break-word;resize: none}
+
+
+.przystwas{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmallmatrixbus;color:orange;font-size:80px;border:none;height: 110px; line-height: 110px; margin-bottom: -10px; margin-top: -18px;word-wrap: break-word;resize: none}
+.przystwide{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmallwidematrixbus;color:orange;font-size:80px;border:none;height: 110px; line-height: 110px; margin-bottom: -10px; margin-top: -18px;word-wrap: break-word;resize: none}
+.przystdwuw{text-shadow: 0 0 6px orange;font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwmatrixbus;color:orange;font-size:34px;border:none;height: 50px; line-height: 40px; margin-bottom: -13px;word-wrap: break-word;resize: none}
+.przystwasbial{text-shadow: 0 0 6px white;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#262626;font-family: lednummatrixbus;color:white;font-size:122px;border:none;height: 140px;word-wrap: break-word;resize: none}
+
+.przystwas2{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledwas7matrixbus;color:orange;font-size:55px;border:none;height: 110px; line-height: 110px; margin-bottom: -10px; margin-top: -18px;word-wrap: break-word;resize: none}
+.przystdwuw2{text-shadow: 0 0 6px orange;font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwmatrixbus;color:orange;font-size:34px;border:none;height: 50px; line-height: 40px; margin-bottom: -13px;word-wrap: break-word;resize: none}
+.przystwasbial2{text-shadow: 0 0 6px white;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#262626;font-family: lednummatrixbus;color:white;font-size:122px;border:none;height: 140px;word-wrap: break-word;resize: none}
+
+
+.przystwasregl{text-shadow: 0 0 6px white;font-weight: 1;text-transform: none;text-align:left;vertical-align:center;background-color:#222222;font-family: ledkolejowy;color:white;font-size:45px;border:none;padding-top:10px; height: 55px; line-height: 50px; word-wrap: break-word;resize: none}
+.przystwasregr{text-shadow: 0 0 6px white;font-weight: 1;text-transform: none;text-align:right;vertical-align:center;background-color:#222222;font-family: ledkolejowy;color:white;font-size:45px;border:none;padding-top:10px; height: 55px; line-height: 50px; word-wrap: break-word;resize: none}
+.przystwasreg{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledkolejowy;color:orange;font-size:54px;border:none;padding-top:10px; height: 55px; line-height: 50px; word-wrap: break-word;resize: none}
+.przystwasregwas{text-shadow: 0 0 6px orange;font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledkolejowywas;color:orange;font-size:54px;border:none;padding-top:10px; height: 55px; line-height: 50px; word-wrap: break-word;resize: none}
+
+.przystinner1{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwmatrixbus;color:rgb(231, 32, 32);font-size:36px;border:none;height: 50px; line-height: 48px; padding-top: 8px;margin-bottom: 0px;word-wrap: break-word;resize: none}
+.przystinner2{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwmatrixbus;color:rgb(231, 32, 32);font-size:36px;border:none;height: 50px; line-height: 48px; padding-top: 8px;margin-top: -8px;word-wrap: break-word;resize: none}
+.przystinnernr{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmall5altmatrixbus;color:rgb(231, 32, 32);font-size:80px;border:none;height: 112px; line-height: 100px; margin-bottom: -15px; margin-top: 1px;word-wrap: break-word;resize: none}
+.przystinnersam{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledsmall5altmatrixbus;color:rgb(231, 32, 32);font-size: 80px;border:none;height: 112px; line-height: 100px; margin-bottom: -15px; padding-top: 0.5px;word-wrap: break-word;resize: none}
+
+.przystinnerwas1{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwwasmatrixbus;color:rgb(231, 32, 32);font-size:36px;border:none;height: 50px; line-height: 48px; ;padding-top: 8px;margin-bottom: 0px;word-wrap: break-word;resize: none}
+.przystinnerwas2{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-align:center;vertical-align:center;background-color:#222222;font-family: leddwuwwasmatrixbus;color:rgb(231, 32, 32);font-size:36px;border:none;height: 50px; line-height: 48px; padding-top: 8px;margin-top: -8px;word-wrap: break-word;resize: none}
+.przystinnersamwas{text-shadow: 0 0 6px rgb(231, 32, 32);font-weight: 1;text-transform: uppercase;text-align:center;vertical-align:center;background-color:#222222;font-family: ledwas7matrixbus;color:rgb(231, 32, 32);font-size: 62px;border:none;height: 112px; line-height: 100px;margin-bottom: -15px;margin-top: -2px;word-wrap: break-word;resize: none}
+
+
+.przystdww{text-align:center;vertical-align:center;background-color:#222222;font-family: dispb7_h;color:orange;font-size:50px;border:none;;height:60px;word-wrap: break-word;resize: none;line-height:28px}
+.przystdwwj{text-align:center;vertical-align:center;background-color:#222222;font-family: dispb7_h;color:orange;font-size:50px;border:none;;height:60px;word-wrap: break-word;resize: none}
+.przystdwwlek{text-align:center;vertical-align:center;background-color:#222222;font-family: dispb7_l;color:orange;font-size:50px;border:none;height:60;word-wrap: break-word;resize: none;line-height:28px}
+input[type=textpodp]{text-shadow: 0 0 4px orange;text-align:center;vertical-align:center;background-color:#222222;font-family: ledmatrixbusn;color:orange;font-size:24px;border:none;width:100%;}
+.tg .tg-1pky{border-color:inherit;vertical-align:center;padding:5px 5px;word-spacing:6.4em;font-family: Arial;font-size:20px}
+.tg .tg-2pky{border-color:inherit;text-align:center;vertical-align:center;font-family: ledmatrixbuskwadrregular;font-size: 14px;text-transform: uppercase;font-weight: 1;padding-top:7px;padding-left:7px}
+.tg .tg-3pky{border-color:inherit;text-align:center;vertical-align:center;text-transform: uppercase;padding-bottom: 5px}
+.tg .tg-4pky{border-color:inherit;text-align:center;vertical-align:center;font-family: ledmatrixbusprzystregular;text-transform: uppercase}
+.tg .tg-5pky{border-color:inherit;text-align:center;vertical-align:center;font-family: dispb7_l;text-transform: uppercase}
+.tg .tg-6pky{border-color:inherit;text-align:center;vertical-align:center;font-family: dispb7_l;text-transform: uppercase;font-size:50px;line-height:50px;margin-bottom:-50px}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #222222;
+  border-color: #222222;
+  
+}
+
+select {
+      background-color: #222222;
+      color: #fefefe;
+      border: none;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 4px;
+      outline: none;
+  }
+
+  select option {
+      background-color: #222222;
+      color: #fefefe;
+  }
+
+  select option:hover, 
+  select option:focus {
+      background-color: #222222;
+  }
+
+  select:focus {
+      outline: 2px solid #262626;
+  }
+
+  button {
+    background-color: #222222;
+      color: #fefefe;
+      border: none;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 4px;
+      outline: none;
+      width: 200px;
+  }
+
+  button:hover {
+    background-color: #252525;
+  }
+
+  button:active {
+    background-color: #191919;
+  }
+
+  /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+  /* Track */
+::-webkit-scrollbar-track {
+  background: #222222; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #191919; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #191919; 
+}
+
+</style>
+
+<body class="content">
+
+
+<div class="ramka">
+ 
+
+  <div style="display: flex; gap: 20px;">
+    <table id="table1" class="tg" style="undefined;table-layout: fixed; width: 1200px">
+      <colgroup>
+      </colgroup>
+      <tbody class="obram">
+      
+          <tr style="height:130px">
+        <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" class="przystbial"style="width: 225px"></textarea>
+          <td class="tg-0pky" style="width: 975px"><textarea spellcheck="false" id="klasprzyst11" class="przyst"style="width: 975px; padding-top: 15px; overflow: hidden; resize: none"></textarea>
+        </tr>
+      
+      </tbody>
+      </table>
+
+      
+
+<table id="table2" class="tg" style="undefined;table-layout: fixed; width: 900px">
+  <colgroup>
+  </colgroup>
+  <tbody class="obram">
+  
+      <tr style="height:130px">
+        <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" class="przystpom"style="width: 225px"></textarea>
+      <td class="tg-0pky" style="width: 675px"><textarea spellcheck="false" id="klasprzyst211" class="przyst"style="width: 675px; padding-top: 15px; overflow: hidden; resize: none;"></textarea>
+    </tr>
+  
+  </tbody>
+  </table>
+  
+</div>
+
+<table style="display: inline-table; padding-top: 10px; padding-left: 570px; position: relative;">
+  <tr>
+    <th>
+      <button id="toggleTable1">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector1">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+    <th>
+      <button id="resetAuto1">Automatyczne skalowanie</button>
+    </th>
+    <th>
+      <select id="classSelector1">
+        <option value="przyst">22x13</option>
+        <option value="przystsmwide">17x11</option>
+        <option value="przystsm">17x10</option>
+        <option value="przystsm3">12x8</option>
+        <option value="przystsm2">12x6</option>
+      </select>
+    </th>
+
+    <th style="padding-left: 293px;">
+      <button id="toggleTable2">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector2">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+    <th>
+      <button id="resetAuto2">Automatyczne skalowanie</button>
+    </th>
+    <th>
+      <select id="classSelector2">
+        <option value="przyst">22x13</option>
+        <option value="przystsmwide">17x11</option>
+        <option value="przystsm">17x10</option>
+        <option value="przystsm3">12x8</option>
+        <option value="przystsm2">12x6</option>
+      </select>
+    </th>
+  </tr>
+  
+
+</table>
+
+<br><br><br>
+
+
+  <div style="display: flex; gap: 20px;">
+<table id="table3" class="tg" style="undefined;table-layout: fixed; width: 1200px">
+<colgroup>
+</colgroup>
+<tbody class="obram">
+
+    <tr style="height:130px">
+      <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" id="klasprzyst2" class="przystbial"style="width: 225px"></textarea>
+    <td class="tg-0pky" style="width: 975px"><textarea spellcheck="false" id="klasprzyst12" class="przystwide"style="width: 975px; padding-top: 8px; overflow: hidden; resize: none;"></textarea><br>
+                                              <textarea spellcheck="false" id="klasprzyst2" class="przystdwuw"style="width: 975px; margin-bottom: -15px"></textarea>
+  </tr>
+
+</tbody>
+</table>
+
+<table id="table4" class="tg" style="undefined;table-layout: fixed; width: 900px">
+  <colgroup>
+  </colgroup>
+  <tbody class="obram">
+  
+      <tr style="height:130px">
+        <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" id="klasprzyst2" class="przystpom"style="width: 225px"></textarea>
+      <td class="tg-0pky" style="width: 675px"><textarea spellcheck="false" id="klasprzyst212" class="przystwide"style="width: 675px; padding-top: 8px; overflow: hidden; resize: none;"></textarea><br>
+                                                <textarea spellcheck="false" id="klasprzyst2" class="przystdwuw"style="width: 675px; margin-bottom: -15px"></textarea>
+    </tr>
+  
+  </tbody>
+  </table></div>
+
+  <table style="display: inline-table; padding-top: 10px; padding-left: 572px; position: relative;">
+    <tr>
+      <th>
+      <button id="toggleTable3">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector3">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+      <th>
+        <button id="resetAuto3">Automatyczne skalowanie</button>
+      </th>
+      <th>
+        <select id="classSelector3">
+          <option value="przystwide">17x11</option>
+          <option value="przystwas">17x10</option>
+          <option value="przystsm3dwuw">12x8</option>
+          <option value="przystwas2">12x6</option>
+        </select>
+      </th>
+      <th style="padding-left: 293px;">
+      <button id="toggleTable4">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector4">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+      <th>
+        <button id="resetAuto4">Automatyczne skalowanie</button>
+      </th>
+      <th>
+        <select id="classSelector4">
+          <option value="przystwide">17x11</option>
+          <option value="przystwas">17x10</option>
+          <option value="przystsm3dwuw">12x8</option>
+          <option value="przystwas2">12x6</option>
+        </select>
+      </th>
+    </tr>
+    
+  
+  </table>
+
+
+<br><br><br>
+
+
+    <div style="display: flex; gap: 20px;">
+  <table id="table5" class="tg" style="undefined;table-layout: fixed; width: 1200px; ">
+    <colgroup>
+    </colgroup>
+    <tbody class="obram">
+    
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" id="klasprzyst2" class="przystbial"style="width: 225px"></textarea>
+        <td class="tg-0pky" style="width: 975px"><textarea spellcheck="false" id="klasprzyst91" class="przystwasreg"style="width: 975px; padding-top: 8px; overflow: hidden; resize: none;"></textarea><br>
+                                                  <textarea spellcheck="false" id="klasprzyst92" class="przystwasreg"style="width: 975px"></textarea>
+      </tr>
+    
+    </tbody>
+    </table>
+  
+    <table id="table6" class="tg" style="undefined;table-layout: fixed; width: 900px; ">
+      <colgroup>
+      </colgroup>
+      <tbody class="obram">
+      
+          <tr style="height:130px">
+            <td class="tg-0pky" style="width: 225px"><textarea maxlength="3" spellcheck="false" id="klasprzyst2" class="przystpom"style="width: 225px"></textarea>
+          <td class="tg-0pky" style="width: 675px"><textarea spellcheck="false" id="klasprzyst93" class="przystwasreg"style="width: 675px; padding-top: 8px; overflow: hidden; resize: none;"></textarea><br>
+                                                    <textarea spellcheck="false" id="klasprzyst94" class="przystwasreg"style="width: 675px"></textarea>
+        </tr>
+      
+      </tbody>
+      </table></div>
+      
+      
+      
+      <table style="display: inline-table; padding-top: 10px; padding-left:572px; position: relative;">
+        <tr>
+          <th>
+      <button id="toggleTable5">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector5">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+          <th>
+            <button id="resetAuto5">Automatyczne skalowanie</button>
+          </th>
+          <th>
+            <select id="classSelector5">
+              <option value="przystwasreg">&nbsp;10x8&nbsp;</option>
+              <option value="przystwasregwas">&nbsp;10x6&nbsp;</option>
+            </select>
+          </th>
+          <th style="padding-left: 293px;">
+      <button id="toggleTable6">Przełącz piktogram</button>
+    </th>
+    <th>
+      <select id="letterSelector6">
+        <option value="" disabled selected>Piktogram</option>
+        <option value="A">Autobus</option>
+        <option value="N">Boisko</option>
+        <option value="C">Cmentarz</option>
+        <option value="D">Drzewo</option>
+        <option value="B">Fabryka</option>
+        <option value="U">Metro</option>
+        <option value="V">Metro negatyw</option>
+        <option value="M">Muzeum</option>
+        <option value="Q">Nuty osobno</option>
+        <option value="O">Nuty razem</option>
+        <option value="Y">Objazd</option>
+        <option value="T">Objazd negatyw</option>
+        <option value="R">P+R</option>
+        <option value="P">Pociąg</option>
+        <option value="L">Samolot z boku</option>
+        <option value="K">Samolot z góry</option>
+        <option value="F">Statek</option>
+        <option value="S">Szpital</option>
+        <option value="W">Teatr</option>
+        <option value="X">Zjazd autobus</option>
+        <option value="Z">Zjazd tramwaj</option>
+        <option value="G">ZOO</option>
+    </select>
+    </th>
+          <th>
+            <button id="resetAuto51">Automatyczne skalowanie</button>
+          </th>
+          <th>
+            <select id="classSelector51">
+              <option value="przystwasreg">&nbsp;10x8&nbsp;</option>
+              <option value="przystwasregwas">&nbsp;10x6&nbsp;</option>
+            </select>
+          </th>
+          
+        </tr>
+        
+      
+      </table>
+
+      <table style="display: inline-table; padding-top: 0px; padding-left: 872px; position: relative;">
+        <tr>
+          <th style="padding-left: 48px;">
+            <button id="resetAuto6">Automatyczne skalowanie</button>
+          </th>
+          <th>
+            <select id="classSelector6">
+              <option value="przystwasreg">&nbsp;10x8&nbsp;</option>
+              <option value="przystwasregwas">&nbsp;10x6&nbsp;</option>
+            </select>
+          </th>
+          <th style="padding-left: 638px;">
+            <button id="resetAuto61">Automatyczne skalowanie</button>
+          </th>
+          <th>
+            <select id="classSelector61">
+              <option value="przystwasreg">&nbsp;10x8&nbsp;</option>
+              <option value="przystwasregwas">&nbsp;10x6&nbsp;</option>
+            </select>
+          </th>
+        </tr>
+        
+      
+      </table>
+      
+      <br><br>
+
+
+
+  </div>
+  
+</div>
+
+
+<div>
+
+  <script>
+/* ------------------------------------------------------------------
+   1.  SZABLONY WIDOKÓW  (normal / expanded)  –  tabela1 … tabela6
+------------------------------------------------------------------ */
+const tableConfigurations = {
+  /* ---- oryginalne szablony z tabel 1-2  ---- */
+  table1: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea maxlength="3" spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:975px">
+            <textarea spellcheck="false" id="klasprzyst11" class="przyst" style="width:975px;padding-top:15px;overflow:hidden;"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:825px">
+            <textarea spellcheck="false" id="klasprzyst11" class="przyst" style="width:825px;padding-top:15px;overflow:hidden;"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="klasprzyst13" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  },
+  table2: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea maxlength="3" spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:675px">
+            <textarea spellcheck="false" id="klasprzyst211" class="przyst" style="width:675px;padding-top:15px;overflow:hidden;"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:525px">
+            <textarea spellcheck="false" id="klasprzyst211" class="przyst" style="width:525px;padding-top:15px;overflow:hidden;"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="klasprzyst213" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  },
+  /* ---- NOWE SZABLONY 3-6 (kopie dostosowane) ---- */
+  table3: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia3" maxlength="3" spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:975px">
+            <textarea spellcheck="false" id="klasprzyst12" class="przystwide" style="width:975px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst2"  class="przystdwuw"  style="width:975px"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia3" spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:825px">
+            <textarea spellcheck="false" id="klasprzyst12" class="przystwide" style="width:825px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst2"  class="przystdwuw"  style="width:825px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="piktogram3" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  },
+  table4: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia4" maxlength="3" spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:675px">
+            <textarea spellcheck="false" id="klasprzyst212" class="przystwide" style="width:675px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst2"   class="przystdwuw"  style="width:675px"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia4" spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:525px">
+            <textarea spellcheck="false" id="klasprzyst212" class="przystwide" style="width:525px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst2"   class="przystdwuw"  style="width:525px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="piktogram4" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  },
+  table5: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia5" maxlength="3" spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:975px">
+            <textarea spellcheck="false" id="klasprzyst91" class="przystwasreg" style="width:975px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst92" class="przystwasreg" style="width:975px"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia5" spellcheck="false" class="przystbial" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:825px">
+            <textarea spellcheck="false" id="klasprzyst91" class="przystwasreg" style="width:825px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst92" class="przystwasreg" style="width:825px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="piktogram5" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  },
+  table6: {
+    normal: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia6" maxlength="3" spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:675px">
+            <textarea spellcheck="false" id="klasprzyst93" class="przystwasreg" style="width:675px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst94" class="przystwasreg" style="width:675px"></textarea>
+          </td>
+        </tr>
+      </tbody>`,
+    expanded: `
+      <colgroup></colgroup>
+      <tbody class="obram">
+        <tr style="height:130px">
+          <td class="tg-0pky" style="width:225px">
+            <textarea id="linia6" spellcheck="false" class="przystpom" style="width:225px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:525px">
+            <textarea spellcheck="false" id="klasprzyst93" class="przystwasreg" style="width:525px;padding-top:8px;overflow:hidden;"></textarea><br>
+            <textarea spellcheck="false" id="klasprzyst94" class="przystwasreg" style="width:525px"></textarea>
+          </td>
+          <td class="tg-0pky" style="width:148px">
+            <textarea spellcheck="false" id="piktogram6" class="przystico" style="width:148px" disabled></textarea>
+          </td>
+        </tr>
+      </tbody>`
+  }
+};
+
+/* ------------------------------------------------------------------
+   2.  GLOBALNE ZMIENNE
+------------------------------------------------------------------ */
+const textBuffer = {};                       // przechowuje wpisane treści
+const switched   = {1:false,2:false,3:false,4:false,5:false,6:false};  // stan expanded/normal
+
+/* ------------------------------------------------------------------
+   3.  FUNKCJE POMOCNICZE
+------------------------------------------------------------------ */
+// przełącza HTML tabeli, zachowując wpisane teksty
+// przełącza HTML tabeli, zachowując wpisane treści (także przy zduplikowanych id)
+function toggleTable(tableId, conf) {
+  const tbl = document.getElementById(tableId);
+  if (!tbl) return;
+
+  const curr = tbl.dataset.state || 'normal';
+  const next = curr === 'normal' ? 'expanded' : 'normal';
+
+  /* --- zapisz wartości w PORZĄDKU, a nie po id --- */
+  const values = Array.from(tbl.querySelectorAll('textarea')).map(t => t.value);
+
+  /* --- wczytaj nowy widok --- */
+  tbl.innerHTML   = conf[next];
+  tbl.dataset.state = next;
+
+  /* --- przywróć wg kolejności --- */
+  Array.from(tbl.querySelectorAll('textarea')).forEach((t, i) => {
+    if (values[i] !== undefined) t.value = values[i];
+  });
+
+  reinitializeClassHandling(tableId);        // autoskalowanie / klasy
+}
+
+
+// aktualizuje flagę i blokuje / odblokowuje listy liter
+function toggleTableState(no){
+  switched[no] = !switched[no];
+  updateLetterSelectorsState();
+}
+
+function updateLetterSelectorsState(){
+  ['1','2','3','4','5','6'].forEach(n=>{
+    const sel = document.getElementById('letterSelector'+n);
+    if(sel) sel.disabled = !switched[n];
+  });
+}
+
+// wpisuje wybraną literę do odpowiedniego pola
+function setupLetterSelectors(){
+  const targets = {
+    1:'klasprzyst13',
+    2:'klasprzyst213',
+    3:'piktogram3',
+    4:'piktogram4',
+    5:'piktogram5',
+    6:'piktogram6'
+  };
+
+  ['1','2','3','4','5','6'].forEach(n=>{
+    const sel = document.getElementById('letterSelector'+n);
+    if(!sel) return;
+    sel.addEventListener('change',()=>{
+      const trg = document.getElementById(targets[n]);
+      if(trg) trg.value = sel.value;
+    });
+  });
+}
+
+/* ------------------------------------------------------------------
+   4.  FUNKCJE AUTOSKALOWANIA / KLAS  (BEZ ZMIAN)
+   – kod przeniesiony 1 : 1 z oryginalnego pliku
+------------------------------------------------------------------ */
+function reinitializeClassHandling(tableId){
+  const table = document.getElementById(tableId);
+  if(!table) return;
+
+  classSelectors.forEach(({selector,textAreaId,buttonId,classList})=>{
+    const textArea     = table.querySelector('#'+textAreaId);
+    const classSel     = document.getElementById(selector);
+    const resetButton  = document.getElementById(buttonId);
+    if(!textArea||!classSel||!resetButton) return;
+
+    let manual = false;
+    const overflow = () => textArea.scrollHeight > textArea.clientHeight;
+
+    const auto = ()=>{
+      if(manual) return;
+      for(let i=0;i<classList.length;i++){
+        textArea.className = classList[i];
+        if(!overflow()){
+          classSel.value = classList[i];
+          break;
+        }
+      }
+    };
+
+    classSel.addEventListener('change',()=>{ textArea.className = classSel.value; manual = true; });
+    textArea.addEventListener('input', auto);
+    resetButton.addEventListener('click',()=>{ manual=false; auto(); });
+    textArea.addEventListener('keyup',()=>{ if(textArea.value.length===0){ manual=false; textArea.className=classList[0]; classSel.value=classList[0]; }});
+  });
+}
+
+/*  ---- oryginalna tablica classSelectors pozostaje niezmieniona ---- */
+const classSelectors = [
+  {selector:'classSelector1', textAreaId:'klasprzyst11', buttonId:'resetAuto1',  classList:["przyst","przystsmwide","przystsm","przystsm3","przystsm2"]},
+  {selector:'classSelector2', textAreaId:'klasprzyst211',buttonId:'resetAuto2',  classList:["przyst","przystsmwide","przystsm","przystsm3","przystsm2"]},
+  {selector:'classSelector3', textAreaId:'klasprzyst12', buttonId:'resetAuto3',  classList:["przystwide","przystwas","przystsm3dwuw","przystwas2"]},
+  {selector:'classSelector4', textAreaId:'klasprzyst212',buttonId:'resetAuto4',  classList:["przystwide","przystwas","przystsm3dwuw","przystwas2"]},
+  {selector:'classSelector5', textAreaId:'klasprzyst91', buttonId:'resetAuto5',  classList:["przystwasreg","przystwasregwas"]},
+  {selector:'classSelector51',textAreaId:'klasprzyst93', buttonId:'resetAuto51', classList:["przystwasreg","przystwasregwas"]},
+  {selector:'classSelector6', textAreaId:'klasprzyst92', buttonId:'resetAuto6',  classList:["przystwasreg","przystwasregwas"]},
+  {selector:'classSelector61',textAreaId:'klasprzyst94', buttonId:'resetAuto61', classList:["przystwasreg","przystwasregwas"]}
+];
+
+/* ------------------------------------------------------------------
+   5.  INICJALIZACJA  – wykonuje się raz po załadowaniu strony
+------------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded',()=>{
+
+  /*  re-init klas / autoskalowania we WSZYSTKICH tabelach */
+  document.querySelectorAll('table[id^="table"]').forEach(t=>{
+    reinitializeClassHandling(t.id);
+  });
+
+  /*  przyciski przełączające piktogramy */
+  ['1','2','3','4','5','6'].forEach(n=>{
+    const btn = document.getElementById('toggleTable'+n);
+    if(!btn) return;
+    btn.addEventListener('click',()=>{
+      toggleTable('table'+n, tableConfigurations['table'+n]);
+      /* automatyczne skalowanie po zmianie */
+      const rs = document.getElementById('resetAuto'+n);
+      setTimeout(()=>{ if(rs) rs.click(); },50);
+      toggleTableState(+n);
+    });
+  });
+
+  setupLetterSelectors();
+  updateLetterSelectorsState();
+});
+</script>
+
+
+</html>
