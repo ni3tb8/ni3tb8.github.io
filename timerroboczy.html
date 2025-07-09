@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer montażowy</title>
+  
+  <!-- Google Fonts: Titillium Web -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Titillium Web', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 { font-size: 2rem; margin-bottom: 1rem; text-align: center; }
+    form {
+      display: flex; gap: 10px; margin-bottom: 20px; width: 45%;
+    }
+    input[type="text"] {
+      flex: 1; padding: 10px; border: 1px solid #333; border-radius: 4px;
+      background-color: #1e1e1e; color: #f0f0f0; font-size: 1rem;
+      font-family: 'Titillium Web', sans-serif;
+      outline: none;
+    }
+    .b-ogolny, .b-zakoncz {
+      font-size: 0.95rem; padding: 10px 15px; border: none; border-radius: 4px;
+      font-weight: 600; cursor: pointer; font-family: 'Titillium Web', sans-serif;
+      transition-duration: 0.4s;
+    }
+    .b-wznow, .b-zatrzymaj {
+      font-size: 0.95rem; padding: 10px 15px; border: none; border-radius: 4px;
+      font-weight: 600; cursor: pointer; font-family: 'Titillium Web', sans-serif;
+      transition-duration: 0.4s;
+      width: 100px;
+    }
+    .b-ogolny { background-color: #8196da; color: #121212; }
+    .b-wznow { background-color: #72bb78; color: #121212; }
+    .b-zatrzymaj { background-color: rgb(182, 158, 107); color: #121212; }
+    .b-zakoncz { background-color: rgb(190, 105, 105); color: #121212; }
+    .b-ogolny:hover { background-color: #a2b3eb; }
+    .b-wznow:hover { background-color: #94cf99; }
+    .b-zatrzymaj:hover { background-color: rgb(204, 183, 137); }
+    .b-zakoncz:hover { background-color: rgb(211, 135, 135); }
+    .b-ogolny:active { background-color: #5c71b9; }
+    .b-wznow:active { background-color: #55a75c; }
+    .b-zatrzymaj:active { background-color: rgb(165, 139, 82); }
+    .b-zakoncz:active { background-color: rgb(167, 76, 76); }
+
+    #timersContainer { width: 70%; margin-top: 10px; }
+    details.timer { background-color: #1e1e1e; padding: 15px; margin-bottom: 10px; border-radius: 6px; }
+    summary.timer-summary { list-style: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .timer-summary::-webkit-details-marker { display: none; }
+    .name { font-size: 1.1rem; font-weight: 600; padding-left: 0.4em;}
+    .info { display: flex; align-items: center; gap: 10px; }
+    .startTime { background-color: #414141; color: #f0f0f0; padding: 5px 10px; border-radius: 4px; font-family: 'Titillium Web', sans-serif; font-size: 1rem; }
+    .time { padding: 5px 10px; background-color: #414141; color: #f0f0f0; border-radius: 4px; font-family: 'Titillium Web', sans-serif; font-size: 1rem; }
+    .controls button { width: 100px; }
+    .log { margin-top: 10px; font-size: 1rem; }
+
+    summary.timer-summary {
+  position: relative;
+  padding-left: 1.2em;
+}
+summary.timer-summary::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.15s ease;
+}
+details[open] summary.timer-summary::before {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+  </style>
+</head>
+<body>
+  <h1>Timer montażowy</h1>
+  <form id="timerForm">
+    <input type="text" id="timerName" placeholder="Nazwa zadania" required autocomplete="off">
+    <button type="submit" class="b-ogolny">Uruchom</button>
+  </form>
+  <div id="timersContainer"></div>
+
+   <script>
+    const timers = {};
+    let timerIdCounter = 0;
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const s = String(totalSeconds % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    function formatDateTime(timestamp) {
+      const d = new Date(timestamp);
+      const Y = d.getFullYear();
+      const M = String(d.getMonth() + 1).padStart(2, '0');
+      const D = String(d.getDate()).padStart(2, '0');
+      const h = String(d.getHours()).padStart(2, '0');
+      const m = String(d.getMinutes()).padStart(2, '0');
+      return `${D}.${M}.${Y} ${h}:${m}`;
+    }
+
+    function saveTimers() {
+      const data = Object.entries(timers).map(([id, t]) => ({
+        id: Number(id), name: t.name,
+        sessions: t.sessions,
+        running: t.running,
+        savedAt: Date.now()
+      }));
+      localStorage.setItem('timers', JSON.stringify(data));
+    }
+
+    function loadTimers() {
+      const data = JSON.parse(localStorage.getItem('timers') || '[]');
+      data.forEach(item => {
+        const { id, name, sessions, running } = item;
+        if (id > timerIdCounter) timerIdCounter = id;
+        timers[id] = { name, sessions, running, animationFrame: null };
+        renderTimer(id);
+        if (running) updateTimer(id);
+        else {
+          const total = sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+          document.getElementById(`time-${id}`).textContent = formatTime(total);
+        }
+        updateLog(id);
+      });
+    }
+
+    function renderTimer(id) {
+      const t = timers[id];
+      const container = document.getElementById('timersContainer');
+      const details = document.createElement('details'); details.className = 'timer'; details.id = 'timer-' + id;
+      const summary = document.createElement('summary'); summary.className = 'timer-summary';
+      const startTime = t.sessions[0].start;
+      summary.innerHTML = `
+        <div class="name">${t.name}</div>
+        <div class="info">
+          <div class="startTime" id="start-${id}">${formatDateTime(startTime)}</div>
+          <div class="time" id="time-${id}">00:00:00</div>
+          <button id="toggle-${id}" class="${t.running ? 'b-zatrzymaj' : 'b-wznow'}">${t.running ? 'Zatrzymaj' : 'Wznów'}</button>
+          <button id="save-${id}" class="b-ogolny">Zapisz</button>
+          <button id="remove-${id}" class="b-zakoncz">Zakończ</button>
+        </div>
+      `;
+      details.appendChild(summary);
+      const logDiv = document.createElement('div'); logDiv.className = 'log'; logDiv.id = 'log-' + id; details.appendChild(logDiv);
+      container.appendChild(details);
+      document.getElementById('toggle-'+id).addEventListener('click', () => toggleTimer(id));
+      document.getElementById('remove-'+id).addEventListener('click', () => removeTimer(id));
+      document.getElementById('save-'+id).addEventListener('click', () => saveToFile(id));
+      updateLog(id);
+    }
+
+    function updateTimer(id) {
+      const t = timers[id]; if (!t.running) return;
+      const now = Date.now();
+      const sessions = t.sessions;
+      const completed = sessions.slice(0, -1).reduce((sum, s) => sum + (s.duration || 0), 0);
+      const currentDuration = now - sessions[sessions.length - 1].start;
+      const total = completed + currentDuration;
+      document.getElementById(`time-${id}`).textContent = formatTime(total);
+      t.animationFrame = requestAnimationFrame(() => updateTimer(id));
+    }
+
+    function updateLog(id) {
+      const t = timers[id];
+      const log = document.getElementById('log-' + id);
+      log.innerHTML = '';
+      const finished = t.sessions.filter(s => s.end !== null);
+      if (finished.length === 0) {
+        log.textContent = 'Brak sesji dzielonych';
+        return;
+      }
+      finished.forEach((s, i) => {
+        const entry = document.createElement('div'); entry.className = 'log-entry';
+        entry.textContent = `Sesja ${i+1}. Rozpoczęcie: ${formatDateTime(s.start)}, zakończenie: ${formatDateTime(s.end)}, czas trwania: ${formatTime(s.duration)}`;
+        log.appendChild(entry);
+      });
+    }
+
+    function saveToFile(id) {
+      const t = timers[id];
+      const total = t.sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+      let text = `Zadanie: ${t.name}\nCałkowity czas: ${formatTime(total)}\n\nSesje:\n`;
+      t.sessions.forEach((s, i) => {
+        const start = formatDateTime(s.start);
+        const stop  = s.end ? formatDateTime(s.end) : '–';
+        const dur   = s.duration ? formatTime(s.duration) : '–';
+        text += `  ${i+1}. ${start} – ${stop} (trwał: ${dur})\n`;
+      });
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a'); a.href = url;
+      a.download = `${t.name.replace(/\s+/g,'_')}.txt`;
+      a.click(); URL.revokeObjectURL(url);
+    }
+
+    function addTimer(name) {
+      const id = ++timerIdCounter; const now = Date.now();
+      timers[id] = { name, sessions: [{ start: now, end: null, duration: null }], running: true, animationFrame: null };
+      renderTimer(id); updateTimer(id); saveTimers();
+    }
+
+    function toggleTimer(id) {
+      const t = timers[id]; const btn = document.getElementById('toggle-'+id); const now = Date.now();
+      if (t.running) {
+        cancelAnimationFrame(t.animationFrame); t.running = false;
+        const current = t.sessions[t.sessions.length - 1]; current.end = now; current.duration = now - current.start;
+        btn.textContent = 'Wznów'; btn.className = 'b-wznow'; updateLog(id);
+      } else {
+        t.running = true; t.sessions.push({ start: now, end: null, duration: null });
+        btn.textContent = 'Zatrzymaj'; btn.className = 'b-zatrzymaj'; updateLog(id); updateTimer(id);
+      }
+      saveTimers();
+    }
+
+    function removeTimer(id) {
+      const t = timers[id]; if (t.animationFrame) cancelAnimationFrame(t.animationFrame);
+      delete timers[id]; const el = document.getElementById('timer-'+id); if (el) el.remove(); saveTimers();
+    }
+
+    document.getElementById('timerForm').addEventListener('submit', function(e) {
+      e.preventDefault(); const name = document.getElementById('timerName').value.trim(); if (!name) return;
+      addTimer(name); this.reset();
+    });
+
+    window.addEventListener('load', loadTimers);
+    window.addEventListener('beforeunload', saveTimers);
+  </script>
+</body>
+</html>
